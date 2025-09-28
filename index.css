@@ -1,9 +1,7 @@
-/* ==================== */
-/* RESET & GLOBAL STYLE */
-/* ==================== */
 html {
   scroll-behavior: smooth;
 }
+
 body {
   width: 100%;
   margin: 0;
@@ -21,9 +19,7 @@ body {
   background: linear-gradient(#212121, #0c1a32);
 }
 
-/* ==================== */
-/* NAVBAR */
-/* ==================== */
+/* Header */
 .header {
   top: 0;
   left: 0;
@@ -33,7 +29,6 @@ body {
   border-bottom: 1px solid white;
   z-index: 100;
 }
-
 .navbar {
   max-width: 1200px;
   margin: auto;
@@ -43,17 +38,11 @@ body {
   padding: 12px 20px;
   gap: 20px;
 }
-
 .logo {
   height: 45px;
   object-fit: contain;
 }
-
-/* Search box */
-.search-wrapper {
-  flex: 1;
-  min-width: 200px;
-}
+.search-wrapper { flex: 1; min-width: 200px; }
 .search-box {
   display: flex;
   align-items: center;
@@ -63,20 +52,12 @@ body {
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 .search-box .search-icon { margin-right: 8px; color: #888; }
-.search-box .search-input {
-  border: none;
-  outline: none;
-  flex: 1;
-  font-size: 14px;
-}
+.search-box .search-input { border: none; outline: none; flex: 1; font-size: 14px; }
 
-/* Navigation links */
 .nav-links {
   display: flex;
   gap: 20px;
   list-style: none;
-  margin: 0;
-  padding: 0;
 }
 .nav-links a {
   color: #fff;
@@ -86,11 +67,7 @@ body {
 }
 .nav-links a:hover { color: #00ffff; }
 
-/* Buttons */
-.auth-buttons {
-  display: flex;
-  gap: 12px;
-}
+.auth-buttons { display: flex; gap: 12px; }
 .btn-login, .btn-register {
   padding: 8px 18px;
   border-radius: 25px;
@@ -108,45 +85,37 @@ body {
 }
 .btn-register:hover { background: #00cccc; }
 
-/* ==================== */
-/* RESPONSIVE NAVBAR */
-/* ==================== */
+/* Hamburger untuk HP */
 .hamburger {
   display: none;
   font-size: 26px;
   color: white;
   cursor: pointer;
 }
-@media (max-width: 768px) {
-  .navbar { gap: 12px; }
-  .search-wrapper { display: none; } /* hide search on small screen */
 
-  .hamburger { display: block; }
+@media (max-width: 768px) {
+  .search-wrapper {
+    flex: none;          /* jangan ambil ruang penuh */
+    min-width: unset;    /* hilangkan min-width default */
+    width: 200px;        /* tentukan ukuran tetap */
+  }
+
+  .search-box {
+    padding: 5px 8px;
+  }
 
   .nav-links {
     display: none;
-    flex-direction: column;
-    width: 100%;
-    background: #111;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 8px;
   }
-  .nav-links.active { display: flex; }
 
-  .auth-buttons {
-    flex: 1;
-    justify-content: flex-end;
-  }
-  .btn-login, .btn-register {
-    padding: 6px 12px;
+  .search-box .search-input {
     font-size: 12px;
+    width: 100%;
   }
 }
 
-/* ==================== */
-/* CONTENT IKLAN SLIDER */
-/* ==================== */
+
+
 .content-iklan {
     position: relative;
     margin-top: 110px;
@@ -311,7 +280,7 @@ body {
 .caption .genres span {
     display: inline-block;
     padding: 5px 12px;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: bold;
     text-transform: uppercase;
     color: white;
@@ -384,26 +353,4 @@ body {
 .read-box:hover {
     background: #359100;
     transform: scale(1.02);
-}
-/* ==================== */
-/* RESPONSIVE IKLAN */
-/* ==================== */
-@media (max-width: 992px) {
-  .content-iklan { aspect-ratio: 16/8; max-width: 95%; }
-  .slide .cover-wrapper { width: 280px; height: 480px; right: 40px; }
-  .slide .caption { bottom: 20px; left: 20px; font-size: 14px; max-width: 60%; }
-}
-@media (max-width: 576px) {
-  .content-iklan { aspect-ratio: 9/16; max-width: 90%; border-radius: 12px; }
-  .content-iklan i { font-size: 26px; }
-  .slide .cover-wrapper { width: 70%; height: auto; top: 20%; right: 15px; rotate: 5deg; }
-  .slide .caption {
-    bottom: 15px;
-    left: 15px;
-    right: 15px;
-    font-size: 12px;
-    padding: 10px;
-    max-width: none;
-  }
-  .read-now { font-size: 12px; padding: 4px 10px; }
 }
