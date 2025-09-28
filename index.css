@@ -93,24 +93,52 @@ body {
   cursor: pointer;
 }
 
+/* ✅ Responsif untuk HP */
 @media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
   .search-wrapper {
-    flex: none;          /* jangan ambil ruang penuh */
-    min-width: unset;    /* hilangkan min-width default */
-    width: 200px;        /* tentukan ukuran tetap */
+    flex: none;
+    width: 160px; /* lebih kecil agar muat */
+    order: 3;     /* turun ke bawah navbar */
   }
 
-  .search-box {
-    padding: 5px 8px;
+  .content-iklan {
+    margin: 90px 15px 20px; /* kecilkan margin */
+    width: 100%;           /* penuh sesuai layar */
+    height: auto;          /* biar fleksibel */
+    min-height: 280px;     /* tinggi minimum */
   }
 
-  .nav-links {
+  .slide img {
+    filter: blur(6px); /* lebih ringan */
+    object-position: center; /* biar pas tengah */
+  }
+
+  /* Sembunyikan cover wrapper di HP */
+  .slide .cover-wrapper {
     display: none;
   }
 
-  .search-box .search-input {
-    font-size: 12px;
-    width: 100%;
+  .slide .caption {
+    position: static; /* biar tidak absolut */
+    margin: 15px;
+    font-size: 14px;
+  }
+
+  .read-box {
+    position: static; /* ikut mengalir */
+    margin: 15px auto 0;
+    display: block;
+    text-align: center;
+  }
+
+  .read-now {
+    font-size: 16px;
+    padding: 8px 12px;
   }
 }
 
