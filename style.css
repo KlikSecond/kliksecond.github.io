@@ -399,6 +399,10 @@ body {
   gap: 25px;
 }
 
+.produk-card .a {
+  text-decoration: none;
+}
+
 .produk-card {
   background: #2a2a2a;
   border-radius: 15px;

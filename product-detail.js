@@ -100,16 +100,21 @@ function loadProductDetails() {
   // Get product ID from URL
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get('id');
+  console.log(productId);
   
   if (!productId) {
-
+    alert('Produk tidak ditemukan!');
+    window.location.href = 'index.html';
+    return;
   }
   
   // Get product data
   const product = getProductById(productId);
   
   if (!product) {
-
+    alert('Produk tidak ditemukan!');
+    window.location.href = 'index.html';
+    return;
   }
   
   // Update page title

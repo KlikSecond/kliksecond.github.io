@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detail Produk - Klik Second</title>
+  <link rel="stylesheet" href="product-detail.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+  <div id="particles-js"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html">
+        <img src="LogoKlikSecondTransparent.png" class="logo">
+      </a>
+      <div class="search-wrapper">
+        <div class="search-box">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" class="search-input" placeholder="Cari Produk">
+        </div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#about">About Us</a></li>
+      </ul>
+      <div class="auth-buttons">
+        <button class="btn-login">Login</button>
+        <button class="btn-register">Daftar</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Product Detail Section -->
+  <section class="product-detail">
+    <div class="product-container">
+      <!-- Left: Product Image -->
+      <div class="product-images">
+        <div class="main-image-wrapper">
+          <img id="product-image" src="" alt="Main Product Image">
+        </div>
+        <div class="image-thumbnails" id="thumbnails-container">
+          <!-- Thumbnails will be loaded dynamically -->
+        </div>
+      </div>
+
+      <!-- Right: Product Info -->
+      <div class="product-info">
+        <div class="breadcrumb">
+          <a href="index.html">Home</a> / <span id="product-category">Category</span> / <span id="product-name-breadcrumb">Product</span>
+        </div>
+        
+        <h1 id="product-name">Loading...</h1>
+        
+        <div class="rating-section">
+          <div class="stars" id="product-rating">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-half"></i>
+          </div>
+          <span class="rating-text"><span id="rating-value">0</span> (<span id="reviews-count">0</span> Ulasan)</span>
+        </div>
+
+        <p id="product-price" class="price">Rp <span>0</span></p>
+        
+        <div class="product-specs">
+          <h3>Spesifikasi Produk</h3>
+          <div class="specs-grid">
+            <div class="spec-item">
+              <i class="bi bi-laptop"></i>
+              <div>
+                <strong>Kondisi</strong>
+                <p id="product-condition">-</p>
+              </div>
+            </div>
+            <div class="spec-item">
+              <i class="bi bi-battery-charging"></i>
+              <div>
+                <strong>Battery Health</strong>
+                <p id="product-battery">-</p>
+              </div>
+            </div>
+            <div class="spec-item">
+              <i class="bi bi-sd-card"></i>
+              <div>
+                <strong>Storage</strong>
+                <p id="product-storage">-</p>
+              </div>
+            </div>
+            <div class="spec-item">
+              <i class="bi bi-clock-history"></i>
+              <div>
+                <strong>Pemakaian</strong>
+                <p id="product-usage">-</p>
+              </div>
+            </div>
+            <div class="spec-item">
+              <i class="bi bi-award"></i>
+              <div>
+                <strong>Grade</strong>
+                <p id="product-grade">-</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-actions">
+          <button class="btn-buy" onclick="buyNow()">
+            <i class="bi bi-lightning-charge-fill"></i> Beli Sekarang
+          </button>
+          <button class="btn-cart" onclick="addToCart()">
+            <i class="bi bi-cart-plus-fill"></i> Tambah ke Keranjang
+          </button>
+        </div>
+        
+        <!-- Seller Info -->
+        <div class="seller-info">
+          <div class="seller-header">
+            <i class="bi bi-shop"></i>
+            <div>
+              <h3 id="seller-name">Loading...</h3>
+              <div class="seller-rating">
+                <i class="bi bi-star-fill"></i>
+                <span id="seller-rating">0</span>
+              </div>
+            </div>
+          </div>
+          <button class="btn-contact-seller">
+            <i class="bi bi-chat-dots-fill"></i> Chat Penjual
+          </button>
+        </div>
+        
+        <!-- Shipping Information -->
+        <div class="shipping-info">
+          <div class="shipping-item">
+            <i class="bi bi-truck"></i>
+            <div>
+              <strong>Pengiriman</strong>
+              <p id="product-shipping">-</p>
+            </div>
+          </div>
+          <div class="shipping-item">
+            <i class="bi bi-geo-alt-fill"></i>
+            <div>
+              <strong>Lokasi Penjual</strong>
+              <p id="product-location">-</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Description -->
+    <div class="product-description-section">
+      <h2>Deskripsi Produk</h2>
+      <div class="description-content" id="product-description">
+        <p>Memuat deskripsi produk...</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 Klik Second. All Rights Reserved.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="products-loader.js"></script>
+  <script src="product-detail.js"></script>
+</body>
+</html>
