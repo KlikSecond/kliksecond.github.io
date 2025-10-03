@@ -399,7 +399,7 @@ body {
   gap: 25px;
 }
 
-.produk-card .a {
+.produk-card a {
   text-decoration: none;
 }
 
