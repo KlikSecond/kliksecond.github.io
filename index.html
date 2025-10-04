@@ -23,7 +23,8 @@
       </div>
 
       <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="lelang.html">Lelang</a></li>
         <li><a href="#about">About Us</a></li>
       </ul>
 
@@ -104,6 +105,80 @@
     </div>
   </section>
 
+  <!-- AUCTION BANNER SECTION -->
+  <section class="auction-banner">
+    <div class="auction-container">
+      <div class="auction-badge">
+        <i class="bi bi-lightning-fill"></i>
+        <span>LELANG AKTIF</span>
+      </div>
+      
+      <div class="auction-content">
+        <div class="auction-info">
+          <h2>Lelang Gadget Premium Sedang Berlangsung!</h2>
+          <p>Dapatkan gadget impianmu dengan harga terbaik. Lelang akan berakhir dalam:</p>
+          
+          <div class="countdown-timer">
+            <div class="time-box">
+              <span class="time-value" id="hours">00</span>
+              <span class="time-label">Jam</span>
+            </div>
+            <div class="time-separator">:</div>
+            <div class="time-box">
+              <span class="time-value" id="minutes">00</span>
+              <span class="time-label">Menit</span>
+            </div>
+            <div class="time-separator">:</div>
+            <div class="time-box">
+              <span class="time-value" id="seconds">00</span>
+              <span class="time-label">Detik</span>
+            </div>
+          </div>
+
+          <div class="auction-stats">
+            <div class="stat-item">
+              <i class="bi bi-cart-check-fill"></i>
+              <div>
+                <span class="stat-number">15</span>
+                <span class="stat-label">Produk Lelang</span>
+              </div>
+            </div>
+            <div class="stat-item">
+              <i class="bi bi-people-fill"></i>
+              <div>
+                <span class="stat-number">247</span>
+                <span class="stat-label">Peserta Aktif</span>
+              </div>
+            </div>
+          </div>
+
+          <a href="lelang.html" class="btn-join-auction">
+            <i class="bi bi-gavel"></i>
+            Ikuti Lelang Sekarang
+          </a>
+        </div>
+
+        <div class="auction-preview">
+          <div class="preview-card">
+            <div class="preview-badge">HOT ITEM</div>
+            <img src="https://images.tokopedia.net/img/cache/700/VqbcmM/2023/10/27/e692ce96-2164-4c9c-9f58-b8dda1ef3037.jpg" alt="iPhone 15 Pro Max">
+            <div class="preview-info">
+              <h4>iPhone 15 Pro Max</h4>
+              <div class="preview-price">
+                <span class="label">Bid Tertinggi:</span>
+                <span class="price">Rp 16.500.000</span>
+              </div>
+              <div class="preview-bids">
+                <i class="bi bi-hammer"></i>
+                <span>128 Bids</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- KATALOG PRODUK -->
   <section class="katalog">
     <!-- Tablet -->
@@ -142,6 +217,7 @@
 
   <!-- Scripts -->
   <script src="products-loader.js"></script>
+  <script src="auction-timer.js"></script>
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script src="script.js"></script>
 </body>
