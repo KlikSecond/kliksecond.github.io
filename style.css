@@ -84,48 +84,6 @@ body {
   font-size: 14px;
 }
 
-/* Hilangkan default search button & clear button - ALL BROWSERS */
-input[type="search"]::-webkit-search-decoration,
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-results-button,
-input[type="search"]::-webkit-search-results-decoration {
-  -webkit-appearance: none;
-  appearance: none;
-  display: none !important;
-}
-
-.search-input::-webkit-search-decoration,
-.search-input::-webkit-search-cancel-button,
-.search-input::-webkit-search-results-button,
-.search-input::-webkit-search-results-decoration {
-  -webkit-appearance: none;
-  appearance: none;
-  display: none !important;
-}
-
-/* Firefox */
-input[type="search"]::-moz-search-decoration,
-input[type="search"]::-moz-search-cancel-button {
-  -moz-appearance: none;
-  appearance: none;
-  display: none !important;
-}
-
-/* Edge & IE */
-input[type="search"]::-ms-clear,
-input[type="search"]::-ms-reveal {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-}
-
-.search-input::-ms-clear,
-.search-input::-ms-reveal {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-}
-
 /* ===== NAVIGATION LINKS ===== */
 .nav-links {
   display: flex;
@@ -194,7 +152,7 @@ input[type="search"]::-ms-reveal {
 .content-iklan {
   position: relative;
   margin: 30px auto;
-  background-color: #1a1a1a; /* Background lebih gelap tapi tidak hitam pekat */
+  background-color: #212121;
   max-width: 1120px;
   width: 100%;
   height: 400px;
@@ -289,8 +247,7 @@ input[type="search"]::-ms-reveal {
   top: 0;
   left: 0;
   z-index: 0;
-  filter: blur(8px) brightness(0.7); /* Tambah brightness agar tidak terlalu gelap */
-  transform: scale(1.1);
+  filter: blur(10px);
 }
 
 .overlay {
@@ -299,7 +256,7 @@ input[type="search"]::-ms-reveal {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.4) 100%); /* Overlay lebih transparan */
+  background: rgba(0, 0, 0, 0.6);
   z-index: 1;
 }
 
@@ -315,7 +272,6 @@ input[type="search"]::-ms-reveal {
   transform: rotate(5deg);
   transition: transform 0.3s;
   margin: 0 auto;
-  background: #2a2a2a; /* Fallback background lebih terang */
 }
 
 .cover-wrapper:hover {
@@ -344,15 +300,13 @@ input[type="search"]::-ms-reveal {
   font-size: 32px;
   margin-bottom: 15px;
   color: #00ffff;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Text shadow lebih kuat */
 }
 
 .caption p {
   font-size: 16px;
   line-height: 1.6;
   margin-bottom: 20px;
-  opacity: 0.95;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8); /* Text shadow untuk readability */
+  opacity: 0.9;
 }
 
 .genres {
@@ -368,11 +322,10 @@ input[type="search"]::-ms-reveal {
   font-size: 14px;
   font-weight: bold;
   color: white;
-  background: rgba(0, 255, 255, 0.2); /* Background transparan berwarna cyan */
+  background: transparent;
   border: 2px solid #00ffff;
   border-radius: 20px;
   transition: 0.3s;
-  backdrop-filter: blur(5px);
 }
 
 .genres span:hover {
@@ -774,77 +727,43 @@ input[type="search"]::-ms-reveal {
 @media (max-width: 768px) {
   .navbar {
     padding: 10px 15px;
-    gap: 10px;
   }
 
   .nav-links {
     display: none;
   }
 
-  /* ===== SEARCH WRAPPER - TETAP INLINE ===== */
   .search-wrapper {
-    flex: 0 1 180px; /* Lebar lebih kecil, tidak turun kebawah */
-    min-width: 150px;
-    max-width: 180px;
-  }
-
-  .search-box {
-    padding: 5px 10px;
-  }
-
-  .search-input {
-    font-size: 13px;
-  }
-
-  .search-icon {
-    font-size: 14px;
-    margin-right: 6px;
-  }
-
-  .auth-buttons {
-    gap: 8px;
-  }
-
-  .btn-login, .btn-register {
-    padding: 6px 12px;
-    font-size: 13px;
+    order: 3;
+    flex-basis: 100%;
+    max-width: 100%;
+    margin-top: 10px;
   }
 
   /* ===== PERBAIKAN CONTENT IKLAN UNTUK MOBILE ===== */
   .content-iklan {
     height: auto;
-    min-height: 620px; /* Tinggi lebih besar untuk ruang cukup */
+    min-height: 600px; /* Tinggi lebih besar untuk ruang cukup */
     margin: 20px 10px;
     width: calc(100% - 20px);
     padding: 0;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); /* Background gradient lebih menarik */
   }
 
   .slide {
     flex-direction: column;
-    padding: 25px 15px;
-    justify-content: center; /* Center alignment */
-    gap: 20px;
+    padding: 20px 15px;
+    justify-content: space-evenly; /* Distribusi ruang merata */
+    gap: 15px;
     align-items: center;
-  }
-
-  /* Background image lebih terang di mobile */
-  .bg-img {
-    filter: blur(6px) brightness(0.5);
-  }
-
-  .overlay {
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.3) 100%);
   }
 
   /* Perbesar Cover Image */
   .cover-wrapper {
     width: 280px;
     height: 350px;
-    margin: 0 auto 20px;
+    margin: 0 auto;
     transform: rotate(0deg); /* Hilangkan rotasi agar lebih rapi */
     flex-shrink: 0;
-    background: linear-gradient(135deg, #2a2a2a, #1a1a1a); /* Gradient background */
   }
 
   .cover-wrapper:hover {
@@ -855,21 +774,19 @@ input[type="search"]::-ms-reveal {
   .caption {
     max-width: 100%;
     text-align: center;
-    padding: 0 15px;
+    padding: 0 10px;
     flex-shrink: 0;
   }
 
   .caption h3 {
     font-size: 24px;
     margin-bottom: 12px;
-    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9);
   }
 
   .caption p {
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.5;
     margin-bottom: 15px;
-    text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.9);
   }
 
   .genres {
@@ -879,28 +796,25 @@ input[type="search"]::-ms-reveal {
   }
 
   .genres span {
-    padding: 6px 14px;
+    padding: 5px 12px;
     font-size: 13px;
-    background: rgba(0, 255, 255, 0.25);
   }
 
   .read-now {
-    padding: 11px 28px;
+    padding: 10px 25px;
     font-size: 14px;
   }
 
-  /* Arrow Controls - Lebih visible di mobile */
+  /* Arrow Controls - Lebih kecil di mobile */
   .content-iklan i {
-    font-size: 32px;
-    width: 45px;
-    height: 45px;
+    font-size: 30px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
-    backdrop-filter: blur(5px);
-    border: 2px solid rgba(0, 255, 255, 0.3);
   }
 
   .content-iklan i.prev {
@@ -909,12 +823,6 @@ input[type="search"]::-ms-reveal {
 
   .content-iklan i.next {
     right: 10px;
-  }
-
-  .content-iklan i:hover {
-    background: rgba(0, 255, 255, 0.3);
-    color: #00ffff;
-    transform: translateY(-50%) scale(1.15);
   }
 
   /* ===== END PERBAIKAN CONTENT IKLAN ===== */
@@ -961,75 +869,64 @@ input[type="search"]::-ms-reveal {
 
 /* ===== EXTRA SMALL MOBILE (480px) ===== */
 @media (max-width: 480px) {
-  .search-wrapper {
-    flex: 0 1 140px;
-    min-width: 120px;
-    max-width: 140px;
-  }
-
-  .btn-login, .btn-register {
-    padding: 5px 10px;
-    font-size: 12px;
-  }
-
   .content-iklan {
-    min-height: 600px;
+    min-height: 580px;
     margin: 15px 8px;
     width: calc(100% - 16px);
   }
 
   .slide {
-    padding: 20px 12px;
+    padding: 15px 10px;
   }
 
   .cover-wrapper {
-    width: 260px;
-    height: 320px;
+    width: 240px;
+    height: 300px;
   }
 
   .caption h3 {
-    font-size: 21px;
+    font-size: 20px;
   }
 
   .caption p {
     font-size: 13px;
-    line-height: 1.5;
+    line-height: 1.4;
   }
 
   .genres span {
     font-size: 12px;
-    padding: 5px 12px;
+    padding: 4px 10px;
   }
 
   .read-now {
-    padding: 9px 22px;
+    padding: 8px 20px;
     font-size: 13px;
   }
 
   .content-iklan i {
-    font-size: 28px;
-    width: 40px;
-    height: 40px;
+    font-size: 26px;
+    width: 36px;
+    height: 36px;
   }
 }
 
 /* ===== LANDSCAPE MODE UNTUK MOBILE ===== */
 @media (max-width: 768px) and (orientation: landscape) {
   .content-iklan {
-    min-height: 400px;
+    min-height: 380px;
   }
 
   .slide {
     flex-direction: row;
-    padding: 20px 20px;
+    padding: 15px 20px;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 25px;
   }
 
   .cover-wrapper {
-    width: 220px;
-    height: 300px;
+    width: 200px;
+    height: 280px;
     margin: 0;
   }
 
@@ -1045,7 +942,7 @@ input[type="search"]::-ms-reveal {
 
   .caption p {
     font-size: 13px;
-    line-height: 1.5;
+    line-height: 1.4;
   }
 
   .genres {
