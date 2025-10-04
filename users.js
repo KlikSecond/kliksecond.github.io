@@ -5,7 +5,7 @@ const usersData = {
   users: [
     {
       id: "user-001",
-      username: "kelvin01",
+      username: "kelvingacor",
       password: "kelvin12345",
       email: "admin@kliksecond.com",
       fullName: "Kelvin Ganteng",
@@ -18,32 +18,37 @@ const usersData = {
         {
           id: "notif-001",
           type: "auction_sold",
-          title: "Produk Telah Terjual",
-          message: "POCO C75 Anda Telah Terjual Seharga Rp 1.300.000",
+          title: "Lelang Berhasil",
+          message: "POCO C75 Anda telah terjual dengan harga Rp 2.240.000",
           date: "2025-10-02 10:24",
           read: false,
           productId: "android-001"
         },
+      ]
+    },
+    {
+      id: "user-002",
+      username: "rivenkrist",
+      password: "riven12345",
+      email: "john@example.com",
+      fullName: "Riven Kristian",
+      phone: "08198765432",
+      address: "Bandung",
+      profilePicture: "https://ui-avatars.com/api/?name=Riven+Kristian&background=4169e1&color=fff",
+      role: "seller",
+      joinDate: "2024-03-15",
+      notifications: [
         {
           id: "notif-001",
-          type: "product_approved",
-          title: "HP Anda Dihargai seharga 1.200.000 ",
-          message: "Jika anda berminat, HP bisa diantarkan langsung ke store",
-          date: "2025-10-02 18:17",
+          type: "auction_sold",
+          title: "Produk Anda Telah Terjual",
+          message: "Samsung Galaxy S23 Rp 9.800.000",
+          date: "2025-10-10 10:45",
           read: false,
           productId: "android-001"
         },
         {
           id: "notif-002",
-          type: "auction_sold",
-          title: "Lelang Berhasil!",
-          message: "iPhone 15 Pro Max Anda telah terjual dengan harga Rp 17.500.000",
-          date: "2025-10-03 14:30",
-          read: false,
-          productId: "iphone-001"
-        },
-        {
-          id: "notif-003",
           type: "product_approved",
           title: "Produk Disetujui",
           message: "Samsung Galaxy S23 Anda telah diverifikasi dan ditampilkan di katalog",
@@ -52,42 +57,6 @@ const usersData = {
           productId: "android-001"
         }
       ]
-    },
-    {
-      id: "user-002",
-      username: "john_doe",
-      password: "john123",
-      email: "john@example.com",
-      fullName: "John Doe",
-      phone: "08198765432",
-      address: "Bandung",
-      profilePicture: "https://ui-avatars.com/api/?name=John+Doe&background=4169e1&color=fff",
-      role: "seller",
-      joinDate: "2024-03-15",
-      notifications: [
-        {
-          id: "notif-003",
-          type: "bid_received",
-          title: "Bid Baru Diterima",
-          message: "Ada bid baru Rp 12.000.000 untuk iPhone 13 Pro Max Anda",
-          date: "2025-10-03 16:45",
-          read: false,
-          productId: "iphone-002"
-        }
-      ]
-    },
-    {
-      id: "user-003",
-      username: "seller123",
-      password: "pass123",
-      email: "seller@example.com",
-      fullName: "Seller Premium",
-      phone: "08123123123",
-      address: "Surabaya",
-      profilePicture: "https://ui-avatars.com/api/?name=Seller+Premium&background=ff6b6b&color=fff",
-      role: "seller",
-      joinDate: "2024-05-20",
-      notifications: []
     }
   ]
 };
