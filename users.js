@@ -51,7 +51,7 @@ const usersData = {
     },
     {
       id: "user-003",
-      username: "nichop",
+      username: "nicho12",
       password: "nicho12345",
       email: "seller@example.com",
       fullName: "Nicholas Yang",
