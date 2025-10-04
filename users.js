@@ -12,7 +12,7 @@ const usersData = {
       phone: "08123456789",
       address: "Jakarta Pusat",
       profilePicture: "https://ui-avatars.com/api/?name=Kelvin+Ganteng&background=00ffff&color=000",
-      role: "user",
+      role: "seller",
       joinDate: "2024-01-01",
       notifications: [
         {
