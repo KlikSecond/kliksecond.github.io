@@ -39,23 +39,37 @@ const usersData = {
       joinDate: "2024-03-15",
       notifications: [
         {
+          id: "notif-003",
+          type: "bid_received",
+          title: "HP Anda Dihargai Seharga Rp 6.175.000",
+          message: "Jika Anda Berminat HP Bisa Diantar Langsung ke Store",
+          date: "2025-10-03 16:45",
+          read: false,
+          productId: "iphone-002"
+        }
+      ]
+    },
+    {
+      id: "user-003",
+      username: "nichop",
+      password: "nicho12345",
+      email: "seller@example.com",
+      fullName: "Nicholas Yang",
+      phone: "08123123123",
+      address: "Surabaya",
+      profilePicture: "https://ui-avatars.com/api/?name=Nicholas+Yang&background=ff6b6b&color=fff",
+      role: "seller",
+      joinDate: "2024-05-20",
+      notifications: [
+        {
           id: "notif-001",
           type: "auction_sold",
           title: "Produk Anda Telah Terjual",
           message: "Samsung Galaxy S23 Rp 9.800.000",
-          date: "2025-10-10 10:45",
+          date: "2025-10-10 10:15",
           read: false,
           productId: "android-001"
         },
-        {
-          id: "notif-002",
-          type: "product_approved",
-          title: "Produk Disetujui",
-          message: "Samsung Galaxy S23 Anda telah diverifikasi dan ditampilkan di katalog",
-          date: "2025-10-02 10:15",
-          read: false,
-          productId: "android-001"
-        }
       ]
     }
   ]
