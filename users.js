@@ -65,7 +65,7 @@ const usersData = {
           id: "notif-001",
           type: "auction_sold",
           title: "Produk Anda Telah Terjual",
-          message: "Samsung Galaxy S23 Rp 9.800.000",
+          message: "Samsung Galaxy S23 Anda Terjual Seharga Rp 9.800.000",
           date: "2025-10-10 10:15",
           read: false,
           productId: "android-001"

@@ -1,4 +1,4 @@
-// ===== NOTIFICATION PANEL HANDLER =====
+// ===== NOTIFICATION PANEL HANDLER (FIXED) =====
 
 function toggleNotificationPanel() {
   const panel = document.getElementById('notification-panel');
@@ -40,7 +40,77 @@ function closeNotificationOnClickOutside(e) {
 
 function loadNotifications() {
   const notificationList = document.getElementById('notification-list');
-  const notifications = authSystem.getUserNotifications();
+  
+  console.log('Loading notifications...');
+  
+  // ===== FIX: Gunakan SessionManager untuk cek login =====
+  if (!window.SessionManager) {
+    console.error('SessionManager not found!');
+    notificationList.innerHTML = `
+      <div class="notification-empty">
+        <i class="bi bi-bell-slash"></i>
+        <p>System error: SessionManager not loaded</p>
+      </div>
+    `;
+    return;
+  }
+  
+  // Cek apakah user sudah login
+  const isLoggedIn = window.SessionManager.isLoggedIn();
+  console.log('Is logged in:', isLoggedIn);
+  
+  if (!isLoggedIn) {
+    notificationList.innerHTML = `
+      <div class="notification-empty">
+        <i class="bi bi-bell-slash"></i>
+        <p>Silakan login untuk melihat notifikasi</p>
+      </div>
+    `;
+    return;
+  }
+  
+  // Ambil data user yang sedang login
+  const currentUser = window.SessionManager.getCurrentUser();
+  console.log('Current user:', currentUser);
+  
+  if (!currentUser) {
+    notificationList.innerHTML = `
+      <div class="notification-empty">
+        <i class="bi bi-bell-slash"></i>
+        <p>User data not found</p>
+      </div>
+    `;
+    return;
+  }
+  
+  // ===== FIX: Ambil notifikasi dari usersData berdasarkan username =====
+  if (!window.usersData || !window.usersData.users) {
+    console.error('usersData not found!');
+    notificationList.innerHTML = `
+      <div class="notification-empty">
+        <i class="bi bi-bell-slash"></i>
+        <p>Data users tidak ditemukan</p>
+      </div>
+    `;
+    return;
+  }
+  
+  // Cari user berdasarkan username
+  const fullUser = window.usersData.users.find(u => u.username === currentUser.username);
+  console.log('Full user data:', fullUser);
+  
+  if (!fullUser || !fullUser.notifications) {
+    notificationList.innerHTML = `
+      <div class="notification-empty">
+        <i class="bi bi-bell-slash"></i>
+        <p>Belum ada notifikasi</p>
+      </div>
+    `;
+    return;
+  }
+  
+  const notifications = fullUser.notifications;
+  console.log('Notifications found:', notifications.length);
   
   if (notifications.length === 0) {
     notificationList.innerHTML = `
@@ -53,10 +123,14 @@ function loadNotifications() {
   }
   
   // Sort by date (newest first)
-  notifications.sort((a, b) => new Date(b.date) - new Date(a.date));
+  notifications.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateB - dateA;
+  });
   
   notificationList.innerHTML = notifications.map(notif => `
-    <div class="notification-item ${notif.read ? '' : 'unread'}" onclick="handleNotificationClick('${notif.id}')">
+    <div class="notification-item ${notif.read ? '' : 'unread'}" onclick="handleNotificationClick('${notif.id}', '${currentUser.username}')">
       <div class="notification-icon ${notif.type}">
         <i class="bi bi-${getNotificationIcon(notif.type)}"></i>
       </div>
@@ -85,37 +159,149 @@ function getNotificationIcon(type) {
   return icons[type] || 'bell-fill';
 }
 
-function handleNotificationClick(notificationId) {
-  // Mark as read
-  authSystem.markAsRead(notificationId);
+function handleNotificationClick(notificationId, username) {
+  console.log('Notification clicked:', notificationId);
+  
+  if (!window.usersData) return;
+  
+  // Cari user dan mark notification as read
+  const user = window.usersData.users.find(u => u.username === username);
+  if (user) {
+    const notification = user.notifications.find(n => n.id === notificationId);
+    if (notification) {
+      notification.read = true;
+      console.log('Notification marked as read');
+    }
+  }
   
   // Update badge
   updateNotificationBadge();
   
   // Reload notifications
   loadNotifications();
-  
-  // You can add navigation to related product/page here
 }
 
 function markAllNotificationsAsRead() {
-  authSystem.markAllAsRead();
+  console.log('Mark all as read');
+  
+  if (!window.SessionManager || !window.SessionManager.isLoggedIn()) return;
+  
+  const currentUser = window.SessionManager.getCurrentUser();
+  if (!currentUser) return;
+  
+  const user = window.usersData.users.find(u => u.username === currentUser.username);
+  if (user && user.notifications) {
+    user.notifications.forEach(n => n.read = true);
+    console.log('All notifications marked as read');
+  }
+  
   updateNotificationBadge();
   loadNotifications();
-  
-  showNotification('Notifikasi', 'Semua notifikasi telah ditandai sebagai dibaca', 'success');
 }
 
-// Initialize notification panel
-document.addEventListener('DOMContentLoaded', function() {
+function updateNotificationBadge() {
+  if (!window.SessionManager || !window.SessionManager.isLoggedIn()) return;
+  
+  const currentUser = window.SessionManager.getCurrentUser();
+  if (!currentUser) return;
+  
+  const badge = document.querySelector('.notification-badge');
+  if (badge && window.usersData) {
+    const user = window.usersData.users.find(u => u.username === currentUser.username);
+    if (user && user.notifications) {
+      const count = user.notifications.filter(n => !n.read).length;
+      badge.textContent = count;
+      
+      if (count > 0) {
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+      
+      console.log('Badge updated:', count, 'unread notifications');
+    }
+  }
+}
+
+// ===== INITIALIZE NOTIFICATION PANEL =====
+function initializeNotificationPanel() {
+  console.log('🔔 Initializing notification panel...');
+  
+  // Get elements
+  const notificationBtn = document.querySelector('.notification-btn');
   const closeNotifBtn = document.querySelector('.close-notification');
   const markAllReadBtn = document.querySelector('.mark-all-read');
   
-  if (closeNotifBtn) {
-    closeNotifBtn.addEventListener('click', closeNotificationPanel);
+  // Attach click listener to notification button
+  if (notificationBtn) {
+    notificationBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      console.log('Notification button clicked!');
+      toggleNotificationPanel();
+    });
+    console.log('✅ Notification button listener attached');
+  } else {
+    console.error('❌ Notification button not found!');
   }
   
-  if (markAllReadBtn) {
-    markAllReadBtn.addEventListener('click', markAllNotificationsAsRead);
+  // Attach close button
+  if (closeNotifBtn) {
+    closeNotifBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      closeNotificationPanel();
+    });
   }
-});a
+  
+  // Attach mark all read button
+  if (markAllReadBtn) {
+    markAllReadBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      markAllNotificationsAsRead();
+    });
+  }
+  
+  // Update badge on init
+  updateNotificationBadge();
+  
+  console.log('✅ Notification panel initialized');
+}
+
+// ===== FIX: Tunggu semua dependencies loaded =====
+function waitForDependencies() {
+  return new Promise((resolve) => {
+    const checkInterval = setInterval(() => {
+      if (window.SessionManager && window.usersData) {
+        clearInterval(checkInterval);
+        console.log('✅ All dependencies loaded');
+        resolve();
+      }
+    }, 50); // Check every 50ms
+    
+    // Timeout setelah 5 detik
+    setTimeout(() => {
+      clearInterval(checkInterval);
+      console.warn('⚠️ Timeout waiting for dependencies');
+      resolve();
+    }, 5000);
+  });
+}
+
+// Initialize setelah dependencies ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', async function() {
+    await waitForDependencies();
+    initializeNotificationPanel();
+  });
+} else {
+  waitForDependencies().then(() => {
+    initializeNotificationPanel();
+  });
+}
+
+// Export functions
+window.notificationHandler = {
+  toggleNotificationPanel,
+  loadNotifications,
+  updateNotificationBadge,
+  markAllNotificationsAsRead
+};

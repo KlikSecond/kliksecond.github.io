@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Detail Produk - Klik Second</title>
-  <link rel="stylesheet" href="product-detail.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="auth-modal.css">
+  <link rel="stylesheet" href="notification.css">
+  <link rel="stylesheet" href="product-detail.css">
 </head>
 <body>
   <div id="particles-js"></div>
@@ -14,7 +17,7 @@
   <header class="header">
     <nav class="navbar">
       <a href="index.html">
-        <img src="LogoKlikSecondTransparent.png" class="logo">
+        <img src="LogoKlikSecondTransparent.png" class="logo" alt="Klik Second">
       </a>
       <div class="search-wrapper">
         <div class="search-box">
@@ -23,15 +26,185 @@
         </div>
       </div>
       <ul class="nav-links">
-        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="lelang.html">Lelang</a></li>
         <li><a href="index.html#about">About Us</a></li>
       </ul>
+      
+      <!-- Auth Buttons (shown when not logged in) -->
       <div class="auth-buttons">
         <button class="btn-login">Login</button>
         <button class="btn-register">Daftar</button>
       </div>
+
+      <!-- User Profile Section (shown when logged in) -->
+      <div class="user-profile-section">
+        <button class="notification-btn">
+          <i class="bi bi-bell-fill"></i>
+          <span class="notification-badge">0</span>
+        </button>
+
+        <div class="user-profile-trigger">
+          <img src="https://ui-avatars.com/api/?name=User&background=00ffff&color=000" alt="User" class="user-avatar">
+          <div class="user-info">
+            <span class="user-name">User Name</span>
+            <span class="user-role">Seller</span>
+          </div>
+          <i class="bi bi-chevron-down dropdown-arrow"></i>
+        </div>
+
+        <div class="user-dropdown">
+          <a href="#" class="dropdown-item">
+            <i class="bi bi-person-circle"></i>
+            <span>Profile Saya</span>
+          </a>
+          <a href="#" class="dropdown-item">
+            <i class="bi bi-box-seam"></i>
+            <span>Produk Saya</span>
+          </a>
+          <a href="#" class="dropdown-item">
+            <i class="bi bi-gavel"></i>
+            <span>Lelang Saya</span>
+          </a>
+          <a href="#" class="dropdown-item">
+            <i class="bi bi-gear"></i>
+            <span>Pengaturan</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item" id="logout-btn">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Keluar</span>
+          </a>
+        </div>
+      </div>
     </nav>
   </header>
+
+  <!-- NOTIFICATION PANEL -->
+  <div id="notification-panel" class="notification-panel">
+    <div class="notification-header">
+      <h3><i class="bi bi-bell-fill"></i> Notifikasi</h3>
+      <div class="notification-actions">
+        <button class="mark-all-read">Tandai Semua</button>
+        <button class="close-notification">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+    </div>
+    <div class="notification-list" id="notification-list">
+      <!-- Notifications will be loaded here -->
+    </div>
+  </div>
+
+  <!-- AUTHENTICATION MODAL -->
+  <div id="auth-modal" class="auth-modal">
+    <div class="auth-modal-content">
+      <span class="auth-modal-close">
+        <i class="bi bi-x"></i>
+      </span>
+
+      <div class="auth-modal-header">
+        <h2>Selamat Datang!</h2>
+        <p>Login atau daftar untuk melanjutkan</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Login</button>
+        <button class="auth-tab" data-tab="register">Daftar</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="login-form" class="auth-form active">
+        <div id="login-error" class="error-message"></div>
+        
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label for="login-username">Username atau Email</label>
+            <input type="text" id="login-username" placeholder="Masukkan username atau email" required>
+          </div>
+
+          <div class="form-group password-toggle">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="Masukkan password" required>
+            <i class="bi bi-eye-slash password-toggle-icon"></i>
+          </div>
+
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" id="remember-me">
+              <span>Ingat Saya</span>
+            </label>
+            <a href="#" class="forgot-password">Lupa Password?</a>
+          </div>
+
+          <button type="submit" class="auth-submit-btn">
+            <i class="bi bi-box-arrow-in-right"></i>
+            Login
+          </button>
+        </form>
+
+        <div class="auth-divider">
+          <span>atau login dengan</span>
+        </div>
+
+        <div class="social-login">
+          <button class="social-btn">
+            <i class="bi bi-google"></i>
+            Google
+          </button>
+          <button class="social-btn">
+            <i class="bi bi-facebook"></i>
+            Facebook
+          </button>
+        </div>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="register-form" class="auth-form">
+        <div id="register-error" class="error-message"></div>
+        <div id="register-success" class="success-message"></div>
+        
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label for="register-fullname">Nama Lengkap</label>
+            <input type="text" id="register-fullname" placeholder="Masukkan nama lengkap" required>
+          </div>
+
+          <div class="form-group">
+            <label for="register-email">Email</label>
+            <input type="email" id="register-email" placeholder="Masukkan email" required>
+          </div>
+
+          <div class="form-group">
+            <label for="register-phone">No. Telepon</label>
+            <input type="tel" id="register-phone" placeholder="08XXXXXXXXXX" required>
+          </div>
+
+          <div class="form-group">
+            <label for="register-username">Username</label>
+            <input type="text" id="register-username" placeholder="Pilih username" required>
+          </div>
+
+          <div class="form-group password-toggle">
+            <label for="register-password">Password</label>
+            <input type="password" id="register-password" placeholder="Minimal 6 karakter" required>
+            <i class="bi bi-eye-slash password-toggle-icon"></i>
+          </div>
+
+          <div class="form-group password-toggle">
+            <label for="register-confirm-password">Konfirmasi Password</label>
+            <input type="password" id="register-confirm-password" placeholder="Ulangi password" required>
+            <i class="bi bi-eye-slash password-toggle-icon"></i>
+          </div>
+
+          <button type="submit" class="auth-submit-btn">
+            <i class="bi bi-person-plus"></i>
+            Daftar Sekarang
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- Product Detail Section -->
   <section class="product-detail">
@@ -168,6 +341,11 @@
     <p>© 2025 Klik Second. All Rights Reserved.</p>
   </footer>
 
+  <!-- Scripts - CRITICAL ORDER -->
+  <script src="users.js"></script>
+  <script src="session-manager.js"></script>
+  <script src="auth-handler.js"></script>
+  <script src="notification-handler.js"></script>
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script src="products-loader.js"></script>
   <script src="product-detail.js"></script>
