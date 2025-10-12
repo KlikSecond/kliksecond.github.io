@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pegadaian Gadget | Klik Second</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="auth-modal.css">
+  <link rel="stylesheet" href="notification.css">
+  <link rel="stylesheet" href="pegadaian-style.css">
+</head>
+<body>
+  <div id="particles-js"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html">
+        <img src="LogoKlikSecondTransparent.png" class="logo" alt="Klik Second">
+      </a>
+
+      <div class="search-wrapper">
+        <div class="search-box">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" class="search-input" placeholder="Cari Gadget">
+        </div>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="lelang.html">Lelang</a></li>
+        <li><a href="pegadaian.html" class="active">Pegadaian</a></li>
+        <li><a href="index.html#about">About Us</a></li>
+      </ul>
+
+      <!-- Auth Buttons (shown when not logged in) -->
+      <div class="auth-buttons">
+        <button class="btn-login">Login</button>
+        <button class="btn-register">Daftar</button>
+      </div>
+
+      <!-- User Profile Section (shown when logged in) -->
+      <div class="user-profile-section">
+        <button class="notification-btn">
+          <i class="bi bi-bell-fill"></i>
+          <span class="notification-badge">0</span>
+        </button>
+
+        <div class="user-profile-trigger">
+          <img src="https://ui-avatars.com/api/?name=User&background=00ffff&color=000" alt="User" class="user-avatar">
+          <div class="user-info">
+            <span class="user-name">User Name</span>
+            <span class="user-role">Seller</span>
+          </div>
+          <i class="bi bi-chevron-down dropdown-arrow"></i>
+        </div>
+
+        <div class="user-dropdown">
+          <a href="#" class="dropdown-item">
+            <i class="bi bi-person-circle"></i>
+            <span>Profile Saya</span>
+          </a>
+          <a href="#" class="dropdown-item">
+            <i class="bi bi-box-seam"></i>
+            <span>Produk Saya</span>
+          </a>
+          <a href="#" class="dropdown-item">
+            <i class="bi bi-gem"></i>
+            <span>Pegadaian Saya</span>
+          </a>
+          <a href="#" class="dropdown-item">
+            <i class="bi bi-gear"></i>
+            <span>Pengaturan</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item" id="logout-btn">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Keluar</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- NOTIFICATION PANEL -->
+  <div id="notification-panel" class="notification-panel">
+    <div class="notification-header">
+      <h3><i class="bi bi-bell-fill"></i> Notifikasi</h3>
+      <div class="notification-actions">
+        <button class="mark-all-read">Tandai Semua</button>
+        <button class="close-notification">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+    </div>
+    <div class="notification-list" id="notification-list">
+      <!-- Notifications will be loaded here -->
+    </div>
+  </div>
+
+  <!-- AUTHENTICATION MODAL -->
+  <div id="auth-modal" class="auth-modal">
+    <div class="auth-modal-content">
+      <span class="auth-modal-close">
+        <i class="bi bi-x"></i>
+      </span>
+
+      <div class="auth-modal-header">
+        <h2>Selamat Datang!</h2>
+        <p>Login atau daftar untuk melanjutkan</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Login</button>
+        <button class="auth-tab" data-tab="register">Daftar</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="login-form" class="auth-form active">
+        <div id="login-error" class="error-message"></div>
+        
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label for="login-username">Username atau Email</label>
+            <input type="text" id="login-username" placeholder="Masukkan username atau email" required>
+          </div>
+
+          <div class="form-group password-toggle">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="Masukkan password" required>
+            <i class="bi bi-eye-slash password-toggle-icon"></i>
+          </div>
+
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" id="remember-me">
+              <span>Ingat Saya</span>
+            </label>
+            <a href="#" class="forgot-password">Lupa Password?</a>
+          </div>
+
+          <button type="submit" class="auth-submit-btn">
+            <i class="bi bi-box-arrow-in-right"></i>
+            Login
+          </button>
+        </form>
+
+        <div class="auth-divider">
+          <span>atau login dengan</span>
+        </div>
+
+        <div class="social-login">
+          <button class="social-btn">
+            <i class="bi bi-google"></i>
+            Google
+          </button>
+          <button class="social-btn">
+            <i class="bi bi-facebook"></i>
+            Facebook
+          </button>
+        </div>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="register-form" class="auth-form">
+        <div id="register-error" class="error-message"></div>
+        <div id="register-success" class="success-message"></div>
+        
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label for="register-fullname">Nama Lengkap</label>
+            <input type="text" id="register-fullname" placeholder="Masukkan nama lengkap" required>
+          </div>
+
+          <div class="form-group">
+            <label for="register-email">Email</label>
+            <input type="email" id="register-email" placeholder="Masukkan email" required>
+          </div>
+
+          <div class="form-group">
+            <label for="register-phone">No. Telepon</label>
+            <input type="tel" id="register-phone" placeholder="08XXXXXXXXXX" required>
+          </div>
+
+          <div class="form-group">
+            <label for="register-username">Username</label>
+            <input type="text" id="register-username" placeholder="Pilih username" required>
+          </div>
+
+          <div class="form-group password-toggle">
+            <label for="register-password">Password</label>
+            <input type="password" id="register-password" placeholder="Minimal 6 karakter" required>
+            <i class="bi bi-eye-slash password-toggle-icon"></i>
+          </div>
+
+          <div class="form-group password-toggle">
+            <label for="register-confirm-password">Konfirmasi Password</label>
+            <input type="password" id="register-confirm-password" placeholder="Ulangi password" required>
+            <i class="bi bi-eye-slash password-toggle-icon"></i>
+          </div>
+
+          <button type="submit" class="auth-submit-btn">
+            <i class="bi bi-person-plus"></i>
+            Daftar Sekarang
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO SECTION PEGADAIAN -->
+  <section class="pegadaian-hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="bi bi-gem"></i>
+        <span>PEGADAIAN GADGET</span>
+      </div>
+      <h1>Gadai Gadget Anda dengan Aman & Cepat</h1>
+      <p>Butuh dana cepat? Gadaikan gadget Anda dan dapatkan pinjaman tunai hingga 80% dari nilai gadget</p>
+      
+      <div class="hero-features">
+        <div class="feature-item">
+          <i class="bi bi-lightning-charge-fill"></i>
+          <div>
+            <h4>Proses Cepat</h4>
+            <p>Estimasi dalam 5 menit</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <i class="bi bi-shield-check"></i>
+          <div>
+            <h4>Aman & Terpercaya</h4>
+            <p>Barang dijamin aman</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <i class="bi bi-cash-stack"></i>
+          <div>
+            <h4>Nilai Terbaik</h4>
+            <p>Hingga 80% nilai gadget</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-start-gadai" onclick="openPegadaianModal()">
+        <i class="bi bi-arrow-right-circle-fill"></i>
+        Mulai Gadai Sekarang
+      </button>
+    </div>
+
+    <div class="hero-illustration">
+      <img src="https://images.unsplash.com/photo-1556656793-08538906a9f8?w=600" alt="Pegadaian Illustration">
+    </div>
+  </section>
+
+  <!-- CARA KERJA SECTION -->
+  <section class="cara-kerja">
+    <h2>Cara Kerja Pegadaian</h2>
+    <div class="steps-container">
+      <div class="step-item">
+        <div class="step-number">1</div>
+        <div class="step-icon">
+          <i class="bi bi-upload"></i>
+        </div>
+        <h3>Upload Gadget</h3>
+        <p>Upload foto dan spesifikasi gadget Anda untuk mendapatkan estimasi nilai pegadaian</p>
+      </div>
+
+      <div class="step-arrow">
+        <i class="bi bi-arrow-right"></i>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">2</div>
+        <div class="step-icon">
+          <i class="bi bi-calculator"></i>
+        </div>
+        <h3>Estimasi Otomatis</h3>
+        <p>Sistem akan memberikan estimasi nilai gadai berdasarkan kondisi dan spesifikasi</p>
+      </div>
+
+      <div class="step-arrow">
+        <i class="bi bi-arrow-right"></i>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">3</div>
+        <div class="step-icon">
+          <i class="bi bi-check-circle"></i>
+        </div>
+        <h3>Verifikasi Admin</h3>
+        <p>Admin akan memverifikasi dan memberikan nilai pasti pegadaian dalam 24 jam</p>
+      </div>
+
+      <div class="step-arrow">
+        <i class="bi bi-arrow-right"></i>
+      </div>
+
+      <div class="step-item">
+        <div class="step-number">4</div>
+        <div class="step-icon">
+          <i class="bi bi-cash-coin"></i>
+        </div>
+        <h3>Terima Dana</h3>
+        <p>Setelah disetujui, dana akan langsung ditransfer ke rekening Anda</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEUNTUNGAN SECTION -->
+  <section class="keuntungan">
+    <h2>Keuntungan Gadai di Klik Second</h2>
+    <div class="keuntungan-grid">
+      <div class="keuntungan-card">
+        <i class="bi bi-percent"></i>
+        <h3>Bunga Rendah</h3>
+        <p>Bunga kompetitif mulai dari 1.5% per bulan</p>
+      </div>
+      <div class="keuntungan-card">
+        <i class="bi bi-clock-history"></i>
+        <h3>Tenor Fleksibel</h3>
+        <p>Cicilan 1-12 bulan sesuai kemampuan</p>
+      </div>
+      <div class="keuntungan-card">
+        <i class="bi bi-arrow-repeat"></i>
+        <h3>Perpanjangan Mudah</h3>
+        <p>Dapat diperpanjang kapan saja</p>
+      </div>
+      <div class="keuntungan-card">
+        <i class="bi bi-shield-check"></i>
+        <h3>Tanpa Survei</h3>
+        <p>Tidak perlu survei rumah atau tempat kerja</p>
+      </div>
+      <div class="keuntungan-card">
+        <i class="bi bi-wallet2"></i>
+        <h3>Tanpa Jaminan Tambahan</h3>
+        <p>Cukup gadget Anda sebagai jaminan</p>
+      </div>
+      <div class="keuntungan-card">
+        <i class="bi bi-lock"></i>
+        <h3>Privasi Terjaga</h3>
+        <p>Data pribadi Anda dijamin aman</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PEGADAIAN MODAL -->
+  <div id="pegadaian-modal" class="pegadaian-modal">
+    <div class="pegadaian-modal-content">
+      <span class="pegadaian-modal-close" onclick="closePegadaianModal()">
+        <i class="bi bi-x"></i>
+      </span>
+
+      <div class="pegadaian-modal-header">
+        <i class="bi bi-gem"></i>
+        <h2>Form Pengajuan Gadai</h2>
+        <p>Isi data berikut untuk mendapatkan estimasi nilai gadai</p>
+      </div>
+
+      <!-- PROGRESS STEPS -->
+      <div class="progress-steps">
+        <div class="progress-step active" data-step="1">
+          <div class="step-circle">1</div>
+          <span>Info Gadget</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step" data-step="2">
+          <div class="step-circle">2</div>
+          <span>Foto & Dokumen</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step" data-step="3">
+          <div class="step-circle">3</div>
+          <span>Estimasi</span>
+        </div>
+      </div>
+
+      <form id="pegadaian-form">
+        <!-- STEP 1: INFO GADGET -->
+        <div class="form-step active" data-step="1">
+          <div class="form-row">
+            <div class="form-group-gadai">
+              <label><i class="bi bi-phone"></i> Nama Gadget <span class="required">*</span></label>
+              <input type="text" id="gadget-name" placeholder="Contoh: iPhone 14 Pro Max" required>
+            </div>
+
+            <div class="form-group-gadai">
+              <label><i class="bi bi-tag"></i> Kategori <span class="required">*</span></label>
+              <select id="gadget-category" required>
+                <option value="">Pilih Kategori</option>
+                <option value="iPhone">iPhone</option>
+                <option value="Android">Android</option>
+                <option value="Tablet">Tablet</option>
+                <option value="Laptop">Laptop</option>
+                <option value="Smartwatch">Smartwatch</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group-gadai">
+              <label><i class="bi bi-calendar"></i> Tahun Pembelian <span class="required">*</span></label>
+              <select id="gadget-year" required>
+                <option value="">Pilih Tahun</option>
+              </select>
+            </div>
+
+            <div class="form-group-gadai">
+              <label><i class="bi bi-hdd"></i> Storage <span class="required">*</span></label>
+              <input type="text" id="gadget-storage" placeholder="Contoh: 256GB" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group-gadai">
+              <label><i class="bi bi-star"></i> Kondisi <span class="required">*</span></label>
+              <select id="gadget-condition" required>
+                <option value="">Pilih Kondisi</option>
+                <option value="Baru">Seperti Baru (Mulus, No Minus)</option>
+                <option value="Baik">Baik (Minor Scratches)</option>
+                <option value="Normal">Normal (Bekas Pakai Wajar)</option>
+                <option value="Kurang Baik">Kurang Baik (Ada Minus)</option>
+              </select>
+            </div>
+
+            <div class="form-group-gadai">
+              <label><i class="bi bi-battery-charging"></i> Battery Health (%) <span class="required">*</span></label>
+              <input type="number" id="gadget-battery" placeholder="85" min="0" max="100" required>
+            </div>
+          </div>
+
+          <div class="form-group-gadai">
+            <label><i class="bi bi-box-seam"></i> Kelengkapan <span class="required">*</span></label>
+            <div class="checkbox-group">
+              <label class="checkbox-item">
+                <input type="checkbox" name="accessories" value="box">
+                <span>Box Original</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="accessories" value="charger">
+                <span>Charger</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="accessories" value="cable">
+                <span>Kabel Data</span>
+              </label>
+              <label class="checkbox-item">
+                <input type="checkbox" name="accessories" value="manual">
+                <span>Manual Book</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group-gadai">
+            <label><i class="bi bi-file-text"></i> Deskripsi Kondisi</label>
+            <textarea id="gadget-description" placeholder="Jelaskan kondisi gadget Anda secara detail..."></textarea>
+          </div>
+
+          <button type="button" class="btn-next" onclick="nextStep(2)">
+            Lanjut ke Foto & Dokumen
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- STEP 2: FOTO & DOKUMEN -->
+        <div class="form-step" data-step="2">
+          <div class="form-group-gadai">
+            <label><i class="bi bi-images"></i> Foto Gadget <span class="required">*</span></label>
+            <p class="helper-text">Upload minimal 4 foto (Depan, Belakang, Samping, On Screen)</p>
+            <div class="upload-area" id="gadget-upload-area">
+              <i class="bi bi-cloud-arrow-up-fill"></i>
+              <p>Klik atau drag foto ke sini</p>
+              <small>Maksimal 6 foto, maks 5MB per foto</small>
+            </div>
+            <input type="file" id="gadget-images" accept="image/*" multiple style="display: none;">
+            <div class="image-preview-grid" id="gadget-preview-grid"></div>
+          </div>
+
+          <div class="form-group-gadai">
+            <label><i class="bi bi-upc-scan"></i> Foto IMEI/Serial Number <span class="required">*</span></label>
+            <p class="helper-text">Foto IMEI untuk verifikasi keaslian gadget</p>
+            <div class="upload-area" id="imei-upload-area">
+              <i class="bi bi-upc-scan"></i>
+              <p>Upload foto IMEI/Serial Number</p>
+              <small>Format: JPG, PNG - Maks 3MB</small>
+            </div>
+            <input type="file" id="imei-image" accept="image/*" style="display: none;">
+            <div class="imei-preview" id="imei-preview"></div>
+          </div>
+
+          <div class="form-actions-step">
+            <button type="button" class="btn-back" onclick="previousStep(1)">
+              <i class="bi bi-arrow-left"></i>
+              Kembali
+            </button>
+            <button type="button" class="btn-next" onclick="nextStep(3)">
+              Lihat Estimasi
+              <i class="bi bi-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 3: ESTIMASI -->
+        <div class="form-step" data-step="3">
+          <div class="estimasi-container">
+            <div class="estimasi-header">
+              <i class="bi bi-calculator"></i>
+              <h3>Estimasi Nilai Gadai</h3>
+            </div>
+
+            <div class="estimasi-details">
+              <div class="estimasi-row">
+                <span class="label">Nama Gadget:</span>
+                <span class="value" id="est-name">-</span>
+              </div>
+              <div class="estimasi-row">
+                <span class="label">Kategori:</span>
+                <span class="value" id="est-category">-</span>
+              </div>
+              <div class="estimasi-row">
+                <span class="label">Kondisi:</span>
+                <span class="value" id="est-condition">-</span>
+              </div>
+              <div class="estimasi-row">
+                <span class="label">Battery Health:</span>
+                <span class="value" id="est-battery">-</span>
+              </div>
+            </div>
+
+            <div class="estimasi-price">
+              <div class="price-label">Estimasi Nilai Gadai:</div>
+              <div class="price-range">
+                <span class="price-min" id="est-min">Rp 0</span>
+                <span class="separator">-</span>
+                <span class="price-max" id="est-max">Rp 0</span>
+              </div>
+              <div class="price-note">
+                <i class="bi bi-info-circle"></i>
+                <span>Nilai pasti akan dikonfirmasi oleh admin dalam 1x24 jam</span>
+              </div>
+            </div>
+
+            <div class="tenor-section">
+              <label><i class="bi bi-calendar-range"></i> Pilih Tenor Cicilan</label>
+              <div class="tenor-options">
+                <label class="tenor-item">
+                  <input type="radio" name="tenor" value="1" checked>
+                  <span class="tenor-duration">1 Bulan</span>
+                  <span class="tenor-rate">Bunga 1.5%</span>
+                </label>
+                <label class="tenor-item">
+                  <input type="radio" name="tenor" value="3">
+                  <span class="tenor-duration">3 Bulan</span>
+                  <span class="tenor-rate">Bunga 1.8%</span>
+                </label>
+                <label class="tenor-item">
+                  <input type="radio" name="tenor" value="6">
+                  <span class="tenor-duration">6 Bulan</span>
+                  <span class="tenor-rate">Bunga 2.0%</span>
+                </label>
+                <label class="tenor-item">
+                  <input type="radio" name="tenor" value="12">
+                  <span class="tenor-duration">12 Bulan</span>
+                  <span class="tenor-rate">Bunga 2.5%</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="terms-agreement">
+              <label class="checkbox-item">
+                <input type="checkbox" id="agree-terms" required>
+                <span>Saya setuju dengan <a href="#" target="_blank">Syarat & Ketentuan</a> Pegadaian</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-actions-step">
+            <button type="button" class="btn-back" onclick="previousStep(2)">
+              <i class="bi bi-arrow-left"></i>
+              Kembali
+            </button>
+            <button type="submit" class="btn-submit-gadai">
+              <i class="bi bi-check-circle-fill"></i>
+              Ajukan Pegadaian
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div id="success-gadai-modal" class="success-modal">
+    <div class="success-modal-content">
+      <div class="success-icon">
+        <i class="bi bi-check-circle-fill"></i>
+      </div>
+      <h3>Pengajuan Berhasil!</h3>
+      <p>Pengajuan gadai Anda telah diterima dan sedang dalam proses verifikasi admin. Kami akan mengirimkan notifikasi dalam 1x24 jam.</p>
+      <div class="success-info">
+        <div class="info-item">
+          <i class="bi bi-clock"></i>
+          <span>Estimasi Verifikasi: 1-24 Jam</span>
+        </div>
+        <div class="info-item">
+          <i class="bi bi-bell"></i>
+          <span>Notifikasi akan dikirim ke email & aplikasi</span>
+        </div>
+      </div>
+      <button class="btn-success-ok" onclick="closeSuccessModal()">
+        Oke, Mengerti
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 Klik Second. All Rights Reserved.</p>
+  </footer>
+
+  <!-- Scripts - CRITICAL ORDER -->
+  <script src="users.js"></script>
+  <script src="session-manager.js"></script>
+  <script src="auth-handler.js"></script>
+  <script src="notification-handler.js"></script>
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="pegadaian-script.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
