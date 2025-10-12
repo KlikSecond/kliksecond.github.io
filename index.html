@@ -542,14 +542,27 @@
     </div>
   </section>
 
-  <!-- Scripts -->
+  <!-- ===== CRITICAL: SCRIPT LOADING ORDER ===== -->
+  <!-- 1. Load users data FIRST -->
   <script src="users.js"></script>
-  <script src="session-manager.js"></script>     <!-- 2 -->
-  <script src="auth-handler.js"></script>
-  <script src="notification-handler.js"></script>
-  <script src="upload-product.js"></script>
+  
+  <!-- 2. Load products data -->
   <script src="products-loader.js"></script>
+  
+  <!-- 3. Load session manager -->
+  <script src="session-manager.js"></script>
+  
+  <!-- 4. Load auth handler -->
+  <script src="auth-handler.js"></script>
+  
+  <!-- 5. Load notification handler -->
+  <script src="notification-handler.js"></script>
+  
+  <!-- 6. Load other handlers -->
+  <script src="upload-product.js"></script>
   <script src="auction-timer.js"></script>
+  
+  <!-- 7. Load particles and main script -->
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script src="script.js"></script>
   

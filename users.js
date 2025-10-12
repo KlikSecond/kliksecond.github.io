@@ -1,7 +1,10 @@
-// ===== USER DATA & AUTHENTICATION SYSTEM =====
-console.log('🔧 Users.js loaded');
+// ===== USER DATA & AUTHENTICATION SYSTEM (FIXED VERSION) =====
+// File ini menyimpan data users ke localStorage untuk persistence
 
-const usersData = {
+console.log('🔧 Users.js loading...');
+
+// Default users data (will be loaded to localStorage on first run)
+const defaultUsersData = {
   users: [
     {
       id: "user-001",
@@ -20,10 +23,10 @@ const usersData = {
           type: "auction_sold",
           title: "Lelang Berhasil",
           message: "POCO C75 Anda telah terjual dengan harga Rp 2.240.000",
-          date: "2025-10-02 10:24",
+          date: "02/10/2025, 10:24",
           read: false,
           productId: "android-001"
-        },
+        }
       ]
     },
     {
@@ -43,7 +46,7 @@ const usersData = {
           type: "bid_received",
           title: "HP Anda Dihargai Seharga Rp 6.175.000",
           message: "Jika Anda Berminat HP Bisa Diantar Langsung ke Store",
-          date: "2025-10-03 16:45",
+          date: "03/10/2025, 16:45",
           read: false,
           productId: "iphone-002"
         }
@@ -66,16 +69,41 @@ const usersData = {
           type: "auction_sold",
           title: "Produk Anda Telah Terjual",
           message: "Samsung Galaxy S23 Anda Terjual Seharga Rp 9.800.000",
-          date: "2025-10-10 10:15",
+          date: "10/10/2025, 10:15",
           read: false,
           productId: "android-001"
-        },
+        }
       ]
     }
   ]
 };
 
-// Authentication Functions
+// ===== INITIALIZE USERS DATA IN LOCALSTORAGE =====
+function initializeUsersData() {
+  try {
+    const storedData = localStorage.getItem('klikSecondUsers');
+    
+    if (!storedData) {
+      // First time - save default data to localStorage
+      localStorage.setItem('klikSecondUsers', JSON.stringify(defaultUsersData));
+      console.log('✅ Users data initialized in localStorage');
+      return defaultUsersData;
+    } else {
+      // Load from localStorage
+      const parsedData = JSON.parse(storedData);
+      console.log('✅ Users data loaded from localStorage');
+      return parsedData;
+    }
+  } catch (e) {
+    console.error('❌ Error initializing users data:', e);
+    return defaultUsersData;
+  }
+}
+
+// Load users data
+const usersData = initializeUsersData();
+
+// Authentication Functions (kept for backward compatibility)
 class AuthSystem {
   constructor() {
     this.currentUser = this.getCurrentUser();
@@ -83,6 +111,10 @@ class AuthSystem {
 
   // Login Function
   login(username, password) {
+    // Read fresh data from localStorage
+    const storedData = localStorage.getItem('klikSecondUsers');
+    const usersData = storedData ? JSON.parse(storedData) : { users: [] };
+    
     const user = usersData.users.find(
       u => u.username === username && u.password === password
     );
@@ -120,6 +152,10 @@ class AuthSystem {
 
   // Register Function
   register(userData) {
+    // Read fresh data from localStorage
+    const storedData = localStorage.getItem('klikSecondUsers');
+    const usersData = storedData ? JSON.parse(storedData) : { users: [] };
+    
     // Check if username already exists
     const existingUser = usersData.users.find(
       u => u.username === userData.username || u.email === userData.email
@@ -140,7 +176,7 @@ class AuthSystem {
       email: userData.email,
       fullName: userData.fullName,
       phone: userData.phone,
-      address: userData.address,
+      address: userData.address || '',
       profilePicture: `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.fullName)}&background=00ffff&color=000`,
       role: "seller",
       joinDate: new Date().toISOString().split('T')[0],
@@ -148,15 +184,21 @@ class AuthSystem {
         {
           id: `notif-${Date.now()}`,
           type: "welcome",
-          title: "Selamat Datang!",
-          message: "Terima kasih telah bergabung dengan Klik Second",
+          title: "Selamat Datang! 🎉",
+          message: `Halo ${userData.fullName}! Terima kasih telah bergabung dengan Klik Second. Mulai jual atau beli gadget favoritmu sekarang!`,
           date: new Date().toLocaleString('id-ID'),
           read: false
         }
       ]
     };
 
+    // Add to users array
     usersData.users.push(newUser);
+    
+    // Save back to localStorage
+    localStorage.setItem('klikSecondUsers', JSON.stringify(usersData));
+    
+    console.log('✅ New user registered:', newUser.username);
 
     return {
       success: true,
@@ -192,6 +234,11 @@ class AuthSystem {
   getUserNotifications() {
     if (!this.currentUser) return [];
     
+    // Read from localStorage
+    const storedData = localStorage.getItem('klikSecondUsers');
+    if (!storedData) return [];
+    
+    const usersData = JSON.parse(storedData);
     const fullUser = usersData.users.find(u => u.id === this.currentUser.id);
     return fullUser ? fullUser.notifications : [];
   }
@@ -206,12 +253,22 @@ class AuthSystem {
   markAsRead(notificationId) {
     if (!this.currentUser) return;
     
-    const user = usersData.users.find(u => u.id === this.currentUser.id);
-    if (user) {
-      const notification = user.notifications.find(n => n.id === notificationId);
-      if (notification) {
-        notification.read = true;
+    try {
+      const storedData = localStorage.getItem('klikSecondUsers');
+      if (!storedData) return;
+      
+      const usersData = JSON.parse(storedData);
+      const user = usersData.users.find(u => u.id === this.currentUser.id);
+      
+      if (user) {
+        const notification = user.notifications.find(n => n.id === notificationId);
+        if (notification) {
+          notification.read = true;
+          localStorage.setItem('klikSecondUsers', JSON.stringify(usersData));
+        }
       }
+    } catch (e) {
+      console.error('Error marking notification as read:', e);
     }
   }
 
@@ -219,9 +276,19 @@ class AuthSystem {
   markAllAsRead() {
     if (!this.currentUser) return;
     
-    const user = usersData.users.find(u => u.id === this.currentUser.id);
-    if (user) {
-      user.notifications.forEach(n => n.read = true);
+    try {
+      const storedData = localStorage.getItem('klikSecondUsers');
+      if (!storedData) return;
+      
+      const usersData = JSON.parse(storedData);
+      const user = usersData.users.find(u => u.id === this.currentUser.id);
+      
+      if (user) {
+        user.notifications.forEach(n => n.read = true);
+        localStorage.setItem('klikSecondUsers', JSON.stringify(usersData));
+      }
+    } catch (e) {
+      console.error('Error marking all as read:', e);
     }
   }
 
@@ -229,19 +296,29 @@ class AuthSystem {
   addNotification(type, title, message, productId = null) {
     if (!this.currentUser) return;
     
-    const user = usersData.users.find(u => u.id === this.currentUser.id);
-    if (user) {
-      const newNotification = {
-        id: `notif-${Date.now()}`,
-        type: type,
-        title: title,
-        message: message,
-        date: new Date().toLocaleString('id-ID'),
-        read: false,
-        productId: productId
-      };
+    try {
+      const storedData = localStorage.getItem('klikSecondUsers');
+      if (!storedData) return;
       
-      user.notifications.unshift(newNotification);
+      const usersData = JSON.parse(storedData);
+      const user = usersData.users.find(u => u.id === this.currentUser.id);
+      
+      if (user) {
+        const newNotification = {
+          id: `notif-${Date.now()}`,
+          type: type,
+          title: title,
+          message: message,
+          date: new Date().toLocaleString('id-ID'),
+          read: false,
+          productId: productId
+        };
+        
+        user.notifications.unshift(newNotification);
+        localStorage.setItem('klikSecondUsers', JSON.stringify(usersData));
+      }
+    } catch (e) {
+      console.error('Error adding notification:', e);
     }
   }
 }
@@ -253,6 +330,23 @@ const authSystem = new AuthSystem();
 if (typeof window !== 'undefined') {
   window.authSystem = authSystem;
   window.usersData = usersData;
-  console.log('✅ AuthSystem exported to window:', window.authSystem);
+  console.log('✅ AuthSystem exported to window');
   console.log('✅ Users data loaded:', usersData.users.length, 'users');
+  console.log('📦 Users data stored in localStorage key: klikSecondUsers');
 }
+
+// ===== SYNC LOCALSTORAGE WITH WINDOW.USERSDATA =====
+// This ensures window.usersData always reflects localStorage
+setInterval(() => {
+  try {
+    const storedData = localStorage.getItem('klikSecondUsers');
+    if (storedData && window.usersData) {
+      const parsedData = JSON.parse(storedData);
+      window.usersData.users = parsedData.users;
+    }
+  } catch (e) {
+    // Ignore sync errors
+  }
+}, 1000); // Sync every 1 second
+
+console.log('✅ Users.js loaded successfully');

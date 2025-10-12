@@ -1,4 +1,7 @@
-// ===== NOTIFICATION PANEL HANDLER (FIXED) =====
+// ===== NOTIFICATION PANEL HANDLER (FIXED VERSION) =====
+// File ini membaca notifikasi dari localStorage (persistent storage)
+
+console.log('🔔 Notification handler loading...');
 
 function toggleNotificationPanel() {
   const panel = document.getElementById('notification-panel');
@@ -41,11 +44,11 @@ function closeNotificationOnClickOutside(e) {
 function loadNotifications() {
   const notificationList = document.getElementById('notification-list');
   
-  console.log('Loading notifications...');
+  console.log('📥 Loading notifications from localStorage...');
   
-  // ===== FIX: Gunakan SessionManager untuk cek login =====
+  // Check if SessionManager exists
   if (!window.SessionManager) {
-    console.error('SessionManager not found!');
+    console.error('❌ SessionManager not found!');
     notificationList.innerHTML = `
       <div class="notification-empty">
         <i class="bi bi-bell-slash"></i>
@@ -55,9 +58,9 @@ function loadNotifications() {
     return;
   }
   
-  // Cek apakah user sudah login
+  // Check if user is logged in
   const isLoggedIn = window.SessionManager.isLoggedIn();
-  console.log('Is logged in:', isLoggedIn);
+  console.log('🔐 Is logged in:', isLoggedIn);
   
   if (!isLoggedIn) {
     notificationList.innerHTML = `
@@ -69,9 +72,9 @@ function loadNotifications() {
     return;
   }
   
-  // Ambil data user yang sedang login
+  // Get current user
   const currentUser = window.SessionManager.getCurrentUser();
-  console.log('Current user:', currentUser);
+  console.log('👤 Current user:', currentUser?.username);
   
   if (!currentUser) {
     notificationList.innerHTML = `
@@ -83,9 +86,24 @@ function loadNotifications() {
     return;
   }
   
-  // ===== FIX: Ambil notifikasi dari usersData berdasarkan username =====
-  if (!window.usersData || !window.usersData.users) {
-    console.error('usersData not found!');
+  // ===== CRITICAL FIX: Read from localStorage =====
+  let usersData;
+  try {
+    const storedData = localStorage.getItem('klikSecondUsers');
+    if (storedData) {
+      usersData = JSON.parse(storedData);
+      console.log('✅ Users data loaded from localStorage');
+    } else {
+      console.warn('⚠️ No users data in localStorage, using window.usersData');
+      usersData = window.usersData;
+    }
+  } catch (e) {
+    console.error('❌ Error reading localStorage:', e);
+    usersData = window.usersData;
+  }
+  
+  if (!usersData || !usersData.users) {
+    console.error('❌ Users data not found!');
     notificationList.innerHTML = `
       <div class="notification-empty">
         <i class="bi bi-bell-slash"></i>
@@ -95,9 +113,9 @@ function loadNotifications() {
     return;
   }
   
-  // Cari user berdasarkan username
-  const fullUser = window.usersData.users.find(u => u.username === currentUser.username);
-  console.log('Full user data:', fullUser);
+  // Find user by username
+  const fullUser = usersData.users.find(u => u.username === currentUser.username);
+  console.log('🔍 Full user data found:', !!fullUser);
   
   if (!fullUser || !fullUser.notifications) {
     notificationList.innerHTML = `
@@ -110,7 +128,7 @@ function loadNotifications() {
   }
   
   const notifications = fullUser.notifications;
-  console.log('Notifications found:', notifications.length);
+  console.log('📨 Notifications found:', notifications.length);
   
   if (notifications.length === 0) {
     notificationList.innerHTML = `
@@ -129,6 +147,7 @@ function loadNotifications() {
     return dateB - dateA;
   });
   
+  // Display notifications
   notificationList.innerHTML = notifications.map(notif => `
     <div class="notification-item ${notif.read ? '' : 'unread'}" onclick="handleNotificationClick('${notif.id}', '${currentUser.username}')">
       <div class="notification-icon ${notif.type}">
@@ -144,6 +163,8 @@ function loadNotifications() {
       </div>
     </div>
   `).join('');
+  
+  console.log('✅ Notifications displayed successfully');
 }
 
 function getNotificationIcon(type) {
@@ -153,50 +174,103 @@ function getNotificationIcon(type) {
     'bid_received': 'hammer',
     'welcome': 'hand-thumbs-up-fill',
     'product_rejected': 'x-circle-fill',
-    'new_message': 'chat-dots-fill'
+    'new_message': 'chat-dots-fill',
+    'order_success': 'bag-check-fill',
+    'order_cod': 'cash-coin',
+    'order_shipped': 'truck',
+    'order_delivered': 'box-seam-fill'
   };
   
   return icons[type] || 'bell-fill';
 }
 
 function handleNotificationClick(notificationId, username) {
-  console.log('Notification clicked:', notificationId);
+  console.log('🖱️ Notification clicked:', notificationId);
   
-  if (!window.usersData) return;
-  
-  // Cari user dan mark notification as read
-  const user = window.usersData.users.find(u => u.username === username);
-  if (user) {
-    const notification = user.notifications.find(n => n.id === notificationId);
-    if (notification) {
-      notification.read = true;
-      console.log('Notification marked as read');
+  try {
+    // Read from localStorage
+    const storedData = localStorage.getItem('klikSecondUsers');
+    if (!storedData) return;
+    
+    const usersData = JSON.parse(storedData);
+    
+    // Find user and mark notification as read
+    const user = usersData.users.find(u => u.username === username);
+    if (user) {
+      const notification = user.notifications.find(n => n.id === notificationId);
+      if (notification && !notification.read) {
+        notification.read = true;
+        
+        // Save back to localStorage
+        localStorage.setItem('klikSecondUsers', JSON.stringify(usersData));
+        
+        // Update window.usersData if exists
+        if (window.usersData) {
+          const windowUser = window.usersData.users.find(u => u.username === username);
+          if (windowUser) {
+            const windowNotif = windowUser.notifications.find(n => n.id === notificationId);
+            if (windowNotif) {
+              windowNotif.read = true;
+            }
+          }
+        }
+        
+        console.log('✅ Notification marked as read');
+      }
     }
+    
+    // Update badge
+    updateNotificationBadge();
+    
+    // Reload notifications
+    loadNotifications();
+  } catch (e) {
+    console.error('❌ Error handling notification click:', e);
   }
-  
-  // Update badge
-  updateNotificationBadge();
-  
-  // Reload notifications
-  loadNotifications();
 }
 
 function markAllNotificationsAsRead() {
-  console.log('Mark all as read');
+  console.log('✅ Mark all as read');
   
   if (!window.SessionManager || !window.SessionManager.isLoggedIn()) return;
   
   const currentUser = window.SessionManager.getCurrentUser();
   if (!currentUser) return;
   
-  const user = window.usersData.users.find(u => u.username === currentUser.username);
-  if (user && user.notifications) {
-    user.notifications.forEach(n => n.read = true);
-    console.log('All notifications marked as read');
+  try {
+    // Read from localStorage
+    const storedData = localStorage.getItem('klikSecondUsers');
+    if (!storedData) return;
+    
+    const usersData = JSON.parse(storedData);
+    
+    // Find user and mark all notifications as read
+    const user = usersData.users.find(u => u.username === currentUser.username);
+    if (user && user.notifications) {
+      user.notifications.forEach(n => n.read = true);
+      
+      // Save back to localStorage
+      localStorage.setItem('klikSecondUsers', JSON.stringify(usersData));
+      
+      // Update window.usersData if exists
+      if (window.usersData) {
+        const windowUser = window.usersData.users.find(u => u.username === currentUser.username);
+        if (windowUser && windowUser.notifications) {
+          windowUser.notifications.forEach(n => n.read = true);
+        }
+      }
+      
+      console.log('✅ All notifications marked as read');
+    }
+    
+    // Update badge
+    updateNotificationBadge();
+    
+    // Reload notifications
+    loadNotifications();
+  } catch (e) {
+    console.error('❌ Error marking all as read:', e);
   }
-  
-  updateNotificationBadge();
-  loadNotifications();
 }
 
 function updateNotificationBadge() {
@@ -206,8 +280,23 @@ function updateNotificationBadge() {
   if (!currentUser) return;
   
   const badge = document.querySelector('.notification-badge');
-  if (badge && window.usersData) {
-    const user = window.usersData.users.find(u => u.username === currentUser.username);
+  if (!badge) return;
+  
+  try {
+    // Read from localStorage
+    const storedData = localStorage.getItem('klikSecondUsers');
+    let usersData;
+    
+    if (storedData) {
+      usersData = JSON.parse(storedData);
+    } else if (window.usersData) {
+      usersData = window.usersData;
+    } else {
+      return;
+    }
+    
+    // Find user and count unread notifications
+    const user = usersData.users.find(u => u.username === currentUser.username);
     if (user && user.notifications) {
       const count = user.notifications.filter(n => !n.read).length;
       badge.textContent = count;
@@ -218,8 +307,10 @@ function updateNotificationBadge() {
         badge.style.display = 'none';
       }
       
-      console.log('Badge updated:', count, 'unread notifications');
+      console.log('🔢 Badge updated:', count, 'unread notifications');
     }
+  } catch (e) {
+    console.error('❌ Error updating badge:', e);
   }
 }
 
@@ -236,7 +327,7 @@ function initializeNotificationPanel() {
   if (notificationBtn) {
     notificationBtn.addEventListener('click', function(e) {
       e.stopPropagation();
-      console.log('Notification button clicked!');
+      console.log('🔔 Notification button clicked!');
       toggleNotificationPanel();
     });
     console.log('✅ Notification button listener attached');
@@ -266,18 +357,18 @@ function initializeNotificationPanel() {
   console.log('✅ Notification panel initialized');
 }
 
-// ===== FIX: Tunggu semua dependencies loaded =====
+// ===== WAIT FOR DEPENDENCIES =====
 function waitForDependencies() {
   return new Promise((resolve) => {
     const checkInterval = setInterval(() => {
-      if (window.SessionManager && window.usersData) {
+      if (window.SessionManager) {
         clearInterval(checkInterval);
-        console.log('✅ All dependencies loaded');
+        console.log('✅ Dependencies loaded');
         resolve();
       }
     }, 50); // Check every 50ms
     
-    // Timeout setelah 5 detik
+    // Timeout after 5 seconds
     setTimeout(() => {
       clearInterval(checkInterval);
       console.warn('⚠️ Timeout waiting for dependencies');
@@ -286,7 +377,7 @@ function waitForDependencies() {
   });
 }
 
-// Initialize setelah dependencies ready
+// ===== AUTO-INITIALIZE =====
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', async function() {
     await waitForDependencies();
@@ -298,10 +389,12 @@ if (document.readyState === 'loading') {
   });
 }
 
-// Export functions
+// ===== EXPORT FUNCTIONS =====
 window.notificationHandler = {
   toggleNotificationPanel,
   loadNotifications,
   updateNotificationBadge,
   markAllNotificationsAsRead
 };
+
+console.log('✅ Notification handler loaded successfully');

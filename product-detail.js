@@ -1,3 +1,6 @@
+// ===== PRODUCT DETAIL PAGE - FIXED VERSION =====
+console.log('🛍️ Product Detail page loaded');
+
 // ===== PARTICLES.JS CONFIGURATION =====
 particlesJS("particles-js", {
   particles: {
@@ -27,23 +30,37 @@ particlesJS("particles-js", {
   retina_detect: true
 });
 
-// ===== GET PRODUCT DATA =====
+// ===== GLOBAL VARIABLES =====
+let currentProduct = null;
+
+// ===== GET ALL PRODUCTS =====
 function getAllProducts() {
   // Get products from products-loader.js
   if (window.productsData) {
+    console.log('✅ Products data found');
     return [
       ...window.productsData.tablets,
       ...window.productsData.android,
       ...window.productsData.iphone
     ];
   }
+  console.warn('⚠️ Products data not found');
   return [];
 }
 
 // ===== GET PRODUCT BY ID =====
 function getProductById(productId) {
+  console.log('🔍 Looking for product:', productId);
   const allProducts = getAllProducts();
-  return allProducts.find(product => product.id === productId);
+  const product = allProducts.find(product => product.id === productId);
+  
+  if (product) {
+    console.log('✅ Product found:', product.name);
+  } else {
+    console.error('❌ Product not found with ID:', productId);
+  }
+  
+  return product;
 }
 
 // ===== FORMAT PRICE =====
@@ -97,13 +114,17 @@ function updateMainImage(imageSrc) {
 
 // ===== LOAD PRODUCT DETAILS =====
 function loadProductDetails() {
+  console.log('📱 Loading product details...');
+  
   // Get product ID from URL
   const urlParams = new URLSearchParams(window.location.search);
   const productId = urlParams.get('id');
-  console.log(productId);
+  
+  console.log('🆔 Product ID from URL:', productId);
   
   if (!productId) {
-    alert('Produk tidak ditemukan!');
+    console.error('❌ No product ID in URL');
+    alert('Produk tidak ditemukan! ID produk tidak ada di URL.');
     window.location.href = 'index.html';
     return;
   }
@@ -112,43 +133,71 @@ function loadProductDetails() {
   const product = getProductById(productId);
   
   if (!product) {
-    alert('Produk tidak ditemukan!');
+    console.error('❌ Product not found in database');
+    alert('Data produk tidak ditemukan di database!');
     window.location.href = 'index.html';
     return;
   }
+  
+  // Store globally
+  currentProduct = product;
+  window.currentProduct = product;
+  
+  console.log('✅ Product loaded successfully:', product);
   
   // Update page title
   document.title = `${product.name} - Klik Second`;
   
   // Update breadcrumb
-  document.getElementById('product-category').textContent = product.category;
-  document.getElementById('product-name-breadcrumb').textContent = product.name;
+  const categoryEl = document.getElementById('product-category');
+  const breadcrumbEl = document.getElementById('product-name-breadcrumb');
+  
+  if (categoryEl) categoryEl.textContent = product.category;
+  if (breadcrumbEl) breadcrumbEl.textContent = product.name;
   
   // Update product name
-  document.getElementById('product-name').textContent = product.name;
+  const nameEl = document.getElementById('product-name');
+  if (nameEl) nameEl.textContent = product.name;
   
   // Update rating
-  document.getElementById('product-rating').innerHTML = renderStars(product.rating);
-  document.getElementById('rating-value').textContent = product.rating;
-  document.getElementById('reviews-count').textContent = product.reviews;
+  const ratingEl = document.getElementById('product-rating');
+  const ratingValueEl = document.getElementById('rating-value');
+  const reviewsCountEl = document.getElementById('reviews-count');
+  
+  if (ratingEl) ratingEl.innerHTML = renderStars(product.rating);
+  if (ratingValueEl) ratingValueEl.textContent = product.rating;
+  if (reviewsCountEl) reviewsCountEl.textContent = product.reviews;
   
   // Update price
-  document.querySelector('#product-price span').textContent = formatPrice(product.price);
+  const priceEl = document.querySelector('#product-price span');
+  if (priceEl) priceEl.textContent = formatPrice(product.price);
   
   // Update specs
-  document.getElementById('product-condition').textContent = product.condition;
-  document.getElementById('product-battery').textContent = product.battery;
-  document.getElementById('product-storage').textContent = product.storage;
-  document.getElementById('product-usage').textContent = product.usage;
-  document.getElementById('product-grade').textContent = `Grade ${product.grade}`;
+  const conditionEl = document.getElementById('product-condition');
+  const batteryEl = document.getElementById('product-battery');
+  const storageEl = document.getElementById('product-storage');
+  const usageEl = document.getElementById('product-usage');
+  const gradeEl = document.getElementById('product-grade');
+  
+  if (conditionEl) conditionEl.textContent = product.condition;
+  if (batteryEl) batteryEl.textContent = product.battery;
+  if (storageEl) storageEl.textContent = product.storage;
+  if (usageEl) usageEl.textContent = product.usage;
+  if (gradeEl) gradeEl.textContent = `Grade ${product.grade}`;
   
   // Update seller info
-  document.getElementById('seller-name').textContent = product.seller;
-  document.getElementById('seller-rating').textContent = product.rating;
+  const sellerNameEl = document.getElementById('seller-name');
+  const sellerRatingEl = document.getElementById('seller-rating');
+  
+  if (sellerNameEl) sellerNameEl.textContent = product.seller;
+  if (sellerRatingEl) sellerRatingEl.textContent = product.rating;
   
   // Update shipping info
-  document.getElementById('product-shipping').textContent = product.shipping;
-  document.getElementById('product-location').textContent = product.city;
+  const shippingEl = document.getElementById('product-shipping');
+  const locationEl = document.getElementById('product-location');
+  
+  if (shippingEl) shippingEl.textContent = product.shipping;
+  if (locationEl) locationEl.textContent = product.city;
   
   // Update description
   const descriptionContent = `
@@ -184,16 +233,32 @@ function loadProductDetails() {
     
     <p><em>Catatan: Pastikan untuk memeriksa produk saat diterima. Jika ada kendala, segera hubungi kami untuk pengembalian atau penggantian.</em></p>
   `;
-  document.getElementById('product-description').innerHTML = descriptionContent;
+  
+  const descriptionEl = document.getElementById('product-description');
+  if (descriptionEl) descriptionEl.innerHTML = descriptionContent;
   
   // Load images
+  loadProductImages(product);
+  
+  console.log('✅ All product details loaded');
+}
+
+// ===== LOAD PRODUCT IMAGES =====
+function loadProductImages(product) {
   const mainImage = document.getElementById('product-image');
   const thumbnailsContainer = document.getElementById('thumbnails-container');
+  
+  if (!mainImage || !thumbnailsContainer) {
+    console.warn('⚠️ Image elements not found');
+    return;
+  }
   
   if (product.images && product.images.length > 0) {
     // Set main image
     mainImage.src = product.images[0];
     mainImage.alt = product.name;
+    
+    console.log('✅ Main image loaded:', product.images[0]);
     
     // Clear and add thumbnails
     thumbnailsContainer.innerHTML = '';
@@ -210,46 +275,261 @@ function loadProductDetails() {
       
       thumbnailsContainer.appendChild(thumbnail);
     });
+    
+    console.log('✅ Thumbnails loaded:', product.images.length);
+  } else {
+    console.warn('⚠️ No images found for product');
   }
-  
-  // Store product data for cart functionality
-  window.currentProduct = product;
 }
 
-// ===== CART FUNCTIONALITY =====
-let cart = [];
-
+// ===== ADD TO CART FUNCTIONALITY =====
 function addToCart() {
-  if (!window.currentProduct) {
+  if (!currentProduct) {
+    console.error('❌ No product loaded');
     alert('Produk tidak ditemukan!');
     return;
   }
   
-  cart.push(window.currentProduct);
-  alert(`${window.currentProduct.name} berhasil ditambahkan ke keranjang!`);
-  console.log('Cart:', cart);
+  console.log('🛒 Adding to cart:', currentProduct.name);
   
-  // In a real application, you would save to localStorage or send to backend
-  // localStorage.setItem('cart', JSON.stringify(cart));
+  // Get existing cart from localStorage
+  let cart = [];
+  try {
+    const cartData = localStorage.getItem('cart');
+    if (cartData) {
+      cart = JSON.parse(cartData);
+    }
+  } catch (e) {
+    console.error('Error reading cart:', e);
+    cart = [];
+  }
+  
+  // Check if product already in cart
+  const existingIndex = cart.findIndex(item => item.id === currentProduct.id);
+  
+  if (existingIndex >= 0) {
+    // Update quantity
+    cart[existingIndex].quantity = (cart[existingIndex].quantity || 1) + 1;
+    console.log('📦 Updated quantity in cart');
+  } else {
+    // Add new item
+    cart.push({
+      ...currentProduct,
+      quantity: 1,
+      addedAt: new Date().toISOString()
+    });
+    console.log('✅ Added new item to cart');
+  }
+  
+  // Save to localStorage
+  try {
+    localStorage.setItem('cart', JSON.stringify(cart));
+    console.log('💾 Cart saved to localStorage');
+  } catch (e) {
+    console.error('Error saving cart:', e);
+  }
+  
+  // Show success notification
+  showNotification('success', `${currentProduct.name} berhasil ditambahkan ke keranjang!`);
+  
+  // Update cart badge if exists
+  updateCartBadge();
 }
 
+// ===== BUY NOW FUNCTIONALITY =====
 function buyNow() {
-  if (!window.currentProduct) {
+  if (!currentProduct) {
+    console.error('❌ No product loaded');
     alert('Produk tidak ditemukan!');
     return;
   }
   
-  alert(`Proses pembelian ${window.currentProduct.name}. Anda akan diarahkan ke halaman checkout.`);
-  console.log('Buying:', window.currentProduct);
+  console.log('💳 Redirecting to checkout for:', currentProduct.name);
   
-  // In a real application, you would redirect to checkout page
-  // window.location.href = `checkout.html?id=${window.currentProduct.id}`;
+  // Redirect to checkout page with product ID
+  window.location.href = `checkout.html?id=${currentProduct.id}`;
+}
+
+// ===== UPDATE CART BADGE =====
+function updateCartBadge() {
+  const cartBadge = document.querySelector('.cart-badge');
+  
+  if (cartBadge) {
+    try {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      
+      cartBadge.textContent = totalItems;
+      cartBadge.style.display = totalItems > 0 ? 'flex' : 'none';
+      
+      console.log('🔢 Cart badge updated:', totalItems);
+    } catch (e) {
+      console.error('Error updating cart badge:', e);
+    }
+  }
+}
+
+// ===== SHOW NOTIFICATION =====
+function showNotification(type, message) {
+  // Remove existing notification
+  const existing = document.querySelector('.product-notification');
+  if (existing) {
+    existing.remove();
+  }
+  
+  // Create notification
+  const notification = document.createElement('div');
+  notification.className = `product-notification notification-${type}`;
+  
+  const icons = {
+    'success': 'bi-check-circle-fill',
+    'error': 'bi-x-circle-fill',
+    'info': 'bi-info-circle-fill'
+  };
+  
+  const colors = {
+    'success': 'linear-gradient(135deg, #00ff7f, #00cc66)',
+    'error': 'linear-gradient(135deg, #ff6b6b, #ee5a6f)',
+    'info': 'linear-gradient(135deg, #00bfff, #0099cc)'
+  };
+  
+  notification.innerHTML = `
+    <i class="bi ${icons[type]}"></i>
+    <span>${message}</span>
+  `;
+  
+  notification.style.cssText = `
+    position: fixed;
+    top: 100px;
+    right: 30px;
+    background: ${colors[type]};
+    color: #000;
+    padding: 15px 25px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: bold;
+    font-size: 14px;
+    z-index: 10000;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    animation: slideInRight 0.3s ease;
+  `;
+  
+  document.body.appendChild(notification);
+  
+  console.log(`📢 Notification: ${type} - ${message}`);
+  
+  // Auto remove after 3 seconds
+  setTimeout(() => {
+    notification.style.animation = 'slideOutRight 0.3s ease';
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
+}
+
+// ===== ADD CSS ANIMATIONS =====
+function addNotificationStyles() {
+  if (document.getElementById('notification-styles')) return;
+  
+  const style = document.createElement('style');
+  style.id = 'notification-styles';
+  style.textContent = `
+    @keyframes slideInRight {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes slideOutRight {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+    }
+    
+    .product-notification {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    @media (max-width: 768px) {
+      .product-notification {
+        top: 80px;
+        right: 15px;
+        left: 15px;
+        padding: 12px 20px;
+        font-size: 13px;
+      }
+    }
+  `;
+  
+  document.head.appendChild(style);
+}
+
+// ===== WAIT FOR DEPENDENCIES =====
+function waitForProductsData() {
+  return new Promise((resolve) => {
+    const maxAttempts = 50; // 5 seconds max
+    let attempts = 0;
+    
+    const checkInterval = setInterval(() => {
+      attempts++;
+      
+      if (window.productsData) {
+        clearInterval(checkInterval);
+        console.log('✅ Products data ready');
+        resolve(true);
+      } else if (attempts >= maxAttempts) {
+        clearInterval(checkInterval);
+        console.error('❌ Timeout waiting for products data');
+        resolve(false);
+      }
+    }, 100);
+  });
 }
 
 // ===== INITIALIZE =====
-document.addEventListener('DOMContentLoaded', () => {
-  // Wait a bit for products-loader.js to load
-  setTimeout(() => {
-    loadProductDetails();
-  }, 100);
-});
+async function initialize() {
+  console.log('🚀 Initializing product detail page...');
+  
+  // Add notification styles
+  addNotificationStyles();
+  
+  // Wait for products data to load
+  const dataReady = await waitForProductsData();
+  
+  if (!dataReady) {
+    alert('Error: Data produk tidak dapat dimuat. Silakan refresh halaman.');
+    return;
+  }
+  
+  // Load product details
+  loadProductDetails();
+  
+  // Update cart badge
+  updateCartBadge();
+  
+  console.log('✅ Product detail page initialized');
+}
+
+// ===== START INITIALIZATION =====
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initialize);
+} else {
+  initialize();
+}
+
+// ===== EXPOSE FUNCTIONS TO GLOBAL SCOPE =====
+window.addToCart = addToCart;
+window.buyNow = buyNow;
+window.updateMainImage = updateMainImage;
+
+console.log('✅ Product detail script loaded');

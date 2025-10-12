@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Klik Second</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="checkout.css">
+</head>
+<body>
+  <div id="particles-js"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html">
+        <img src="LogoKlikSecondTransparent.png" class="logo" alt="Klik Second">
+      </a>
+      <div class="checkout-progress-mini">
+        <i class="bi bi-shield-check"></i>
+        <span>Pembayaran Aman</span>
+      </div>
+    </nav>
+  </header>
+
+  <!-- CHECKOUT CONTAINER -->
+  <div class="checkout-container">
+    
+    <!-- CHECKOUT STEPS -->
+    <div class="checkout-steps">
+      <div class="step active" data-step="1">
+        <div class="step-number">1</div>
+        <div class="step-label">Informasi</div>
+      </div>
+      <div class="step" data-step="2">
+        <div class="step-number">2</div>
+        <div class="step-label">Pembayaran</div>
+      </div>
+      <div class="step" data-step="3">
+        <div class="step-number">3</div>
+        <div class="step-label">Konfirmasi</div>
+      </div>
+    </div>
+
+    <!-- LEFT SECTION: FORM -->
+    <div class="checkout-left">
+      
+      <!-- STEP 1: CUSTOMER INFO -->
+      <div class="checkout-section" id="step-1">
+        <div class="section-header">
+          <i class="bi bi-person-circle"></i>
+          <h2>Informasi Pembeli</h2>
+        </div>
+        
+        <form id="customer-info-form">
+          <div class="form-group">
+            <label for="customer-name">
+              <i class="bi bi-person"></i> Nama Lengkap <span class="required">*</span>
+            </label>
+            <input type="text" id="customer-name" placeholder="Nama lengkap Anda" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="customer-email">
+                <i class="bi bi-envelope"></i> Email <span class="required">*</span>
+              </label>
+              <input type="email" id="customer-email" placeholder="email@example.com" required>
+            </div>
+            <div class="form-group">
+              <label for="customer-phone">
+                <i class="bi bi-telephone"></i> No. Telepon <span class="required">*</span>
+              </label>
+              <input type="tel" id="customer-phone" placeholder="08xxxxxxxxxx" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="customer-address">
+              <i class="bi bi-geo-alt"></i> Alamat Lengkap <span class="required">*</span>
+            </label>
+            <textarea id="customer-address" rows="3" placeholder="Jalan, No. Rumah, RT/RW, Kelurahan, Kecamatan" required></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="customer-city">
+                <i class="bi bi-building"></i> Kota <span class="required">*</span>
+              </label>
+              <input type="text" id="customer-city" placeholder="Nama kota" required>
+            </div>
+            <div class="form-group">
+              <label for="customer-postal">
+                <i class="bi bi-mailbox"></i> Kode Pos <span class="required">*</span>
+              </label>
+              <input type="text" id="customer-postal" placeholder="12345" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="customer-notes">
+              <i class="bi bi-chat-left-text"></i> Catatan (Opsional)
+            </label>
+            <textarea id="customer-notes" rows="2" placeholder="Tambahkan catatan untuk penjual..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-next">
+            Lanjut ke Pembayaran <i class="bi bi-arrow-right"></i>
+          </button>
+        </form>
+      </div>
+
+      <!-- STEP 2: PAYMENT METHOD -->
+      <div class="checkout-section hidden" id="step-2">
+        <div class="section-header">
+          <i class="bi bi-credit-card"></i>
+          <h2>Metode Pembayaran</h2>
+        </div>
+
+        <div class="payment-methods">
+          <!-- E-Wallet -->
+          <div class="payment-category">
+            <h3><i class="bi bi-wallet2"></i> E-Wallet</h3>
+            <div class="payment-options">
+              <label class="payment-option">
+                <input type="radio" name="payment-method" value="gopay">
+                <div class="payment-card">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg" alt="GoPay">
+                  <span>GoPay</span>
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payment-method" value="ovo">
+                <div class="payment-card">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Logo_ovo_purple.svg" alt="OVO">
+                  <span>OVO</span>
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payment-method" value="dana">
+                <div class="payment-card">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dana_blue.svg" alt="DANA">
+                  <span>DANA</span>
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payment-method" value="shopeepay">
+                <div class="payment-card">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Shopee.svg" alt="ShopeePay">
+                  <span>ShopeePay</span>
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Virtual Account -->
+          <div class="payment-category">
+            <h3><i class="bi bi-bank"></i> Virtual Account</h3>
+            <div class="payment-options">
+              <label class="payment-option">
+                <input type="radio" name="payment-method" value="bca">
+                <div class="payment-card">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg" alt="BCA">
+                  <span>BCA Virtual Account</span>
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payment-method" value="bri">
+                <div class="payment-card">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/BRI_2020.svg" alt="BRI">
+                  <span>BRI Virtual Account</span>
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payment-method" value="bni">
+                <div class="payment-card">
+                  <img src="https://upload.wikimedia.org/wikipedia/id/5/55/BNI_logo.svg" alt="BNI">
+                  <span>BNI Virtual Account</span>
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </label>
+
+              <label class="payment-option">
+                <input type="radio" name="payment-method" value="mandiri">
+                <div class="payment-card">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg" alt="Mandiri">
+                  <span>Mandiri Virtual Account</span>
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- QRIS -->
+          <div class="payment-category">
+            <h3><i class="bi bi-qr-code"></i> QRIS</h3>
+            <div class="payment-options">
+              <label class="payment-option">
+                <input type="radio" name="payment-method" value="qris">
+                <div class="payment-card qris-card">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/QRIS_logo.svg" alt="QRIS">
+                  <span>QRIS (Semua E-Wallet & Bank)</span>
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Credit Card -->
+          <div class="payment-category">
+            <h3><i class="bi bi-credit-card-2-front"></i> Kartu Kredit/Debit</h3>
+            <div class="payment-options">
+              <label class="payment-option">
+                <input type="radio" name="payment-method" value="credit-card">
+                <div class="payment-card">
+                  <div class="card-logos">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" alt="Amex">
+                  </div>
+                  <span>Kartu Kredit/Debit</span>
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- COD -->
+          <div class="payment-category">
+            <h3><i class="bi bi-cash-coin"></i> Bayar di Tempat</h3>
+            <div class="payment-options">
+              <label class="payment-option">
+                <input type="radio" name="payment-method" value="cod">
+                <div class="payment-card">
+                  <i class="bi bi-cash-stack" style="font-size: 32px; color: #00ff7f;"></i>
+                  <span>COD (Cash on Delivery)</span>
+                  <i class="bi bi-check-circle-fill"></i>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkout-buttons">
+          <button type="button" class="btn-back" onclick="goToStep(1)">
+            <i class="bi bi-arrow-left"></i> Kembali
+          </button>
+          <button type="button" class="btn-next" onclick="proceedToConfirmation()">
+            Lanjutkan <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: CONFIRMATION -->
+      <div class="checkout-section hidden" id="step-3">
+        <div class="section-header">
+          <i class="bi bi-check-circle"></i>
+          <h2>Konfirmasi Pesanan</h2>
+        </div>
+
+        <div class="confirmation-details">
+          <div class="confirm-section">
+            <h3><i class="bi bi-person"></i> Informasi Pembeli</h3>
+            <div id="confirm-customer-info"></div>
+          </div>
+
+          <div class="confirm-section">
+            <h3><i class="bi bi-credit-card"></i> Metode Pembayaran</h3>
+            <div id="confirm-payment-method"></div>
+          </div>
+
+          <div class="confirm-section">
+            <h3><i class="bi bi-box-seam"></i> Detail Produk</h3>
+            <div id="confirm-product-info"></div>
+          </div>
+        </div>
+
+        <div class="terms-agreement">
+          <label class="checkbox-label">
+            <input type="checkbox" id="agree-terms">
+            <span>Saya setuju dengan <a href="#">Syarat & Ketentuan</a> dan <a href="#">Kebijakan Privasi</a></span>
+          </label>
+        </div>
+
+        <div class="checkout-buttons">
+          <button type="button" class="btn-back" onclick="goToStep(2)">
+            <i class="bi bi-arrow-left"></i> Kembali
+          </button>
+          <button type="button" class="btn-submit" onclick="submitOrder()">
+            <i class="bi bi-check-circle"></i> Bayar Sekarang
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SECTION: ORDER SUMMARY -->
+    <div class="checkout-right">
+      <div class="order-summary">
+        <h3><i class="bi bi-receipt"></i> Ringkasan Pesanan</h3>
+        
+        <div class="product-summary" id="product-summary">
+          <!-- Product info will be loaded here -->
+        </div>
+
+        <div class="price-breakdown">
+          <div class="price-row">
+            <span>Harga Produk</span>
+            <span id="product-price">Rp 0</span>
+          </div>
+          <div class="price-row">
+            <span>Biaya Admin</span>
+            <span id="admin-fee">Rp 5.000</span>
+          </div>
+          <div class="price-row">
+            <span>Biaya Pengiriman</span>
+            <span id="shipping-fee" class="free">GRATIS</span>
+          </div>
+          <div class="price-row discount">
+            <span>Diskon</span>
+            <span id="discount">- Rp 0</span>
+          </div>
+          <div class="price-divider"></div>
+          <div class="price-row total">
+            <span>Total Pembayaran</span>
+            <span id="total-price">Rp 0</span>
+          </div>
+        </div>
+
+        <div class="promo-code">
+          <input type="text" id="promo-input" placeholder="Kode Promo">
+          <button type="button" onclick="applyPromo()">Terapkan</button>
+        </div>
+
+        <div class="security-badge">
+          <i class="bi bi-shield-check"></i>
+          <div>
+            <strong>Pembayaran Aman</strong>
+            <p>Dilindungi dengan enkripsi SSL 256-bit</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PAYMENT MODAL (untuk QRIS, VA, dll) -->
+  <div id="payment-modal" class="payment-modal">
+    <div class="payment-modal-content">
+      <span class="payment-modal-close" onclick="closePaymentModal()">&times;</span>
+      <div id="payment-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- SUCCESS MODAL -->
+  <div id="success-modal" class="success-modal">
+    <div class="success-modal-content">
+      <div class="success-icon">
+        <i class="bi bi-check-circle-fill"></i>
+      </div>
+      <h2>Pesanan Berhasil!</h2>
+      <p>Terima kasih atas pembelian Anda</p>
+      <div class="order-id">Order ID: <strong id="display-order-id"></strong></div>
+      <button onclick="window.location.href='index.html'" class="btn-home">
+        Kembali ke Beranda
+      </button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="products-loader.js"></script>
+  <script src="checkout.js"></script>
+</body>
+</html>c

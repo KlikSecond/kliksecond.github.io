@@ -1,5 +1,92 @@
 /* ===== NOTIFICATION PANEL STYLES ===== */
 
+/* ===== TAMBAHKAN CSS INI DI BAGIAN notification.css ===== */
+/* Cari bagian .notification-icon dan tambahkan style baru ini */
+
+.notification-icon.order_success {
+  background: rgba(0, 255, 127, 0.2);
+  color: #00ff7f;
+}
+
+.notification-icon.order_cod {
+  background: rgba(255, 165, 0, 0.2);
+  color: #ffa500;
+}
+
+.notification-icon.order_shipped {
+  background: rgba(0, 191, 255, 0.2);
+  color: #00bfff;
+}
+
+.notification-icon.order_delivered {
+  background: rgba(138, 43, 226, 0.2);
+  color: #8a2be2;
+}
+
+/* ATAU jika ingin replace semua, gunakan ini: */
+
+.notification-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.notification-icon.auction_sold {
+  background: rgba(0, 255, 127, 0.2);
+  color: #00ff7f;
+}
+
+.notification-icon.product_approved {
+  background: rgba(0, 191, 255, 0.2);
+  color: #00bfff;
+}
+
+.notification-icon.bid_received {
+  background: rgba(255, 215, 0, 0.2);
+  color: #ffd700;
+}
+
+.notification-icon.welcome {
+  background: rgba(147, 51, 234, 0.2);
+  color: #9333ea;
+}
+
+.notification-icon.order_success {
+  background: rgba(0, 255, 127, 0.2);
+  color: #00ff7f;
+}
+
+.notification-icon.order_cod {
+  background: rgba(255, 165, 0, 0.2);
+  color: #ffa500;
+}
+
+.notification-icon.order_shipped {
+  background: rgba(0, 191, 255, 0.2);
+  color: #00bfff;
+}
+
+.notification-icon.order_delivered {
+  background: rgba(138, 43, 226, 0.2);
+  color: #8a2be2;
+}
+
+.notification-icon.product_rejected {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+}
+
+.notification-icon.new_message {
+  background: rgba(255, 99, 132, 0.2);
+  color: #ff6384;
+}
+
 .notification-panel {
   display: none;
   position: fixed;
