@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="auth-modal.css">
   <link rel="stylesheet" href="notification.css">
   <link rel="stylesheet" href="upload-product.css">
+  <link rel="stylesheet" href="user-profile-enhanced.css">
+  <link rel="stylesheet" href="profile-enhanced.css">
+  <link rel="stylesheet" href="product-management.css">
 </head>
 <body>
   <div id="particles-js"></div>
@@ -55,23 +58,23 @@
         </div>
 
         <div class="user-dropdown">
-          <a href="#" class="dropdown-item">
+          <a href="profile.html?tab=profile" class="dropdown-item">
             <i class="bi bi-person-circle"></i>
             <span>Profile Saya</span>
           </a>
-          <a href="#" class="dropdown-item">
+          <a href="profile.html?tab=products" class="dropdown-item">
             <i class="bi bi-box-seam"></i>
             <span>Produk Saya</span>
           </a>
-          <a href="#" class="dropdown-item">
+          <a href="profile.html?tab=auctions" class="dropdown-item">
             <i class="bi bi-gavel"></i>
             <span>Lelang Saya</span>
           </a>
-          <a href="pegadaian.html" class="dropdown-item">
+          <a href="profile.html?tab=pawnshop" class="dropdown-item">
             <i class="bi bi-gem"></i>
             <span>Pegadaian Saya</span>
           </a>
-          <a href="#" class="dropdown-item">
+          <a href="profile.html?tab=settings" class="dropdown-item">
             <i class="bi bi-gear"></i>
             <span>Pengaturan</span>
           </a>
@@ -564,6 +567,10 @@
   
   <!-- 7. Load particles and main script -->
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+  <script src="profile-handler.js"></script>
+  <script src="product-management.js"></script>
+  
   <script src="script.js"></script>
   
 </body>

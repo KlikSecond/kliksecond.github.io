@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil Saya - Klik Second</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="auth-modal.css">
+  <link rel="stylesheet" href="notification.css">
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+  <div id="particles-js"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <nav class="navbar">
+      <img src="LogoKlikSecondTransparent.png" class="logo" alt="Klik Second">
+
+      <div class="search-wrapper">
+        <div class="search-box">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" class="search-input" placeholder="Cari Gadget">
+        </div>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="lelang.html">Lelang</a></li>
+        <li><a href="pegadaian.html">Pegadaian</a></li>
+        <li><a href="#about">About Us</a></li>
+      </ul>
+
+      <!-- Auth Buttons -->
+      <div class="auth-buttons">
+        <button class="btn-login">Login</button>
+        <button class="btn-register">Daftar</button>
+      </div>
+
+      <!-- User Profile Section -->
+      <div class="user-profile-section">
+        <button class="notification-btn">
+          <i class="bi bi-bell-fill"></i>
+          <span class="notification-badge">0</span>
+        </button>
+
+        <div class="user-profile-trigger">
+          <img src="https://ui-avatars.com/api/?name=User&background=00ffff&color=000" alt="User" class="user-avatar">
+          <div class="user-info">
+            <span class="user-name">User Name</span>
+            <span class="user-role">Seller</span>
+          </div>
+          <i class="bi bi-chevron-down dropdown-arrow"></i>
+        </div>
+
+        <div class="user-dropdown">
+          <a href="profile.html" class="dropdown-item">
+            <i class="bi bi-person-circle"></i>
+            <span>Profile Saya</span>
+          </a>
+          <a href="profile.html?tab=products" class="dropdown-item">
+            <i class="bi bi-box-seam"></i>
+            <span>Produk Saya</span>
+          </a>
+          <a href="profile.html?tab=orders" class="dropdown-item">
+            <i class="bi bi-bag-check"></i>
+            <span>Pesanan Saya</span>
+          </a>
+          <a href="profile.html?tab=auctions" class="dropdown-item">
+            <i class="bi bi-gavel"></i>
+            <span>Lelang Saya</span>
+          </a>
+          <a href="profile.html?tab=pawnshop" class="dropdown-item">
+            <i class="bi bi-gem"></i>
+            <span>Pegadaian Saya</span>
+          </a>
+          <a href="profile.html?tab=settings" class="dropdown-item">
+            <i class="bi bi-gear"></i>
+            <span>Pengaturan</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item" id="logout-btn">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Keluar</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- NOTIFICATION PANEL -->
+  <div id="notification-panel" class="notification-panel">
+    <div class="notification-header">
+      <h3><i class="bi bi-bell-fill"></i> Notifikasi</h3>
+      <div class="notification-actions">
+        <button class="mark-all-read">Tandai Semua</button>
+        <button class="close-notification">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+    </div>
+    <div class="notification-list" id="notification-list"></div>
+  </div>
+
+  <!-- PROFILE CONTENT -->
+  <section class="profile-section">
+    <div class="profile-container">
+      
+      <!-- SIDEBAR -->
+      <aside class="profile-sidebar">
+        <div class="profile-card">
+          <div class="profile-avatar-wrapper">
+            <img src="https://ui-avatars.com/api/?name=User&background=00ffff&color=000" alt="Profile" class="profile-avatar" id="profile-avatar">
+            <button class="change-avatar-btn" id="change-avatar-btn">
+              <i class="bi bi-camera-fill"></i>
+            </button>
+          </div>
+          <h3 class="profile-name" id="profile-name">Loading...</h3>
+          <p class="profile-role" id="profile-role">Seller</p>
+          <div class="profile-stats">
+            <div class="stat">
+              <span class="stat-value" id="stat-products">0</span>
+              <span class="stat-label">Produk</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" id="stat-orders">0</span>
+              <span class="stat-label">Pesanan</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" id="stat-rating">0.0</span>
+              <span class="stat-label">Rating</span>
+            </div>
+          </div>
+        </div>
+
+        <nav class="profile-menu">
+          <a href="#" class="menu-item active" data-tab="profile">
+            <i class="bi bi-person-circle"></i>
+            <span>Profil Saya</span>
+          </a>
+          <a href="#" class="menu-item" data-tab="products">
+            <i class="bi bi-box-seam"></i>
+            <span>Produk Saya</span>
+          </a>
+          <a href="#" class="menu-item" data-tab="orders">
+            <i class="bi bi-bag-check"></i>
+            <span>Pesanan Saya</span>
+          </a>
+          <a href="#" class="menu-item" data-tab="auctions">
+            <i class="bi bi-gavel"></i>
+            <span>Lelang Saya</span>
+          </a>
+          <a href="#" class="menu-item" data-tab="pawnshop">
+            <i class="bi bi-gem"></i>
+            <span>Pegadaian Saya</span>
+          </a>
+          <a href="#" class="menu-item" data-tab="settings">
+            <i class="bi bi-gear"></i>
+            <span>Pengaturan</span>
+          </a>
+        </nav>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="profile-main">
+        
+        <!-- PROFILE TAB -->
+        <div class="tab-content active" id="profile-tab">
+          <div class="content-header">
+            <h2><i class="bi bi-person-circle"></i> Profil Saya</h2>
+            <p>Kelola informasi profil Anda</p>
+          </div>
+
+          <div class="profile-info-card">
+            <div class="info-section">
+              <h3>Informasi Pribadi</h3>
+              <div class="info-grid">
+                <div class="info-item">
+                  <label><i class="bi bi-person"></i> Nama Lengkap</label>
+                  <p id="info-fullname">-</p>
+                </div>
+                <div class="info-item">
+                  <label><i class="bi bi-envelope"></i> Email</label>
+                  <p id="info-email">-</p>
+                </div>
+                <div class="info-item">
+                  <label><i class="bi bi-phone"></i> No. Telepon</label>
+                  <p id="info-phone">-</p>
+                </div>
+                <div class="info-item">
+                  <label><i class="bi bi-calendar"></i> Bergabung Sejak</label>
+                  <p id="info-joindate">-</p>
+                </div>
+                <div class="info-item full-width">
+                  <label><i class="bi bi-geo-alt"></i> Alamat</label>
+                  <p id="info-address">-</p>
+                </div>
+              </div>
+              <button class="btn-edit-profile" id="btn-edit-profile">
+                <i class="bi bi-pencil-square"></i> Edit Profil
+              </button>
+            </div>
+
+            <div class="info-section">
+              <h3>Statistik Akun</h3>
+              <div class="stats-grid">
+                <div class="stats-card">
+                  <i class="bi bi-box-seam"></i>
+                  <div>
+                    <h4 id="stats-total-products">0</h4>
+                    <p>Total Produk</p>
+                  </div>
+                </div>
+                <div class="stats-card">
+                  <i class="bi bi-check-circle"></i>
+                  <div>
+                    <h4 id="stats-sold-products">0</h4>
+                    <p>Produk Terjual</p>
+                  </div>
+                </div>
+                <div class="stats-card">
+                  <i class="bi bi-clock-history"></i>
+                  <div>
+                    <h4 id="stats-pending-products">0</h4>
+                    <p>Produk Pending</p>
+                  </div>
+                </div>
+                <div class="stats-card">
+                  <i class="bi bi-star-fill"></i>
+                  <div>
+                    <h4 id="stats-avg-rating">0.0</h4>
+                    <p>Rating Rata-rata</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRODUCTS TAB -->
+        <div class="tab-content" id="products-tab">
+          <div class="content-header">
+            <h2><i class="bi bi-box-seam"></i> Produk Saya</h2>
+            <p>Kelola semua produk yang Anda jual</p>
+          </div>
+
+          <div class="products-list" id="products-list">
+            <!-- Products will be loaded here -->
+          </div>
+        </div>
+
+        <!-- ORDERS TAB -->
+        <div class="tab-content" id="orders-tab">
+          <div class="content-header">
+            <h2><i class="bi bi-bag-check"></i> Pesanan Saya</h2>
+            <p>Lacak dan kelola pesanan Anda</p>
+          </div>
+
+          <div class="orders-filter">
+            <button class="filter-btn active" data-status="all">Semua</button>
+            <button class="filter-btn" data-status="pending">Pending</button>
+            <button class="filter-btn" data-status="processing">Diproses</button>
+            <button class="filter-btn" data-status="shipped">Dikirim</button>
+            <button class="filter-btn" data-status="completed">Selesai</button>
+            <button class="filter-btn" data-status="cancelled">Dibatalkan</button>
+          </div>
+
+          <div class="orders-list" id="orders-list">
+            <!-- Orders will be loaded here -->
+          </div>
+        </div>
+
+        <!-- AUCTIONS TAB -->
+        <div class="tab-content" id="auctions-tab">
+          <div class="content-header">
+            <h2><i class="bi bi-gavel"></i> Lelang Saya</h2>
+            <p>Kelola produk lelang Anda</p>
+          </div>
+
+          <div class="auctions-list" id="auctions-list">
+            <!-- Auctions will be loaded here -->
+          </div>
+        </div>
+
+        <!-- PAWNSHOP TAB -->
+        <div class="tab-content" id="pawnshop-tab">
+          <div class="content-header">
+            <h2><i class="bi bi-gem"></i> Pegadaian Saya</h2>
+            <p>Kelola gadget yang digadaikan</p>
+          </div>
+
+          <div class="pawnshop-list" id="pawnshop-list">
+            <!-- Pawnshop items will be loaded here -->
+          </div>
+        </div>
+
+        <!-- SETTINGS TAB -->
+        <div class="tab-content" id="settings-tab">
+          <div class="content-header">
+            <h2><i class="bi bi-gear"></i> Pengaturan</h2>
+            <p>Kelola preferensi akun Anda</p>
+          </div>
+
+          <div class="settings-container">
+            <div class="settings-section">
+              <h3>Keamanan</h3>
+              <div class="setting-item">
+                <div class="setting-info">
+                  <i class="bi bi-shield-lock"></i>
+                  <div>
+                    <h4>Ubah Password</h4>
+                    <p>Perbarui password Anda secara berkala</p>
+                  </div>
+                </div>
+                <button class="btn-action" id="btn-change-password">Ubah</button>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h3>Notifikasi</h3>
+              <div class="setting-item">
+                <div class="setting-info">
+                  <i class="bi bi-bell"></i>
+                  <div>
+                    <h4>Notifikasi Email</h4>
+                    <p>Terima pembaruan via email</p>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggle-email-notif" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="setting-item">
+                <div class="setting-info">
+                  <i class="bi bi-phone"></i>
+                  <div>
+                    <h4>Notifikasi SMS</h4>
+                    <p>Terima pembaruan via SMS</p>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggle-sms-notif">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <h3>Privasi</h3>
+              <div class="setting-item">
+                <div class="setting-info">
+                  <i class="bi bi-eye"></i>
+                  <div>
+                    <h4>Profil Publik</h4>
+                    <p>Tampilkan profil Anda ke pengguna lain</p>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="toggle-public-profile" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="settings-section danger-zone">
+              <h3>Zona Berbahaya</h3>
+              <div class="setting-item">
+                <div class="setting-info">
+                  <i class="bi bi-trash"></i>
+                  <div>
+                    <h4>Hapus Akun</h4>
+                    <p>Hapus akun Anda secara permanen</p>
+                  </div>
+                </div>
+                <button class="btn-danger" id="btn-delete-account">Hapus Akun</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </section>
+
+  <!-- EDIT PROFILE MODAL -->
+  <div id="edit-profile-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="bi bi-pencil-square"></i> Edit Profil</h3>
+        <button class="modal-close" id="close-edit-modal">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+      <form id="edit-profile-form">
+        <div class="form-group-modal">
+          <label>Nama Lengkap</label>
+          <input type="text" id="edit-fullname" required>
+        </div>
+        <div class="form-group-modal">
+          <label>Email</label>
+          <input type="email" id="edit-email" required>
+        </div>
+        <div class="form-group-modal">
+          <label>No. Telepon</label>
+          <input type="tel" id="edit-phone" required>
+        </div>
+        <div class="form-group-modal">
+          <label>Alamat</label>
+          <textarea id="edit-address" rows="3"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="cancel-edit">Batal</button>
+          <button type="submit" class="btn-save">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CHANGE PASSWORD MODAL -->
+  <div id="change-password-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="bi bi-shield-lock"></i> Ubah Password</h3>
+        <button class="modal-close" id="close-password-modal">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+      <form id="change-password-form">
+        <div class="form-group-modal">
+          <label>Password Lama</label>
+          <input type="password" id="old-password" required>
+        </div>
+        <div class="form-group-modal">
+          <label>Password Baru</label>
+          <input type="password" id="new-password" required>
+        </div>
+        <div class="form-group-modal">
+          <label>Konfirmasi Password Baru</label>
+          <input type="password" id="confirm-password" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="cancel-password">Batal</button>
+          <button type="submit" class="btn-save">Ubah Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="users.js"></script>
+  <script src="products-loader.js"></script>
+  <script src="session-manager.js"></script>
+  <script src="notification-handler.js"></script>
+  <script src="profile-data.js"></script>
+  <script src="profile-handler.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
