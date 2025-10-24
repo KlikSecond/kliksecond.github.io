@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pencarian Gadget - Klik Second</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="auth-modal.css">
+  <link rel="stylesheet" href="notification.css">
+  <link rel="stylesheet" href="search.css">
+</head>
+<body>
+  <div id="particles-js"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <nav class="navbar">
+      <img src="LogoKlikSecondTransparent.png" class="logo" alt="Klik Second" onclick="window.location.href='index.html'">
+
+      <!-- ENHANCED SEARCH BOX -->
+      <div class="search-wrapper">
+        <div class="search-box" id="navbar-search-box">
+          <i class="bi bi-search search-icon"></i>
+          <input 
+            type="text" 
+            class="search-input" 
+            id="navbar-search-input"
+            placeholder="Cari Gadget (e.g. iPhone 14, Samsung S23)"
+            autocomplete="off"
+          >
+          <button class="search-clear-btn" id="navbar-clear-btn" style="display: none;">
+            <i class="bi bi-x"></i>
+          </button>
+          
+          <!-- AUTOCOMPLETE DROPDOWN -->
+          <div class="search-autocomplete" id="navbar-autocomplete">
+            <!-- Suggestions will appear here -->
+          </div>
+        </div>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="lelang.html">Lelang</a></li>
+        <li><a href="pegadaian.html">Pegadaian</a></li>
+        <li><a href="#about">About Us</a></li>
+      </ul>
+
+      <div class="auth-buttons">
+        <button class="btn-login">Login</button>
+        <button class="btn-register">Daftar</button>
+      </div>
+
+      <div class="user-profile-section">
+        <button class="notification-btn">
+          <i class="bi bi-bell-fill"></i>
+          <span class="notification-badge">0</span>
+        </button>
+
+        <div class="user-profile-trigger">
+          <img src="https://ui-avatars.com/api/?name=User&background=00ffff&color=000" alt="User" class="user-avatar">
+          <div class="user-info">
+            <span class="user-name">User Name</span>
+            <span class="user-role">Seller</span>
+          </div>
+          <i class="bi bi-chevron-down dropdown-arrow"></i>
+        </div>
+
+        <div class="user-dropdown">
+          <a href="profile.html?tab=profile" class="dropdown-item">
+            <i class="bi bi-person-circle"></i>
+            <span>Profile Saya</span>
+          </a>
+          <a href="profile.html?tab=products" class="dropdown-item">
+            <i class="bi bi-box-seam"></i>
+            <span>Produk Saya</span>
+          </a>
+          <a href="profile.html?tab=settings" class="dropdown-item">
+            <i class="bi bi-gear"></i>
+            <span>Pengaturan</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item" id="logout-btn">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Keluar</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- NOTIFICATION PANEL -->
+  <div id="notification-panel" class="notification-panel">
+    <div class="notification-header">
+      <h3><i class="bi bi-bell-fill"></i> Notifikasi</h3>
+      <div class="notification-actions">
+        <button class="mark-all-read">Tandai Semua</button>
+        <button class="close-notification">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+    </div>
+    <div class="notification-list" id="notification-list"></div>
+  </div>
+
+  <!-- SEARCH PAGE CONTENT -->
+  <section class="search-page-section">
+    <div class="search-page-container">
+      
+      <!-- SEARCH HERO -->
+      <div class="search-hero">
+        <h1><i class="bi bi-search"></i> Cari Gadget Impianmu</h1>
+        <p>Temukan ribuan gadget second berkualitas dengan harga terbaik</p>
+        
+        <!-- MAIN SEARCH BOX -->
+        <div class="main-search-box">
+          <div class="search-input-wrapper">
+            <i class="bi bi-search"></i>
+            <input 
+              type="text" 
+              id="main-search-input" 
+              placeholder="Cari berdasarkan merk, model, atau kategori..."
+              autocomplete="off"
+            >
+            <button class="voice-search-btn" title="Voice Search">
+              <i class="bi bi-mic-fill"></i>
+            </button>
+          </div>
+          <button class="btn-main-search" id="btn-main-search">
+            <i class="bi bi-search"></i>
+            Cari
+          </button>
+        </div>
+
+        <!-- POPULAR SEARCHES -->
+        <div class="popular-searches">
+          <span class="label">Pencarian Populer:</span>
+          <div class="popular-tags" id="popular-tags">
+            <span class="tag" data-query="iPhone 14">iPhone 14</span>
+            <span class="tag" data-query="Samsung S23">Samsung S23</span>
+            <span class="tag" data-query="iPad">iPad</span>
+            <span class="tag" data-query="Xiaomi">Xiaomi</span>
+            <span class="tag" data-query="POCO">POCO</span>
+          </div>
+        </div>
+
+        <!-- SEARCH HISTORY -->
+        <div class="search-history" id="search-history-section" style="display: none;">
+          <div class="history-header">
+            <span><i class="bi bi-clock-history"></i> Riwayat Pencarian</span>
+            <button class="clear-history-btn" id="clear-history-btn">Hapus Semua</button>
+          </div>
+          <div class="history-tags" id="history-tags">
+            <!-- History will be loaded here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTERS & RESULTS -->
+      <div class="search-content">
+        
+        <!-- SIDEBAR FILTERS -->
+        <aside class="search-sidebar">
+          <div class="filter-header">
+            <h3><i class="bi bi-funnel-fill"></i> Filter</h3>
+            <button class="reset-filters-btn" id="reset-filters-btn">Reset</button>
+          </div>
+
+          <!-- CATEGORY FILTER -->
+          <div class="filter-section">
+            <h4>Kategori</h4>
+            <div class="filter-options">
+              <label class="filter-checkbox">
+                <input type="checkbox" name="category" value="all" checked>
+                <span>Semua Kategori</span>
+                <span class="count" id="count-all">0</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="category" value="iPhone">
+                <span>iPhone</span>
+                <span class="count" id="count-iphone">0</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="category" value="Android">
+                <span>Android</span>
+                <span class="count" id="count-android">0</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="category" value="Tablet">
+                <span>Tablet</span>
+                <span class="count" id="count-tablet">0</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- PRICE RANGE FILTER -->
+          <div class="filter-section">
+            <h4>Kisaran Harga</h4>
+            <div class="price-range-wrapper">
+              <div class="price-inputs">
+                <input type="number" id="min-price" placeholder="Min" class="price-input">
+                <span>—</span>
+                <input type="number" id="max-price" placeholder="Max" class="price-input">
+              </div>
+              <div class="price-slider">
+                <input type="range" id="price-slider" min="0" max="30000000" step="100000" value="30000000">
+              </div>
+              <div class="price-labels">
+                <span>Rp 0</span>
+                <span id="max-price-label">Rp 30jt+</span>
+              </div>
+            </div>
+            <div class="quick-price-filters">
+              <button class="quick-price" data-max="5000000">< 5 Juta</button>
+              <button class="quick-price" data-min="5000000" data-max="10000000">5 - 10 Juta</button>
+              <button class="quick-price" data-min="10000000" data-max="20000000">10 - 20 Juta</button>
+              <button class="quick-price" data-min="20000000">> 20 Juta</button>
+            </div>
+          </div>
+
+          <!-- GRADE FILTER -->
+          <div class="filter-section">
+            <h4>Grade/Kondisi</h4>
+            <div class="filter-options">
+              <label class="filter-checkbox">
+                <input type="checkbox" name="grade" value="A">
+                <span>Grade A (Mulus)</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="grade" value="B+">
+                <span>Grade B+ (Minor Scratch)</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="grade" value="B">
+                <span>Grade B (Bekas Normal)</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- BATTERY HEALTH FILTER -->
+          <div class="filter-section">
+            <h4>Battery Health</h4>
+            <div class="filter-options">
+              <label class="filter-checkbox">
+                <input type="checkbox" name="battery" value="90">
+                <span>90% ke atas</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="battery" value="80">
+                <span>80% - 89%</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="battery" value="70">
+                <span>Di bawah 80%</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- LOCATION FILTER -->
+          <div class="filter-section">
+            <h4>Lokasi</h4>
+            <div class="location-search">
+              <input type="text" id="location-search" placeholder="Cari lokasi...">
+            </div>
+            <div class="filter-options" id="location-options">
+              <label class="filter-checkbox">
+                <input type="checkbox" name="location" value="Jakarta">
+                <span>Jakarta</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="location" value="Bandung">
+                <span>Bandung</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="location" value="Surabaya">
+                <span>Surabaya</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="location" value="Medan">
+                <span>Medan</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- SHIPPING FILTER -->
+          <div class="filter-section">
+            <h4>Pengiriman</h4>
+            <div class="filter-options">
+              <label class="filter-checkbox">
+                <input type="checkbox" name="shipping" value="free">
+                <span>Gratis Ongkir</span>
+              </label>
+              <label class="filter-checkbox">
+                <input type="checkbox" name="shipping" value="cod">
+                <span>COD Tersedia</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- APPLY FILTERS BUTTON (MOBILE) -->
+          <button class="btn-apply-filters" id="btn-apply-filters-mobile">
+            <i class="bi bi-check-circle"></i>
+            Terapkan Filter
+          </button>
+        </aside>
+
+        <!-- RESULTS AREA -->
+        <main class="search-results">
+          
+          <!-- RESULTS HEADER -->
+          <div class="results-header">
+            <div class="results-info">
+              <h2 id="results-title">Semua Produk</h2>
+              <p id="results-count">Menampilkan 0 produk</p>
+            </div>
+
+            <!-- SORT OPTIONS -->
+            <div class="sort-wrapper">
+              <label>Urutkan:</label>
+              <select id="sort-select" class="sort-select">
+                <option value="relevant">Paling Relevan</option>
+                <option value="price-low">Harga Terendah</option>
+                <option value="price-high">Harga Tertinggi</option>
+                <option value="newest">Terbaru</option>
+                <option value="popular">Terpopuler</option>
+                <option value="rating">Rating Tertinggi</option>
+              </select>
+            </div>
+
+            <!-- VIEW TOGGLE -->
+            <div class="view-toggle">
+              <button class="view-btn active" data-view="grid" title="Grid View">
+                <i class="bi bi-grid-3x3-gap-fill"></i>
+              </button>
+              <button class="view-btn" data-view="list" title="List View">
+                <i class="bi bi-list-ul"></i>
+              </button>
+            </div>
+
+            <!-- MOBILE FILTER TOGGLE -->
+            <button class="mobile-filter-toggle" id="mobile-filter-toggle">
+              <i class="bi bi-funnel-fill"></i>
+              Filter
+            </button>
+          </div>
+
+          <!-- ACTIVE FILTERS -->
+          <div class="active-filters" id="active-filters" style="display: none;">
+            <span class="label">Filter Aktif:</span>
+            <div class="filter-chips" id="filter-chips">
+              <!-- Active filter chips will appear here -->
+            </div>
+          </div>
+
+          <!-- RESULTS GRID -->
+          <div class="results-grid" id="results-grid">
+            <!-- Products will be loaded here -->
+          </div>
+
+          <!-- EMPTY STATE -->
+          <div class="empty-state" id="empty-state" style="display: none;">
+            <div class="empty-icon">
+              <i class="bi bi-search"></i>
+            </div>
+            <h3>Tidak ada produk ditemukan</h3>
+            <p>Coba ubah kata kunci atau filter pencarian Anda</p>
+            <button class="btn-reset-search" id="btn-reset-search">
+              <i class="bi bi-arrow-clockwise"></i>
+              Reset Pencarian
+            </button>
+          </div>
+
+          <!-- LOADING STATE -->
+          <div class="loading-state" id="loading-state" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>Mencari produk...</p>
+          </div>
+
+          <!-- PAGINATION -->
+          <div class="pagination" id="pagination" style="display: none;">
+            <button class="page-btn" id="prev-page" disabled>
+              <i class="bi bi-chevron-left"></i>
+              Sebelumnya
+            </button>
+            <div class="page-numbers" id="page-numbers">
+              <!-- Page numbers will be generated here -->
+            </div>
+            <button class="page-btn" id="next-page">
+              Selanjutnya
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOBILE FILTER OVERLAY -->
+  <div class="mobile-filter-overlay" id="mobile-filter-overlay">
+    <div class="mobile-filter-header">
+      <h3>Filter Produk</h3>
+      <button class="close-mobile-filter" id="close-mobile-filter">
+        <i class="bi bi-x"></i>
+      </button>
+    </div>
+    <div class="mobile-filter-content">
+      <!-- Sidebar content will be cloned here for mobile -->
+    </div>
+  </div>
+
+  <!-- AUTHENTICATION MODAL -->
+  <div id="auth-modal" class="auth-modal">
+    <div class="auth-modal-content">
+      <span class="auth-modal-close">
+        <i class="bi bi-x"></i>
+      </span>
+      <div class="auth-modal-header">
+        <h2>Selamat Datang!</h2>
+        <p>Login atau daftar untuk melanjutkan</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Login</button>
+        <button class="auth-tab" data-tab="register">Daftar</button>
+      </div>
+      <div id="login-form" class="auth-form active">
+        <div id="login-error" class="error-message"></div>
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label for="login-username">Username atau Email</label>
+            <input type="text" id="login-username" placeholder="Masukkan username atau email" required>
+          </div>
+          <div class="form-group password-toggle">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="Masukkan password" required>
+            <i class="bi bi-eye-slash password-toggle-icon"></i>
+          </div>
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" id="remember-me">
+              <span>Ingat Saya</span>
+            </label>
+            <a href="#" class="forgot-password">Lupa Password?</a>
+          </div>
+          <button type="submit" class="auth-submit-btn">
+            <i class="bi bi-box-arrow-in-right"></i>
+            Login
+          </button>
+        </form>
+      </div>
+      <div id="register-form" class="auth-form">
+        <div id="register-error" class="error-message"></div>
+        <div id="register-success" class="success-message"></div>
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label for="register-fullname">Nama Lengkap</label>
+            <input type="text" id="register-fullname" placeholder="Masukkan nama lengkap" required>
+          </div>
+          <div class="form-group">
+            <label for="register-email">Email</label>
+            <input type="email" id="register-email" placeholder="Masukkan email" required>
+          </div>
+          <div class="form-group">
+            <label for="register-phone">No. Telepon</label>
+            <input type="tel" id="register-phone" placeholder="08XXXXXXXXXX" required>
+          </div>
+          <div class="form-group">
+            <label for="register-username">Username</label>
+            <input type="text" id="register-username" placeholder="Pilih username" required>
+          </div>
+          <div class="form-group password-toggle">
+            <label for="register-password">Password</label>
+            <input type="password" id="register-password" placeholder="Minimal 6 karakter" required>
+            <i class="bi bi-eye-slash password-toggle-icon"></i>
+          </div>
+          <div class="form-group password-toggle">
+            <label for="register-confirm-password">Konfirmasi Password</label>
+            <input type="password" id="register-confirm-password" placeholder="Ulangi password" required>
+            <i class="bi bi-eye-slash password-toggle-icon"></i>
+          </div>
+          <button type="submit" class="auth-submit-btn">
+            <i class="bi bi-person-plus"></i>
+            Daftar Sekarang
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="users.js"></script>
+  <script src="products-loader.js"></script>
+  <script src="session-manager.js"></script>
+  <script src="auth-handler.js"></script>
+  <script src="notification-handler.js"></script>
+  <script src="search-engine.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

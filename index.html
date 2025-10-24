@@ -17,76 +17,264 @@
   <div id="particles-js"></div>
 
   <!-- HEADER -->
-  <header class="header">
-    <nav class="navbar">
-      <img src="LogoKlikSecondTransparent.png" class="logo" alt="Klik Second">
+<header class="header">
+  <nav class="navbar">
+    <img src="LogoKlikSecondTransparent.png" class="logo" alt="Klik Second" onclick="window.location.href='index.html'" style="cursor: pointer;">
 
-      <div class="search-wrapper">
-        <div class="search-box">
-          <i class="bi bi-search search-icon"></i>
-          <input type="text" class="search-input" placeholder="Cari Gadget">
-        </div>
-      </div>
-
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="lelang.html">Lelang</a></li>
-        <li><a href="pegadaian.html">Pegadaian</a></li>
-        <li><a href="#about">About Us</a></li>
-      </ul>
-
-      <!-- Auth Buttons (shown when not logged in) -->
-      <div class="auth-buttons">
-        <button class="btn-login">Login</button>
-        <button class="btn-register">Daftar</button>
-      </div>
-
-      <!-- User Profile Section (shown when logged in) -->
-      <div class="user-profile-section">
-        <button class="notification-btn">
-          <i class="bi bi-bell-fill"></i>
-          <span class="notification-badge">0</span>
+    <!-- ENHANCED SEARCH BOX WITH AUTOCOMPLETE -->
+    <div class="search-wrapper">
+      <div class="search-box" id="navbar-search-box">
+        <i class="bi bi-search search-icon"></i>
+        <input 
+          type="text" 
+          class="search-input" 
+          id="navbar-search-input"
+          placeholder="Cari Gadget"
+          autocomplete="off"
+        >
+        <button class="search-clear-btn" id="navbar-clear-btn" style="display: none;">
+          <i class="bi bi-x"></i>
         </button>
-
-        <div class="user-profile-trigger">
-          <img src="https://ui-avatars.com/api/?name=User&background=00ffff&color=000" alt="User" class="user-avatar">
-          <div class="user-info">
-            <span class="user-name">User Name</span>
-            <span class="user-role">Seller</span>
-          </div>
-          <i class="bi bi-chevron-down dropdown-arrow"></i>
-        </div>
-
-        <div class="user-dropdown">
-          <a href="profile.html?tab=profile" class="dropdown-item">
-            <i class="bi bi-person-circle"></i>
-            <span>Profile Saya</span>
-          </a>
-          <a href="profile.html?tab=products" class="dropdown-item">
-            <i class="bi bi-box-seam"></i>
-            <span>Produk Saya</span>
-          </a>
-          <a href="profile.html?tab=auctions" class="dropdown-item">
-            <i class="bi bi-gavel"></i>
-            <span>Lelang Saya</span>
-          </a>
-          <a href="profile.html?tab=pawnshop" class="dropdown-item">
-            <i class="bi bi-gem"></i>
-            <span>Pegadaian Saya</span>
-          </a>
-          <a href="profile.html?tab=settings" class="dropdown-item">
-            <i class="bi bi-gear"></i>
-            <span>Pengaturan</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item" id="logout-btn">
-            <i class="bi bi-box-arrow-right"></i>
-            <span>Keluar</span>
-          </a>
+        
+        <!-- AUTOCOMPLETE DROPDOWN -->
+        <div class="search-autocomplete" id="navbar-autocomplete">
+          <!-- Suggestions will appear here dynamically -->
         </div>
       </div>
-    </nav>
-  </header>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <!--<li><a href="search.html">Cari Produk</a></li> NEW: Optional -->
+      <li><a href="lelang.html">Lelang</a></li>
+      <li><a href="pegadaian.html">Pegadaian</a></li>
+      <li><a href="#about">About Us</a></li>
+    </ul>
+
+    <!-- Auth Buttons (shown when not logged in) -->
+    <div class="auth-buttons">
+      <button class="btn-login">Login</button>
+      <button class="btn-register">Daftar</button>
+    </div>
+
+    <!-- User Profile Section (shown when logged in) -->
+    <div class="user-profile-section">
+      <button class="notification-btn">
+        <i class="bi bi-bell-fill"></i>
+        <span class="notification-badge">0</span>
+      </button>
+
+      <div class="user-profile-trigger">
+        <img src="https://ui-avatars.com/api/?name=User&background=00ffff&color=000" alt="User" class="user-avatar">
+        <div class="user-info">
+          <span class="user-name">User Name</span>
+          <span class="user-role">Seller</span>
+        </div>
+        <i class="bi bi-chevron-down dropdown-arrow"></i>
+      </div>
+
+      <div class="user-dropdown">
+        <a href="profile.html?tab=profile" class="dropdown-item">
+          <i class="bi bi-person-circle"></i>
+          <span>Profile Saya</span>
+        </a>
+        <a href="profile.html?tab=products" class="dropdown-item">
+          <i class="bi bi-box-seam"></i>
+          <span>Produk Saya</span>
+        </a>
+        <a href="profile.html?tab=auctions" class="dropdown-item">
+          <i class="bi bi-gavel"></i>
+          <span>Lelang Saya</span>
+        </a>
+        <a href="profile.html?tab=pawnshop" class="dropdown-item">
+          <i class="bi bi-gem"></i>
+          <span>Pegadaian Saya</span>
+        </a>
+        <a href="profile.html?tab=settings" class="dropdown-item">
+          <i class="bi bi-gear"></i>
+          <span>Pengaturan</span>
+        </a>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item" id="logout-btn">
+          <i class="bi bi-box-arrow-right"></i>
+          <span>Keluar</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- ===== ADDITIONAL CSS FOR AUTOCOMPLETE ===== -->
+<!-- Add this to your style.css OR create separate file -->
+<style>
+/* Search Clear Button */
+.search-clear-btn {
+  background: rgba(0, 0, 0, 0.1);
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.3s;
+  color: #666;
+  margin-left: 8px;
+}
+
+.search-clear-btn:hover {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+}
+
+/* Autocomplete Dropdown */
+.search-autocomplete {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+}
+
+.search-autocomplete.active {
+  display: block;
+  animation: slideDownAutocomplete 0.2s ease;
+}
+
+@keyframes slideDownAutocomplete {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-autocomplete::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-autocomplete::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.search-autocomplete::-webkit-scrollbar-thumb {
+  background: #00ffff;
+  border-radius: 10px;
+}
+
+.autocomplete-section {
+  padding: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.autocomplete-section:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-header {
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.autocomplete-item {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.autocomplete-item:hover {
+  background: rgba(0, 255, 255, 0.1);
+}
+
+.autocomplete-item i {
+  font-size: 16px;
+  color: #00ffff;
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.autocomplete-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.autocomplete-item-title {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.autocomplete-item-subtitle {
+  font-size: 12px;
+  color: #999;
+  margin-top: 2px;
+}
+
+.autocomplete-item-price {
+  font-size: 14px;
+  color: #00ffff;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.autocomplete-footer {
+  padding: 12px 15px;
+  background: #f8f8f8;
+  text-align: center;
+  border-radius: 0 0 15px 15px;
+}
+
+.autocomplete-footer a {
+  color: #00ffff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: 0.3s;
+}
+
+.autocomplete-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .search-autocomplete {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    top: 70px;
+    max-height: calc(100vh - 100px);
+  }
+}
+</style>
 
   <!-- NOTIFICATION PANEL -->
   <div id="notification-panel" class="notification-panel">
@@ -560,6 +748,8 @@
   
   <!-- 5. Load notification handler -->
   <script src="notification-handler.js"></script>
+
+  <script src="search-engine.js"></script>
   
   <!-- 6. Load other handlers -->
   <script src="upload-product.js"></script>
