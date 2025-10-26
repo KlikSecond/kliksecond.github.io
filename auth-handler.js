@@ -1,4 +1,4 @@
-// ===== AUTHENTICATION HANDLER (FIXED) =====
+// ===== AUTHENTICATION HANDLER (FIXED - NO LOOP) =====
 // File ini menangani login/register dan sinkron dengan SessionManager
 
 console.log('🔐 Auth handler loaded');
@@ -97,7 +97,7 @@ document.querySelectorAll('.password-toggle-icon').forEach(icon => {
   });
 });
 
-// ===== LOGIN HANDLER =====
+// ===== LOGIN HANDLER (FIXED) =====
 document.querySelector('#login-form form').addEventListener('submit', async function(e) {
   e.preventDefault();
   
@@ -114,64 +114,75 @@ document.querySelector('#login-form form').addEventListener('submit', async func
   
   console.log('🔑 Attempting login for:', username);
   
-  // Cek apakah usersData tersedia
-  if (!window.usersData || !window.usersData.users) {
-    errorDiv.textContent = 'System error: User database not loaded!';
-    errorDiv.style.display = 'block';
-    console.error('❌ usersData not found!');
-    return;
-  }
-  
-  // Cari user
-  const user = window.usersData.users.find(u => 
-    (u.username === username || u.email === username) && u.password === password
-  );
-  
-  if (user) {
-    console.log('✅ User found:', user.username);
+  // ===== CRITICAL FIX: Cek localStorage langsung =====
+  try {
+    const storedData = localStorage.getItem('klikSecondUsers');
+    if (!storedData) {
+      errorDiv.textContent = 'System error: User database not loaded!';
+      errorDiv.style.display = 'block';
+      console.error('❌ klikSecondUsers not found in localStorage!');
+      return;
+    }
     
-    // ===== FIX: Simpan session menggunakan SessionManager =====
-    const sessionSaved = window.SessionManager.saveSession({
-      username: user.username,
-      fullname: user.fullName,
-      email: user.email,
-      phone: user.phone,
-      role: user.role,
-      profilePicture: user.profilePicture
-    });
+    const usersData = JSON.parse(storedData);
     
-    if (sessionSaved) {
-      errorDiv.style.display = 'none';
+    // Cari user
+    const user = usersData.users.find(u => 
+      (u.username === username || u.email === username) && u.password === password
+    );
+    
+    if (user) {
+      console.log('✅ User found:', user.username);
       
-      // Tampilkan success message
-      const successMsg = document.createElement('div');
-      successMsg.className = 'success-message';
-      successMsg.textContent = '✓ Login berhasil! Selamat datang, ' + user.fullName;
-      successMsg.style.display = 'block';
-      errorDiv.parentNode.insertBefore(successMsg, errorDiv);
+      // ===== FIX: Simpan session menggunakan SessionManager =====
+      const sessionSaved = window.SessionManager.saveSession({
+        username: user.username,
+        fullname: user.fullName,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        profilePicture: user.profilePicture
+      });
       
-      // Update UI
-      setTimeout(() => {
-        closeAuthModal();
-        window.SessionManager.updateUIForAuth();
+      if (sessionSaved) {
+        errorDiv.style.display = 'none';
         
-        // Update notification badge
-        if (window.notificationHandler) {
-          window.notificationHandler.updateNotificationBadge();
-        }
+        // Tampilkan success message
+        const successMsg = document.createElement('div');
+        successMsg.className = 'success-message';
+        successMsg.textContent = '✓ Login berhasil! Selamat datang, ' + user.fullName;
+        successMsg.style.display = 'block';
+        errorDiv.parentNode.insertBefore(successMsg, errorDiv);
         
-        // Reload halaman untuk refresh semua komponen
+        // ===== CRITICAL FIX: Update UI tanpa reload =====
         setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }, 1000);
+          closeAuthModal();
+          
+          // Update UI secara manual
+          window.SessionManager.updateUIForAuth();
+          
+          // Update notification badge
+          if (window.notificationHandler) {
+            window.notificationHandler.updateNotificationBadge();
+          }
+          
+          // ===== REMOVED: window.location.reload() =====
+          // Tidak perlu reload, cukup update UI
+          
+          console.log('✅ Login successful, UI updated');
+        }, 1000);
+      } else {
+        errorDiv.textContent = 'Gagal menyimpan session. Coba lagi.';
+        errorDiv.style.display = 'block';
+      }
     } else {
-      errorDiv.textContent = 'Gagal menyimpan session. Coba lagi.';
+      console.log('❌ Invalid credentials');
+      errorDiv.textContent = 'Username atau password salah!';
       errorDiv.style.display = 'block';
     }
-  } else {
-    console.log('❌ Invalid credentials');
-    errorDiv.textContent = 'Username atau password salah!';
+  } catch (error) {
+    console.error('❌ Login error:', error);
+    errorDiv.textContent = 'Terjadi kesalahan sistem!';
     errorDiv.style.display = 'block';
   }
 });
@@ -223,9 +234,18 @@ document.querySelector('#register-form form').addEventListener('submit', async f
   
   console.log('📝 Attempting registration for:', username);
   
-  // Cek username/email sudah ada
-  if (window.usersData && window.usersData.users) {
-    const existingUser = window.usersData.users.find(u => 
+  try {
+    const storedData = localStorage.getItem('klikSecondUsers');
+    if (!storedData) {
+      errorDiv.textContent = 'System error: Database not found!';
+      errorDiv.style.display = 'block';
+      return;
+    }
+    
+    const usersData = JSON.parse(storedData);
+    
+    // Cek username/email sudah ada
+    const existingUser = usersData.users.find(u => 
       u.username === username || u.email === email
     );
     
@@ -234,50 +254,60 @@ document.querySelector('#register-form form').addEventListener('submit', async f
       errorDiv.style.display = 'block';
       return;
     }
-  }
-  
-  // Buat user baru
-  const newUser = {
-    id: `user-${Date.now()}`,
-    username: username,
-    password: password,
-    email: email,
-    fullName: fullname,
-    phone: phone,
-    address: '',
-    profilePicture: `https://ui-avatars.com/api/?name=${encodeURIComponent(fullname)}&background=00ffff&color=000`,
-    role: 'seller',
-    joinDate: new Date().toISOString().split('T')[0],
-    notifications: [
-      {
-        id: `notif-${Date.now()}`,
-        type: 'welcome',
-        title: 'Selamat Datang! 🎉',
-        message: `Halo ${fullname}! Terima kasih telah bergabung dengan Klik Second. Mulai jual atau beli gadget favoritmu sekarang!`,
-        date: new Date().toLocaleString('id-ID'),
-        read: false
-      }
-    ]
-  };
-  
-  // Tambahkan ke database
-  if (window.usersData) {
-    window.usersData.users.push(newUser);
+    
+    // Buat user baru
+    const newUser = {
+      id: `user-${Date.now()}`,
+      username: username,
+      password: password,
+      email: email,
+      fullName: fullname,
+      phone: phone,
+      address: '',
+      profilePicture: `https://ui-avatars.com/api/?name=${encodeURIComponent(fullname)}&background=00ffff&color=000`,
+      role: 'seller',
+      joinDate: new Date().toISOString().split('T')[0],
+      notifications: [
+        {
+          id: `notif-${Date.now()}`,
+          type: 'welcome',
+          title: 'Selamat Datang! 🎉',
+          message: `Halo ${fullname}! Terima kasih telah bergabung dengan Klik Second. Mulai jual atau beli gadget favoritmu sekarang!`,
+          date: new Date().toLocaleString('id-ID'),
+          read: false
+        }
+      ]
+    };
+    
+    // Tambahkan ke database
+    usersData.users.push(newUser);
+    localStorage.setItem('klikSecondUsers', JSON.stringify(usersData));
+    
+    // Update window.usersData if exists
+    if (window.usersData) {
+      window.usersData.users.push(newUser);
+    }
+    
     console.log('✅ New user registered:', newUser.username);
+    
+    // Tampilkan success
+    successDiv.textContent = '✓ Registrasi berhasil! Silakan login.';
+    successDiv.style.display = 'block';
+    
+    // Clear form
+    document.querySelector('#register-form form').reset();
+    
+    // Auto switch ke login setelah 2 detik
+    setTimeout(() => {
+      switchTab('login');
+      successDiv.style.display = 'none';
+    }, 2000);
+    
+  } catch (error) {
+    console.error('❌ Registration error:', error);
+    errorDiv.textContent = 'Terjadi kesalahan sistem!';
+    errorDiv.style.display = 'block';
   }
-  
-  // Tampilkan success
-  successDiv.textContent = '✓ Registrasi berhasil! Silakan login.';
-  successDiv.style.display = 'block';
-  
-  // Clear form
-  document.querySelector('#register-form form').reset();
-  
-  // Auto switch ke login setelah 2 detik
-  setTimeout(() => {
-    switchTab('login');
-    successDiv.style.display = 'none';
-  }, 2000);
 });
 
 console.log('✅ Auth handler initialized');

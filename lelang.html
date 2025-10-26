@@ -6,6 +6,7 @@
   <title>Lelang Gadget | Klik Second</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link rel="stylesheet" href="style.css">
+  
   <link rel="stylesheet" href="auth-modal.css">
   <link rel="stylesheet" href="notification.css">
   <link rel="stylesheet" href="lelang-style.css">
@@ -16,36 +17,15 @@
   <!-- HEADER -->
   <header class="header">
     <nav class="navbar">
-      <a href="index.html">
-        <img src="LogoKlikSecondTransparent.png" class="logo" alt="Klik Second">
-      </a>
-
-      <div class="search-wrapper">
-        <div class="search-box" id="navbar-search-box">
-          <i class="bi bi-search search-icon"></i>
-          <input 
-            type="text" 
-            class="search-input" 
-            id="navbar-search-input"
-            placeholder="Cari Gadget (e.g. iPhone 14, Samsung S23)"
-            autocomplete="off"
-          >
-          <button class="search-clear-btn" id="navbar-clear-btn" style="display: none;">
-            <i class="bi bi-x"></i>
-          </button>
-          
-          <!-- AUTOCOMPLETE DROPDOWN -->
-          <div class="search-autocomplete" id="navbar-autocomplete">
-            <!-- Suggestions will appear here -->
-          </div>
-        </div>
-      </div>
+      <img src="LogoKlikSecondTransparent.png" class="logo" alt="Klik Second" onclick="window.location.href='index.html'" style="cursor: pointer;">
 
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="lelang.html">Lelang</a></li>
-        <li><a href="pegadaian.html">Pegadaian</a></li> <!-- TAMBAHKAN INI -->
-        <li><a href="#about">About Us</a></li>
+        <li><a href="search.html">Cari Produk</a></li>
+        <li><a href="lelang.html" class="active">Lelang</a></li>
+        <li><a href="pegadaian.html">Pegadaian</a></li>
+        <li><a href="about.html">About Us</a></li>
+
       </ul>
 
       <!-- Auth Buttons (shown when not logged in) -->
@@ -71,23 +51,23 @@
         </div>
 
         <div class="user-dropdown">
-          <a href="#" class="dropdown-item">
+          <a href="profile.html?tab=profile" class="dropdown-item">
             <i class="bi bi-person-circle"></i>
             <span>Profile Saya</span>
           </a>
-          <a href="#" class="dropdown-item">
+          <a href="profile.html?tab=products" class="dropdown-item">
             <i class="bi bi-box-seam"></i>
             <span>Produk Saya</span>
           </a>
-          <a href="#" class="dropdown-item">
+          <a href="profile.html?tab=auctions" class="dropdown-item">
             <i class="bi bi-gavel"></i>
             <span>Lelang Saya</span>
           </a>
-          <a href="pegadaian.html" class="dropdown-item">
+          <a href="profile.html?tab=pawnshop" class="dropdown-item">
             <i class="bi bi-gem"></i>
             <span>Pegadaian Saya</span>
           </a>          
-          <a href="#" class="dropdown-item">
+          <a href="profile.html?tab=settings" class="dropdown-item">
             <i class="bi bi-gear"></i>
             <span>Pengaturan</span>
           </a>
@@ -674,6 +654,7 @@
 
   <!-- Scripts - CRITICAL ORDER -->
   <script src="users.js"></script>
+  <script src="products-loader.js"></script>
   <script src="session-manager.js"></script>
   <script src="auth-handler.js"></script>
   <script src="notification-handler.js"></script>

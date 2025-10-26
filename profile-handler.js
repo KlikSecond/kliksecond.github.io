@@ -1,5 +1,5 @@
-// ===== ENHANCED PROFILE PAGE HANDLER =====
-// Professional E-commerce Profile Management System
+// ===== ENHANCED PROFILE PAGE HANDLER (FIXED - NO LOOP) =====
+// File ini HANYA berjalan di profile.html, TIDAK di index.html
 
 console.log('🎯 Enhanced Profile Handler Loading...');
 
@@ -7,11 +7,25 @@ class ProfileManager {
   constructor() {
     this.currentUser = null;
     this.activeTab = 'profile';
+    
+    // ===== CRITICAL FIX: Cek halaman dulu sebelum init =====
+    if (!this.isProfilePage()) {
+      console.log('⏭️ Not on profile page, skipping ProfileManager init');
+      return;
+    }
+    
     this.init();
+  }
+
+  // ===== NEW: Cek apakah ini halaman profile =====
+  isProfilePage() {
+    return window.location.pathname.includes('profile.html');
   }
 
   // ===== INITIALIZATION =====
   async init() {
+    console.log('🔄 Initializing ProfileManager...');
+    
     if (!this.checkAuthentication()) return;
     
     this.currentUser = window.SessionManager.getCurrentUser();
@@ -23,10 +37,13 @@ class ProfileManager {
     console.log('✅ Profile Manager Initialized');
   }
 
-  // ===== AUTHENTICATION CHECK =====
+  // ===== AUTHENTICATION CHECK (FIXED - NO REDIRECT LOOP) =====
   checkAuthentication() {
+    // ===== CRITICAL FIX: Hanya redirect jika DI profile.html =====
     if (!window.SessionManager || !window.SessionManager.isLoggedIn()) {
+      console.log('❌ User not logged in on profile page');
       this.showError('Anda harus login terlebih dahulu!');
+      
       setTimeout(() => {
         window.location.href = 'index.html';
       }, 1500);
@@ -84,11 +101,9 @@ class ProfileManager {
 
   // ===== CALCULATE USER STATS =====
   async calculateUserStats() {
-    // Check if sample data is enabled
     const showSample = localStorage.getItem('showSampleData') !== 'false';
     
     if (showSample && window.profileDataGenerator) {
-      // Use sample data
       const sampleProducts = window.profileDataGenerator.sampleUserProducts || [];
       const sampleOrders = window.profileDataGenerator.sampleUserOrders || [];
       
@@ -101,7 +116,6 @@ class ProfileManager {
       };
     }
 
-    // Real data (would come from backend API)
     return {
       totalProducts: 0,
       soldProducts: 0,
@@ -132,7 +146,6 @@ class ProfileManager {
   switchTab(tabName) {
     this.activeTab = tabName;
 
-    // Update menu items
     document.querySelectorAll('.menu-item').forEach(item => {
       if (item.getAttribute('data-tab') === tabName) {
         item.classList.add('active');
@@ -141,7 +154,6 @@ class ProfileManager {
       }
     });
 
-    // Update tab contents
     document.querySelectorAll('.tab-content').forEach(content => {
       if (content.id === tabName + '-tab') {
         content.classList.add('active');
@@ -151,7 +163,6 @@ class ProfileManager {
       }
     });
 
-    // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -195,7 +206,7 @@ class ProfileManager {
         productsList.innerHTML = this.renderEmptyState(
           'box-seam',
           'Belum Ada Produk',
-          'Anda belum memiliki produk yang dijual. Mulai upload produk pertama Anda!',
+          'Anda belum memiliki produk yang dijual.',
           'Upload Produk',
           'index.html'
         );
@@ -211,7 +222,6 @@ class ProfileManager {
     const ordersList = document.getElementById('orders-list');
     if (!ordersList) return;
 
-    // Setup filter buttons
     this.setupOrderFilters(filterStatus);
 
     ordersList.innerHTML = '<div class="loading-spinner"><i class="bi bi-arrow-repeat"></i> Loading...</div>';
@@ -223,7 +233,7 @@ class ProfileManager {
         ordersList.innerHTML = this.renderEmptyState(
           'bag-x',
           'Belum Ada Pesanan',
-          'Anda belum memiliki pesanan. Mulai belanja gadget favoritmu sekarang!',
+          'Anda belum memiliki pesanan.',
           'Mulai Belanja',
           'index.html'
         );
@@ -265,7 +275,7 @@ class ProfileManager {
         auctionsList.innerHTML = this.renderEmptyState(
           'gavel',
           'Belum Ada Lelang',
-          'Anda belum mengikuti lelang apapun. Ikuti lelang untuk mendapatkan gadget dengan harga terbaik!',
+          'Anda belum mengikuti lelang apapun.',
           'Lihat Lelang',
           'lelang.html'
         );
@@ -290,7 +300,7 @@ class ProfileManager {
         pawnshopList.innerHTML = this.renderEmptyState(
           'gem',
           'Belum Ada Gadget yang Digadaikan',
-          'Anda belum menggadaikan gadget apapun. Butuh dana cepat? Gadaikan gadgetmu sekarang!',
+          'Anda belum menggadaikan gadget apapun.',
           'Gadaikan Sekarang',
           'pegadaian.html'
         );
@@ -309,7 +319,6 @@ class ProfileManager {
     this.initChangeAvatarModal();
   }
 
-  // ===== EDIT PROFILE MODAL =====
   initEditProfileModal() {
     const btnEdit = document.getElementById('btn-edit-profile');
     const modal = document.getElementById('edit-profile-modal');
@@ -317,30 +326,11 @@ class ProfileManager {
     const cancelBtn = document.getElementById('cancel-edit');
     const form = document.getElementById('edit-profile-form');
 
-    if (btnEdit) {
-      btnEdit.onclick = () => this.openEditModal();
-    }
-
-    if (closeBtn) {
-      closeBtn.onclick = () => this.closeModal(modal);
-    }
-
-    if (cancelBtn) {
-      cancelBtn.onclick = () => this.closeModal(modal);
-    }
-
-    if (modal) {
-      modal.onclick = (e) => {
-        if (e.target === modal) this.closeModal(modal);
-      };
-    }
-
-    if (form) {
-      form.onsubmit = (e) => {
-        e.preventDefault();
-        this.saveProfileChanges();
-      };
-    }
+    if (btnEdit) btnEdit.onclick = () => this.openEditModal();
+    if (closeBtn) closeBtn.onclick = () => this.closeModal(modal);
+    if (cancelBtn) cancelBtn.onclick = () => this.closeModal(modal);
+    if (modal) modal.onclick = (e) => { if (e.target === modal) this.closeModal(modal); };
+    if (form) form.onsubmit = (e) => { e.preventDefault(); this.saveProfileChanges(); };
   }
 
   openEditModal() {
@@ -381,16 +371,13 @@ class ProfileManager {
       const userIndex = usersData.users.findIndex(u => u.username === this.currentUser.username);
 
       if (userIndex !== -1) {
-        // Update user data
         usersData.users[userIndex].fullName = fullname;
         usersData.users[userIndex].email = email;
         usersData.users[userIndex].phone = phone;
         usersData.users[userIndex].address = address;
 
-        // Save to localStorage
         localStorage.setItem('klikSecondUsers', JSON.stringify(usersData));
 
-        // Update session
         window.SessionManager.saveSession({
           username: this.currentUser.username,
           fullname: fullname,
@@ -400,12 +387,8 @@ class ProfileManager {
           avatar: this.currentUser.avatar
         });
 
-        // Reload profile data
         await this.loadProfileData();
-
-        // Close modal
         this.closeModal(document.getElementById('edit-profile-modal'));
-
         this.showSuccess('Profil berhasil diperbarui!');
       }
     } catch (error) {
@@ -414,7 +397,6 @@ class ProfileManager {
     }
   }
 
-  // ===== CHANGE PASSWORD MODAL =====
   initChangePasswordModal() {
     const btnChange = document.getElementById('btn-change-password');
     const modal = document.getElementById('change-password-modal');
@@ -422,30 +404,11 @@ class ProfileManager {
     const cancelBtn = document.getElementById('cancel-password');
     const form = document.getElementById('change-password-form');
 
-    if (btnChange) {
-      btnChange.onclick = () => modal.classList.add('active');
-    }
-
-    if (closeBtn) {
-      closeBtn.onclick = () => this.closeModal(modal, form);
-    }
-
-    if (cancelBtn) {
-      cancelBtn.onclick = () => this.closeModal(modal, form);
-    }
-
-    if (modal) {
-      modal.onclick = (e) => {
-        if (e.target === modal) this.closeModal(modal, form);
-      };
-    }
-
-    if (form) {
-      form.onsubmit = (e) => {
-        e.preventDefault();
-        this.changePassword();
-      };
-    }
+    if (btnChange) btnChange.onclick = () => modal.classList.add('active');
+    if (closeBtn) closeBtn.onclick = () => this.closeModal(modal, form);
+    if (cancelBtn) cancelBtn.onclick = () => this.closeModal(modal, form);
+    if (modal) modal.onclick = (e) => { if (e.target === modal) this.closeModal(modal, form); };
+    if (form) form.onsubmit = (e) => { e.preventDefault(); this.changePassword(); };
   }
 
   async changePassword() {
@@ -499,20 +462,16 @@ class ProfileManager {
     }
   }
 
-  // ===== DELETE ACCOUNT =====
   initDeleteAccountModal() {
     const btnDelete = document.getElementById('btn-delete-account');
-    
-    if (btnDelete) {
-      btnDelete.onclick = () => this.confirmDeleteAccount();
-    }
+    if (btnDelete) btnDelete.onclick = () => this.confirmDeleteAccount();
   }
 
   confirmDeleteAccount() {
     const confirmation = confirm(
       '⚠️ PERINGATAN!\n\n' +
       'Apakah Anda yakin ingin menghapus akun?\n\n' +
-      'Semua data Anda akan dihapus secara permanen dan tidak dapat dikembalikan.'
+      'Semua data Anda akan dihapus secara permanen.'
     );
 
     if (confirmation) {
@@ -537,7 +496,7 @@ class ProfileManager {
       localStorage.setItem('klikSecondUsers', JSON.stringify(usersData));
       window.SessionManager.clearSession();
       
-      this.showSuccess('Akun Anda telah dihapus. Terima kasih telah menggunakan Klik Second.');
+      this.showSuccess('Akun Anda telah dihapus.');
       
       setTimeout(() => {
         window.location.href = 'index.html';
@@ -548,13 +507,9 @@ class ProfileManager {
     }
   }
 
-  // ===== CHANGE AVATAR =====
   initChangeAvatarModal() {
     const btnChangeAvatar = document.getElementById('change-avatar-btn');
-    
-    if (btnChangeAvatar) {
-      btnChangeAvatar.onclick = () => this.changeAvatar();
-    }
+    if (btnChangeAvatar) btnChangeAvatar.onclick = () => this.changeAvatar();
   }
 
   changeAvatar() {
@@ -636,7 +591,6 @@ class ProfileManager {
     if (form) form.reset();
   }
 
-  // ===== RENDER HELPERS =====
   renderEmptyState(icon, title, message, btnText, btnLink) {
     return `
       <div class="empty-state">
@@ -665,7 +619,6 @@ class ProfileManager {
     `;
   }
 
-  // ===== NOTIFICATIONS =====
   showSuccess(message) {
     this.showNotification(message, 'success');
   }
@@ -679,7 +632,6 @@ class ProfileManager {
   }
 
   showNotification(message, type = 'info') {
-    // Remove existing notifications
     const existing = document.querySelector('.profile-notification');
     if (existing) existing.remove();
 
@@ -692,29 +644,22 @@ class ProfileManager {
 
     document.body.appendChild(notification);
 
-    setTimeout(() => {
-      notification.classList.add('show');
-    }, 100);
-
+    setTimeout(() => notification.classList.add('show'), 100);
     setTimeout(() => {
       notification.classList.remove('show');
       setTimeout(() => notification.remove(), 300);
     }, 3000);
   }
 
-  // ===== EVENT LISTENERS =====
   setupEventListeners() {
-    // Settings toggles
     this.initSettingsToggles();
 
-    // Browser back/forward buttons
     window.addEventListener('popstate', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const tab = urlParams.get('tab') || 'profile';
       this.switchTab(tab);
     });
 
-    // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
       if (e.ctrlKey || e.metaKey) {
         if (e.key === 'e') {
@@ -768,19 +713,22 @@ class ProfileManager {
   }
 }
 
-// ===== AUTO-INITIALIZE =====
+// ===== AUTO-INITIALIZE (FIXED) =====
 let profileManager;
 
 async function initProfilePage() {
-  console.log('📄 Initializing Enhanced Profile Page...');
+  console.log('📄 Initializing Profile Page...');
   
-  // Wait for dependencies
+  // ===== CRITICAL FIX: Cek halaman dulu =====
+  if (!window.location.pathname.includes('profile.html')) {
+    console.log('⏭️ Not on profile.html, skipping init');
+    return;
+  }
+  
   await waitForDependencies();
-  
-  // Initialize Profile Manager
   profileManager = new ProfileManager();
   
-  console.log('✅ Enhanced Profile Page Initialized');
+  console.log('✅ Profile Page Initialized');
 }
 
 function waitForDependencies() {
@@ -806,8 +754,7 @@ if (document.readyState === 'loading') {
   initProfilePage();
 }
 
-// Export for global use
 window.ProfileManager = ProfileManager;
 window.profileManager = profileManager;
 
-console.log('✅ Enhanced Profile Handler loaded successfully');
+console.log('✅ Profile Handler loaded successfully');

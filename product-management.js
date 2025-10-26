@@ -1,5 +1,5 @@
-// ===== ADVANCED PRODUCT MANAGEMENT SYSTEM =====
-// Professional E-commerce Product Manager for Profile Page
+// ===== PRODUCT MANAGEMENT SYSTEM (FIXED - NO LOOP) =====
+// File ini HANYA berjalan di profile.html pada tab products
 
 console.log('📦 Product Management System Loading...');
 
@@ -7,16 +7,33 @@ class ProductManagement {
   constructor() {
     this.products = [];
     this.filteredProducts = [];
-    this.currentView = 'grid'; // 'grid' or 'list'
-    this.sortBy = 'date-desc'; // 'date-desc', 'date-asc', 'price-desc', 'price-asc', 'name'
-    this.filterStatus = 'all'; // 'all', 'active', 'sold', 'pending'
+    this.currentView = 'grid';
+    this.sortBy = 'date-desc';
+    this.filterStatus = 'all';
     this.searchQuery = '';
     this.currentPage = 1;
     this.itemsPerPage = 9;
+    
+    // ===== CRITICAL FIX: Jangan init otomatis =====
+    console.log('📦 ProductManagement created (not initialized yet)');
   }
 
-  // ===== INITIALIZE =====
+  // ===== INITIALIZE (Hanya dipanggil manual) =====
   init() {
+    console.log('🔄 Initializing Product Management...');
+    
+    // ===== CRITICAL FIX: Cek halaman dan elemen =====
+    if (!window.location.pathname.includes('profile.html')) {
+      console.log('⏭️ Not on profile.html, skipping init');
+      return;
+    }
+    
+    const productsList = document.getElementById('products-list');
+    if (!productsList) {
+      console.log('⏭️ products-list element not found, skipping init');
+      return;
+    }
+    
     this.loadProducts();
     this.setupEventListeners();
     this.renderToolbar();
@@ -26,7 +43,6 @@ class ProductManagement {
 
   // ===== LOAD PRODUCTS =====
   loadProducts() {
-    // Check if using sample data
     const showSample = localStorage.getItem('showSampleData') !== 'false';
     
     if (showSample && window.profileDataGenerator) {
@@ -40,7 +56,6 @@ class ProductManagement {
   }
 
   loadUserProducts() {
-    // Load real user products from localStorage or API
     const currentUser = window.SessionManager?.getCurrentUser();
     if (!currentUser) return [];
 
@@ -129,43 +144,37 @@ class ProductManagement {
 
   // ===== SETUP EVENT LISTENERS =====
   setupEventListeners() {
-    // Delegated event listeners
     document.addEventListener('click', (e) => {
-      // View toggle
       if (e.target.closest('.view-toggle-btn')) {
         const btn = e.target.closest('.view-toggle-btn');
         this.currentView = btn.dataset.view;
         this.renderProducts();
       }
 
-      // Filter dropdown
       if (e.target.closest('.filter-dropdown-btn')) {
         const dropdown = e.target.closest('.filter-dropdown');
         dropdown.classList.toggle('active');
       }
 
-      // Close dropdown when clicking outside
       if (!e.target.closest('.filter-dropdown')) {
         document.querySelectorAll('.filter-dropdown').forEach(d => d.classList.remove('active'));
       }
 
-      // Product actions
       if (e.target.closest('.btn-view-product')) {
-        const productId = e.target.closest('.product-card').dataset.productId;
+        const productId = e.target.closest('.product-card, .product-card-grid').dataset.productId;
         this.viewProduct(productId);
       }
 
       if (e.target.closest('.btn-edit-product')) {
-        const productId = e.target.closest('.product-card').dataset.productId;
+        const productId = e.target.closest('.product-card, .product-card-grid').dataset.productId;
         this.editProduct(productId);
       }
 
       if (e.target.closest('.btn-delete-product')) {
-        const productId = e.target.closest('.product-card').dataset.productId;
+        const productId = e.target.closest('.product-card, .product-card-grid').dataset.productId;
         this.deleteProduct(productId);
       }
 
-      // Pagination
       if (e.target.closest('.pagination-btn')) {
         const btn = e.target.closest('.pagination-btn');
         if (btn.dataset.page) {
@@ -175,7 +184,6 @@ class ProductManagement {
       }
     });
 
-    // Search input
     document.addEventListener('input', (e) => {
       if (e.target.id === 'product-search') {
         this.searchQuery = e.target.value;
@@ -185,7 +193,6 @@ class ProductManagement {
       }
     });
 
-    // Sort select
     document.addEventListener('change', (e) => {
       if (e.target.id === 'product-sort') {
         this.sortBy = e.target.value;
@@ -193,7 +200,6 @@ class ProductManagement {
         this.renderProducts();
       }
 
-      // Status filter
       if (e.target.name === 'status-filter') {
         this.filterStatus = e.target.value;
         this.currentPage = 1;
@@ -207,12 +213,10 @@ class ProductManagement {
   applyFilters() {
     let filtered = [...this.products];
 
-    // Status filter
     if (this.filterStatus !== 'all') {
       filtered = filtered.filter(p => p.status === this.filterStatus);
     }
 
-    // Search filter
     if (this.searchQuery) {
       const query = this.searchQuery.toLowerCase();
       filtered = filtered.filter(p => 
@@ -222,7 +226,6 @@ class ProductManagement {
       );
     }
 
-    // Sort
     filtered.sort((a, b) => {
       switch(this.sortBy) {
         case 'date-desc':
@@ -241,7 +244,7 @@ class ProductManagement {
     });
 
     this.filteredProducts = filtered;
-    this.renderToolbar(); // Update count
+    this.renderToolbar();
   }
 
   // ===== RENDER PRODUCTS =====
@@ -249,21 +252,17 @@ class ProductManagement {
     const container = document.getElementById('products-list');
     if (!container) return;
 
-    // Keep toolbar
     const toolbar = container.querySelector('.products-toolbar');
 
-    // Calculate pagination
     const totalPages = Math.ceil(this.filteredProducts.length / this.itemsPerPage);
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     const paginatedProducts = this.filteredProducts.slice(startIndex, endIndex);
 
-    // Render products
     const productsHTML = this.currentView === 'grid' 
       ? this.renderGridView(paginatedProducts)
       : this.renderListView(paginatedProducts);
 
-    // Render pagination
     const paginationHTML = this.renderPagination(totalPages);
 
     container.innerHTML = '';
@@ -273,7 +272,6 @@ class ProductManagement {
     productsContainer.innerHTML = productsHTML + paginationHTML;
     container.appendChild(productsContainer);
 
-    // Animate entrance
     this.animateProducts();
   }
 
@@ -384,7 +382,6 @@ class ProductManagement {
       startPage = Math.max(1, endPage - maxVisible + 1);
     }
 
-    // Previous button
     const prevDisabled = this.currentPage === 1 ? 'disabled' : '';
     pages.push(`
       <button class="pagination-btn" data-page="${this.currentPage - 1}" ${prevDisabled}>
@@ -392,7 +389,6 @@ class ProductManagement {
       </button>
     `);
 
-    // First page
     if (startPage > 1) {
       pages.push(`<button class="pagination-btn" data-page="1">1</button>`);
       if (startPage > 2) {
@@ -400,13 +396,11 @@ class ProductManagement {
       }
     }
 
-    // Page numbers
     for (let i = startPage; i <= endPage; i++) {
       const active = i === this.currentPage ? 'active' : '';
       pages.push(`<button class="pagination-btn ${active}" data-page="${i}">${i}</button>`);
     }
 
-    // Last page
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
         pages.push(`<span class="pagination-ellipsis">...</span>`);
@@ -414,7 +408,6 @@ class ProductManagement {
       pages.push(`<button class="pagination-btn" data-page="${totalPages}">${totalPages}</button>`);
     }
 
-    // Next button
     const nextDisabled = this.currentPage === totalPages ? 'disabled' : '';
     pages.push(`
       <button class="pagination-btn" data-page="${this.currentPage + 1}" ${nextDisabled}>
@@ -472,16 +465,12 @@ class ProductManagement {
   viewProduct(productId) {
     const product = this.products.find(p => p.id === productId);
     if (!product) return;
-
-    // Redirect to product detail page
     window.location.href = `product-detail.html?id=${productId}`;
   }
 
   editProduct(productId) {
     const product = this.products.find(p => p.id === productId);
     if (!product) return;
-
-    // Open edit modal
     this.openEditModal(product);
   }
 
@@ -489,11 +478,10 @@ class ProductManagement {
     const product = this.products.find(p => p.id === productId);
     if (!product) return;
 
-    // Show confirmation dialog
     this.showConfirmation(
       'warning',
       'Hapus Produk?',
-      `Apakah Anda yakin ingin menghapus "${product.name}"? Tindakan ini tidak dapat dibatalkan.`,
+      `Apakah Anda yakin ingin menghapus "${product.name}"?`,
       () => {
         this.performDelete(productId);
       }
@@ -501,32 +489,25 @@ class ProductManagement {
   }
 
   performDelete(productId) {
-    // Remove from array
     this.products = this.products.filter(p => p.id !== productId);
     
-    // Save to localStorage if using real data
     if (localStorage.getItem('showSampleData') === 'false') {
       this.saveUserProducts();
     }
 
-    // Update view
     this.applyFilters();
     this.renderProducts();
-
-    // Show success message
     this.showNotification('Produk berhasil dihapus', 'success');
   }
 
   // ===== EDIT MODAL =====
   openEditModal(product) {
-    // Create modal if not exists
     let modal = document.getElementById('edit-product-modal');
     if (!modal) {
       modal = this.createEditModal();
       document.body.appendChild(modal);
     }
 
-    // Fill form
     document.getElementById('edit-product-id').value = product.id;
     document.getElementById('edit-product-name').value = product.name;
     document.getElementById('edit-product-price').value = product.price;
@@ -591,7 +572,6 @@ class ProductManagement {
       </div>
     `;
 
-    // Handle form submit
     modal.querySelector('#edit-product-form').addEventListener('submit', (e) => {
       e.preventDefault();
       this.saveProductEdit();
@@ -608,7 +588,6 @@ class ProductManagement {
     const battery = document.getElementById('edit-product-battery').value;
     const storage = document.getElementById('edit-product-storage').value;
 
-    // Find and update product
     const product = this.products.find(p => p.id === productId);
     if (product) {
       product.name = name;
@@ -617,19 +596,13 @@ class ProductManagement {
       product.battery = battery;
       product.storage = storage;
 
-      // Save to localStorage if using real data
       if (localStorage.getItem('showSampleData') === 'false') {
         this.saveUserProducts();
       }
 
-      // Close modal
       document.getElementById('edit-product-modal').classList.remove('active');
-
-      // Update view
       this.applyFilters();
       this.renderProducts();
-
-      // Show success message
       this.showNotification('Produk berhasil diperbarui', 'success');
     }
   }
@@ -711,7 +684,6 @@ class ProductManagement {
 
     overlay.classList.add('show');
 
-    // Event listeners
     overlay.querySelector('.btn-cancel-confirm').onclick = () => {
       overlay.classList.remove('show');
     };
@@ -747,23 +719,26 @@ class ProductManagement {
   }
 }
 
-// ===== INITIALIZE =====
+// ===== INITIALIZE (FIXED - NO AUTO-INIT) =====
 window.productManagement = null;
 
 function initProductManagement() {
-  const productsList = document.getElementById('products-list');
-  if (productsList && window.location.pathname.includes('profile.html')) {
-    window.productManagement = new ProductManagement();
-    window.productManagement.init();
-    console.log('✅ Product Management System Initialized');
+  // ===== CRITICAL FIX: Cek halaman dan elemen =====
+  if (!window.location.pathname.includes('profile.html')) {
+    console.log('⏭️ Not on profile.html, skipping ProductManagement init');
+    return;
   }
+  
+  const productsList = document.getElementById('products-list');
+  if (!productsList) {
+    console.log('⏭️ products-list not found, skipping init');
+    return;
+  }
+
+  window.productManagement = new ProductManagement();
+  console.log('✅ ProductManagement instance created (call .init() to start)');
 }
 
-// Auto-initialize
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initProductManagement);
-} else {
-  setTimeout(initProductManagement, 500);
-}
-
-console.log('✅ Product Management System Loaded');
+// ===== FIXED: Jangan auto-initialize =====
+// Product management akan di-init manual dari profile-handler.js
+console.log('✅ Product Management System Loaded (waiting for manual init)');

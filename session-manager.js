@@ -1,9 +1,14 @@
-// ===== SESSION MANAGER =====
+// ===== SESSION MANAGER (FIXED - NO LOOP) =====
 // File ini harus di-load pertama kali di semua halaman
+
+console.log('📦 Session Manager loading...');
 
 const SessionManager = {
   // Key untuk localStorage
   SESSION_KEY: 'klikSecondSession',
+  
+  // Flag untuk prevent infinite loop
+  _isUpdating: false,
   
   // Save session after login
   saveSession(userData) {
@@ -20,11 +25,9 @@ const SessionManager = {
       }
     };
     
-    // CRITICAL: Dalam production, gunakan sessionStorage atau backend session
-    // localStorage hanya untuk demo purposes
     try {
       localStorage.setItem(this.SESSION_KEY, JSON.stringify(sessionData));
-      console.log('✅ Session saved:', sessionData);
+      console.log('✅ Session saved:', sessionData.user.username);
       return true;
     } catch (e) {
       console.error('❌ Failed to save session:', e);
@@ -37,9 +40,7 @@ const SessionManager = {
     try {
       const sessionData = localStorage.getItem(this.SESSION_KEY);
       if (sessionData) {
-        const parsed = JSON.parse(sessionData);
-        console.log('📋 Session retrieved:', parsed);
-        return parsed;
+        return JSON.parse(sessionData);
       }
     } catch (e) {
       console.error('❌ Failed to get session:', e);
@@ -50,7 +51,9 @@ const SessionManager = {
   // Check if user is logged in
   isLoggedIn() {
     const session = this.getSession();
-    return session && session.isLoggedIn === true;
+    const isLogged = session && session.isLoggedIn === true;
+    console.log('🔒 Is logged in:', isLogged);
+    return isLogged;
   },
   
   // Get current user data
@@ -71,92 +74,140 @@ const SessionManager = {
     }
   },
   
-  // Update UI based on login status
+  // ===== CRITICAL FIX: Update UI dengan flag anti-loop =====
   updateUIForAuth() {
-    const authButtons = document.querySelector('.auth-buttons');
-    const userProfileSection = document.querySelector('.user-profile-section');
-    const floatingUploadBtn = document.querySelector('.floating-upload-btn');
+    // Prevent multiple simultaneous updates
+    if (this._isUpdating) {
+      console.log('⏸️ Update already in progress, skipping...');
+      return;
+    }
     
-    if (this.isLoggedIn()) {
-      const user = this.getCurrentUser();
+    this._isUpdating = true;
+    
+    try {
+      const authButtons = document.querySelector('.auth-buttons');
+      const userProfileSection = document.querySelector('.user-profile-section');
+      const floatingUploadBtn = document.querySelector('.floating-upload-btn');
       
-      // Hide auth buttons, show profile
-      if (authButtons) authButtons.style.display = 'none';
-      if (userProfileSection) userProfileSection.style.display = 'flex';
-      
-      // Update user info in navbar
-      const userName = document.querySelector('.user-name');
-      const userRole = document.querySelector('.user-role');
-      const userAvatar = document.querySelector('.user-avatar');
-      
-      if (userName) userName.textContent = user.fullname;
-      if (userRole) userRole.textContent = user.role === 'seller' ? 'Seller' : 'Buyer';
-      if (userAvatar) userAvatar.src = user.avatar;
-      
-      // Update notification badge
-      this.updateNotificationBadge();
-      
-      // Show floating upload button for sellers
-      if (floatingUploadBtn && user.role === 'seller') {
-        floatingUploadBtn.classList.remove('hidden');
+      if (this.isLoggedIn()) {
+        const user = this.getCurrentUser();
+        
+        // Hide auth buttons, show profile
+        if (authButtons) authButtons.style.display = 'none';
+        if (userProfileSection) userProfileSection.style.display = 'flex';
+        
+        // Update user info in navbar
+        const userName = document.querySelector('.user-name');
+        const userRole = document.querySelector('.user-role');
+        const userAvatar = document.querySelector('.user-avatar');
+        
+        if (userName) userName.textContent = user.fullname;
+        if (userRole) userRole.textContent = user.role === 'seller' ? 'Seller' : 'Buyer';
+        if (userAvatar) userAvatar.src = user.avatar;
+        
+        // Update notification badge
+        this.updateNotificationBadge();
+        
+        // Show floating upload button for sellers
+        if (floatingUploadBtn && user.role === 'seller') {
+          floatingUploadBtn.classList.remove('hidden');
+        }
+        
+        console.log('✅ UI updated for logged in user:', user.fullname);
+      } else {
+        // Show auth buttons, hide profile
+        if (authButtons) authButtons.style.display = 'flex';
+        if (userProfileSection) userProfileSection.style.display = 'none';
+        if (floatingUploadBtn) floatingUploadBtn.classList.add('hidden');
+        
+        console.log('👤 UI updated for guest user');
       }
-      
-      console.log('✅ UI updated for logged in user:', user.fullname);
-    } else {
-      // Show auth buttons, hide profile
-      if (authButtons) authButtons.style.display = 'flex';
-      if (userProfileSection) userProfileSection.style.display = 'none';
-      if (floatingUploadBtn) floatingUploadBtn.classList.add('hidden');
-      
-      console.log('👤 UI updated for guest user');
+    } catch (error) {
+      console.error('❌ Error updating UI:', error);
+    } finally {
+      // Reset flag after a small delay
+      setTimeout(() => {
+        this._isUpdating = false;
+      }, 100);
     }
   },
   
   // Update notification badge count
   updateNotificationBadge() {
-    const notificationBadge = document.querySelector('.notification-badge');
-    if (!notificationBadge) return;
+    if (!this.isLoggedIn()) return;
     
-    const user = this.getCurrentUser();
-    if (!user) return;
+    const currentUser = this.getCurrentUser();
+    if (!currentUser) return;
     
-    // Get user's notifications from usersData
-    if (window.usersData && window.usersData.users) {
-      const fullUser = window.usersData.users.find(u => u.username === user.username);
+    const badge = document.querySelector('.notification-badge');
+    if (!badge) return;
+    
+    try {
+      // Read from localStorage
+      const storedData = localStorage.getItem('klikSecondUsers');
+      let usersData;
+      
+      if (storedData) {
+        usersData = JSON.parse(storedData);
+      } else if (window.usersData) {
+        usersData = window.usersData;
+      } else {
+        return;
+      }
+      
+      // Find user and count unread notifications
+      const fullUser = usersData.users.find(u => u.username === currentUser.username);
       if (fullUser && fullUser.notifications) {
-        const unreadCount = fullUser.notifications.filter(n => !n.read).length;
-        notificationBadge.textContent = unreadCount;
+        const count = fullUser.notifications.filter(n => !n.read).length;
+        badge.textContent = count;
         
-        // Show badge only if there are unread notifications
-        if (unreadCount > 0) {
-          notificationBadge.style.display = 'flex';
+        if (count > 0) {
+          badge.style.display = 'flex';
         } else {
-          notificationBadge.style.display = 'none';
+          badge.style.display = 'none';
         }
         
-        console.log('📬 Notification badge updated:', unreadCount, 'unread');
+        console.log('🔢 Badge updated:', count, 'unread notifications');
       }
+    } catch (e) {
+      console.error('❌ Error updating badge:', e);
     }
   }
 };
 
-// ===== AUTO-INITIALIZE ON PAGE LOAD =====
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('🔄 Checking session...');
+// ===== AUTO-INITIALIZE ON PAGE LOAD (FIXED) =====
+function initializeSessionManager() {
+  console.log('🔄 Initializing session manager...');
+  
+  // Check session ONCE
   SessionManager.updateUIForAuth();
   
   // Setup logout button if exists
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
-    logoutBtn.addEventListener('click', (e) => {
+    // Remove existing listeners to prevent duplicates
+    const newLogoutBtn = logoutBtn.cloneNode(true);
+    logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
+    
+    newLogoutBtn.addEventListener('click', (e) => {
       e.preventDefault();
       
       if (confirm('Apakah Anda yakin ingin keluar?')) {
         SessionManager.clearSession();
+        
+        // Update UI immediately
+        const authButtons = document.querySelector('.auth-buttons');
+        const userProfileSection = document.querySelector('.user-profile-section');
+        
+        if (authButtons) authButtons.style.display = 'flex';
+        if (userProfileSection) userProfileSection.style.display = 'none';
+        
+        // Show alert and redirect
         alert('Anda telah logout. Sampai jumpa lagi!');
         window.location.href = 'index.html';
       }
     });
+    console.log('✅ Logout button initialized');
   }
   
   // Setup user dropdown toggle
@@ -175,8 +226,21 @@ document.addEventListener('DOMContentLoaded', () => {
         userDropdown.classList.remove('show');
       }
     });
+    console.log('✅ User dropdown initialized');
   }
-});
+  
+  console.log('✅ Session manager initialized');
+}
+
+// ===== SAFE INITIALIZATION =====
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeSessionManager);
+} else {
+  // DOM already loaded, init immediately
+  initializeSessionManager();
+}
 
 // Export for use in other files
 window.SessionManager = SessionManager;
+
+console.log('✅ Session Manager loaded successfully');
