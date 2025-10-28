@@ -1,4 +1,8 @@
-// ===== AUCTION BIDDING SYSTEM WITH DEPOSIT =====
+// ===== AUCTION BIDDING SYSTEM WITH DEPOSIT INTEGRATION =====
+// File: lelang-integration.js
+// Menggabungkan sistem lelang dengan sistem deposit 50%
+
+console.log('🔄 Auction-Deposit integration loading...');
 
 // Variable untuk menyimpan data bid saat ini
 let currentAuctionId = '';
@@ -6,17 +10,27 @@ let currentProductName = '';
 let currentBidPrice = 0;
 const BID_INCREMENT = 100000; // Minimum increment bid: Rp 100.000
 
-// Fungsi untuk format angka ke format rupiah
+// ===== UTILITY FUNCTIONS =====
+
+/**
+ * Format angka ke format rupiah
+ */
 function formatRupiah(angka) {
   return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 }
 
-// Fungsi untuk parse rupiah ke angka
+/**
+ * Parse rupiah ke angka
+ */
 function parseRupiah(rupiah) {
   return parseInt(rupiah.replace(/[^0-9]/g, ''));
 }
 
-// Fungsi untuk membuka modal bid
+// ===== BID MODAL FUNCTIONS =====
+
+/**
+ * Membuka modal bid dengan integrasi deposit check
+ */
 function openBidModal(productName, currentBid, auctionId) {
   // Check if user is logged in
   if (!window.SessionManager || !window.SessionManager.isLoggedIn()) {
@@ -29,6 +43,12 @@ function openBidModal(productName, currentBid, auctionId) {
         loginBtn.click();
       }
     }, 1500);
+    return;
+  }
+  
+  // Check if deposit system is loaded
+  if (!window.DepositSystem) {
+    showNotification('error', 'Sistem deposit sedang dimuat. Coba lagi sebentar...');
     return;
   }
   
@@ -58,8 +78,9 @@ function openBidModal(productName, currentBid, auctionId) {
   const currentDepositEl = document.getElementById('current-deposit-amount');
   const requiredDepositEl = document.getElementById('required-deposit-amount');
   const depositShortageEl = document.getElementById('deposit-shortage');
+  const shortageAmountEl = document.getElementById('shortage-amount-display');
   
-  if (window.DepositSystem && depositInfo) {
+  if (depositInfo) {
     const currentDeposit = window.DepositSystem.getUserDeposit(currentUser.username);
     const requiredDeposit = window.DepositSystem.calculateRequiredDeposit(minBid);
     
@@ -69,7 +90,7 @@ function openBidModal(productName, currentBid, auctionId) {
     // Show shortage if insufficient
     if (currentDeposit < requiredDeposit) {
       const shortage = requiredDeposit - currentDeposit;
-      depositShortageEl.querySelector('.shortage-amount').textContent = formatRupiah(shortage);
+      shortageAmountEl.textContent = formatRupiah(shortage);
       depositShortageEl.style.display = 'flex';
     } else {
       depositShortageEl.style.display = 'none';
@@ -86,7 +107,9 @@ function openBidModal(productName, currentBid, auctionId) {
   generateBidHistory(currentBid);
 }
 
-// Fungsi untuk menutup modal
+/**
+ * Menutup modal bid
+ */
 function closeBidModal() {
   const modal = document.getElementById('bid-modal');
   modal.classList.remove('show');
@@ -96,77 +119,11 @@ function closeBidModal() {
   document.getElementById('agree-terms').checked = false;
 }
 
-// Close modal ketika klik di luar modal
-window.onclick = function(event) {
-  const modal = document.getElementById('bid-modal');
-  const depositModal = document.getElementById('deposit-modal');
-  
-  if (event.target === modal) {
-    closeBidModal();
-  }
-  
-  if (event.target === depositModal) {
-    closeDepositModal();
-  }
-}
+// ===== DEPOSIT MODAL FUNCTIONS =====
 
-// Fungsi untuk quick bid (tambah cepat)
-function quickBid(amount) {
-  const bidAmountInput = document.getElementById('bid-amount');
-  let currentValue = parseRupiah(bidAmountInput.value) || (currentBidPrice + BID_INCREMENT);
-  
-  currentValue += amount;
-  
-  // Format dengan titik pemisah ribuan
-  bidAmountInput.value = currentValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  
-  // Update required deposit display
-  updateDepositRequirement(currentValue);
-}
-
-// Fungsi untuk update deposit requirement saat user mengetik
-function updateDepositRequirement(bidAmount) {
-  if (!window.DepositSystem) return;
-  
-  const currentUser = window.SessionManager.getCurrentUser();
-  if (!currentUser) return;
-  
-  const requiredDepositEl = document.getElementById('required-deposit-amount');
-  const depositShortageEl = document.getElementById('deposit-shortage');
-  
-  const currentDeposit = window.DepositSystem.getUserDeposit(currentUser.username);
-  const requiredDeposit = window.DepositSystem.calculateRequiredDeposit(bidAmount);
-  
-  requiredDepositEl.textContent = formatRupiah(requiredDeposit);
-  
-  // Update shortage
-  if (currentDeposit < requiredDeposit) {
-    const shortage = requiredDeposit - currentDeposit;
-    depositShortageEl.querySelector('.shortage-amount').textContent = formatRupiah(shortage);
-    depositShortageEl.style.display = 'flex';
-  } else {
-    depositShortageEl.style.display = 'none';
-  }
-}
-
-// Fungsi untuk format input saat user mengetik
-document.addEventListener('DOMContentLoaded', function() {
-  const bidAmountInput = document.getElementById('bid-amount');
-  
-  if (bidAmountInput) {
-    bidAmountInput.addEventListener('input', function(e) {
-      let value = e.target.value.replace(/[^0-9]/g, '');
-      if (value) {
-        e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-        
-        // Update deposit requirement
-        updateDepositRequirement(parseInt(value));
-      }
-    });
-  }
-});
-
-// ===== OPEN DEPOSIT MODAL =====
+/**
+ * Membuka modal deposit untuk top-up
+ */
 function openDepositModal() {
   if (!window.SessionManager || !window.SessionManager.isLoggedIn()) {
     showNotification('error', 'Silakan login terlebih dahulu!');
@@ -195,8 +152,9 @@ function openDepositModal() {
   if (shortage > 0) {
     shortageSection.style.display = 'block';
     
-    // Set default topup amount to shortage
-    document.getElementById('topup-amount').value = shortage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    // Set default topup amount to shortage (rounded up to nearest 100k)
+    const suggestedTopup = Math.ceil(shortage / 100000) * 100000;
+    document.getElementById('topup-amount').value = suggestedTopup.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   } else {
     shortageSection.style.display = 'none';
   }
@@ -209,11 +167,19 @@ function openDepositModal() {
   document.body.style.overflow = 'hidden';
 }
 
-// ===== CLOSE DEPOSIT MODAL =====
+/**
+ * Menutup modal deposit
+ */
 function closeDepositModal() {
   const depositModal = document.getElementById('deposit-modal');
   depositModal.classList.remove('show');
   document.body.style.overflow = 'auto';
+  
+  // Hide success message
+  const successMsg = document.getElementById('deposit-success-message');
+  if (successMsg) {
+    successMsg.classList.remove('show');
+  }
   
   // Reset form
   document.getElementById('topup-amount').value = '';
@@ -221,10 +187,77 @@ function closeDepositModal() {
   document.querySelectorAll('.payment-method-btn').forEach(btn => btn.classList.remove('selected'));
 }
 
-// ===== QUICK AMOUNT SELECTION =====
+// Close modal ketika klik di luar modal
+window.onclick = function(event) {
+  const modal = document.getElementById('bid-modal');
+  const depositModal = document.getElementById('deposit-modal');
+  
+  if (event.target === modal) {
+    closeBidModal();
+  }
+  
+  if (event.target === depositModal) {
+    closeDepositModal();
+  }
+}
+
+// ===== QUICK BID FUNCTIONS =====
+
+/**
+ * Quick bid - tambah nilai bid dengan cepat
+ */
+function quickBid(amount) {
+  const bidAmountInput = document.getElementById('bid-amount');
+  let currentValue = parseRupiah(bidAmountInput.value) || (currentBidPrice + BID_INCREMENT);
+  
+  currentValue += amount;
+  
+  // Format dengan titik pemisah ribuan
+  bidAmountInput.value = currentValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  
+  // Update required deposit display
+  updateDepositRequirement(currentValue);
+}
+
+/**
+ * Update deposit requirement saat user mengetik
+ */
+function updateDepositRequirement(bidAmount) {
+  if (!window.DepositSystem) return;
+  
+  const currentUser = window.SessionManager.getCurrentUser();
+  if (!currentUser) return;
+  
+  const requiredDepositEl = document.getElementById('required-deposit-amount');
+  const depositShortageEl = document.getElementById('deposit-shortage');
+  const shortageAmountEl = document.getElementById('shortage-amount-display');
+  
+  const currentDeposit = window.DepositSystem.getUserDeposit(currentUser.username);
+  const requiredDeposit = window.DepositSystem.calculateRequiredDeposit(bidAmount);
+  
+  requiredDepositEl.textContent = formatRupiah(requiredDeposit);
+  
+  // Update shortage
+  if (currentDeposit < requiredDeposit) {
+    const shortage = requiredDeposit - currentDeposit;
+    shortageAmountEl.textContent = formatRupiah(shortage);
+    depositShortageEl.style.display = 'flex';
+  } else {
+    depositShortageEl.style.display = 'none';
+  }
+}
+
+// ===== TOP-UP FUNCTIONS =====
+
+/**
+ * Quick amount selection untuk top-up
+ */
+let selectedQuickAmount = 0;
+
 function selectQuickAmount(amount) {
   const topupInput = document.getElementById('topup-amount');
   topupInput.value = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  selectedQuickAmount = amount;
   
   // Update active state
   document.querySelectorAll('.quick-amount-btn').forEach(btn => {
@@ -234,7 +267,9 @@ function selectQuickAmount(amount) {
   event.target.classList.add('active');
 }
 
-// ===== SELECT PAYMENT METHOD =====
+/**
+ * Select payment method
+ */
 let selectedPaymentMethod = '';
 
 function selectPaymentMethod(method) {
@@ -248,7 +283,9 @@ function selectPaymentMethod(method) {
   event.target.closest('.payment-method-btn').classList.add('selected');
 }
 
-// ===== PROCESS TOP-UP =====
+/**
+ * Process top-up deposit
+ */
 function processTopUp() {
   const topupInput = document.getElementById('topup-amount');
   const amount = parseRupiah(topupInput.value);
@@ -277,7 +314,9 @@ function processTopUp() {
     if (success) {
       // Show success message
       const successMsg = document.getElementById('deposit-success-message');
-      successMsg.classList.add('show');
+      if (successMsg) {
+        successMsg.classList.add('show');
+      }
       
       // Update notification badge
       if (window.notificationHandler) {
@@ -297,21 +336,11 @@ function processTopUp() {
   }, 2000);
 }
 
-// Format topup input
-document.addEventListener('DOMContentLoaded', function() {
-  const topupInput = document.getElementById('topup-amount');
-  
-  if (topupInput) {
-    topupInput.addEventListener('input', function(e) {
-      let value = e.target.value.replace(/[^0-9]/g, '');
-      if (value) {
-        e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-      }
-    });
-  }
-});
+// ===== BID SUBMISSION FUNCTIONS =====
 
-// Fungsi untuk submit bid
+/**
+ * Submit bid dengan deposit check
+ */
 function submitBid() {
   const bidAmountInput = document.getElementById('bid-amount');
   const agreeTerms = document.getElementById('agree-terms');
@@ -345,7 +374,7 @@ function submitBid() {
     return;
   }
   
-  // ===== CHECK DEPOSIT =====
+  // ===== CHECK DEPOSIT (CRITICAL) =====
   if (!window.DepositSystem) {
     showNotification('error', 'Sistem deposit belum dimuat!');
     return;
@@ -358,7 +387,15 @@ function submitBid() {
     
     // Show prompt to top-up
     setTimeout(() => {
-      if (confirm(`Deposit Anda tidak mencukupi.\n\nDeposit saat ini: ${formatRupiah(depositCheck.current)}\nDiperlukan: ${formatRupiah(depositCheck.required)}\nKekurangan: ${formatRupiah(depositCheck.shortage)}\n\nApakah Anda ingin melakukan top-up sekarang?`)) {
+      const confirmTopup = confirm(
+        `DEPOSIT TIDAK MENCUKUPI\n\n` +
+        `Deposit saat ini: ${formatRupiah(depositCheck.current)}\n` +
+        `Diperlukan (50% dari bid): ${formatRupiah(depositCheck.required)}\n` +
+        `Kekurangan: ${formatRupiah(depositCheck.shortage)}\n\n` +
+        `Apakah Anda ingin melakukan top-up sekarang?`
+      );
+      
+      if (confirmTopup) {
         openDepositModal();
       }
     }, 500);
@@ -404,12 +441,18 @@ function submitBid() {
   }, 1500);
 }
 
-// Fungsi untuk update auction card setelah bid
+/**
+ * Update auction card setelah bid berhasil
+ */
 function updateAuctionCard(auctionId, newBid) {
   const allItems = document.querySelectorAll('.auction-item');
   
   allItems.forEach((item, index) => {
-    if (index === 0) { // Update item pertama sebagai contoh
+    // Update berdasarkan auction ID (untuk demo, update item pertama)
+    if ((auctionId === 'auction-1' && index === 0) ||
+        (auctionId === 'auction-2' && index === 1) ||
+        (auctionId === 'auction-3' && index === 2)) {
+      
       const currentPriceEl = item.querySelector('.current-price');
       const bidsEl = item.querySelector('.auction-stats-row .stat:first-child span');
       
@@ -428,7 +471,11 @@ function updateAuctionCard(auctionId, newBid) {
   currentBidPrice = newBid;
 }
 
-// Fungsi untuk generate bid history (simulasi)
+// ===== BID HISTORY FUNCTIONS =====
+
+/**
+ * Generate bid history (simulasi)
+ */
 function generateBidHistory(currentBid) {
   const historyList = document.getElementById('bid-history-list');
   const bidHistory = [];
@@ -460,7 +507,9 @@ function generateBidHistory(currentBid) {
   `).join('');
 }
 
-// Fungsi untuk menambah bid baru ke history
+/**
+ * Tambah bid baru ke history
+ */
 function addBidToHistory(bidAmount) {
   const historyList = document.getElementById('bid-history-list');
   
@@ -478,7 +527,11 @@ function addBidToHistory(bidAmount) {
   historyList.insertAdjacentHTML('afterbegin', newBid);
 }
 
-// Fungsi untuk menampilkan notifikasi
+// ===== NOTIFICATION FUNCTION =====
+
+/**
+ * Show notification dengan berbagai tipe
+ */
 function showNotification(type, message) {
   // Hapus notifikasi sebelumnya jika ada
   const existingNotif = document.querySelector('.notification');
@@ -537,7 +590,114 @@ function showNotification(type, message) {
   }
 }
 
-// CSS untuk animasi notifikasi
+// ===== INPUT FORMAT HANDLERS =====
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Format bid amount input
+  const bidAmountInput = document.getElementById('bid-amount');
+  
+  if (bidAmountInput) {
+    bidAmountInput.addEventListener('input', function(e) {
+      let value = e.target.value.replace(/[^0-9]/g, '');
+      if (value) {
+        e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        
+        // Update deposit requirement
+        updateDepositRequirement(parseInt(value));
+      }
+    });
+  }
+  
+  // Format topup amount input
+  const topupInput = document.getElementById('topup-amount');
+  
+  if (topupInput) {
+    topupInput.addEventListener('input', function(e) {
+      let value = e.target.value.replace(/[^0-9]/g, '');
+      if (value) {
+        e.target.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      }
+    });
+  }
+});
+
+// ===== FILTER & SORT FUNCTIONALITY =====
+
+document.addEventListener('DOMContentLoaded', function() {
+  const categoryFilter = document.getElementById('category-filter');
+  const sortFilter = document.getElementById('sort-filter');
+  
+  if (categoryFilter) {
+    categoryFilter.addEventListener('change', function() {
+      filterAuctions(this.value);
+    });
+  }
+  
+  if (sortFilter) {
+    sortFilter.addEventListener('change', function() {
+      sortAuctions(this.value);
+    });
+  }
+});
+
+/**
+ * Filter auctions by category
+ */
+function filterAuctions(category) {
+  const auctionItems = document.querySelectorAll('.auction-item');
+  let visibleCount = 0;
+  
+  auctionItems.forEach(item => {
+    const itemCategory = item.getAttribute('data-category');
+    
+    if (category === 'all' || itemCategory === category) {
+      item.style.display = 'block';
+      visibleCount++;
+    } else {
+      item.style.display = 'none';
+    }
+  });
+  
+  // Update active count
+  const activeCount = document.getElementById('active-count');
+  if (activeCount) {
+    activeCount.textContent = visibleCount;
+  }
+}
+
+/**
+ * Sort auctions
+ */
+function sortAuctions(sortType) {
+  const container = document.querySelector('.lelang-container');
+  const items = Array.from(document.querySelectorAll('.auction-item'));
+  
+  items.sort((a, b) => {
+    if (sortType === 'price-low') {
+      const priceA = parseRupiah(a.querySelector('.current-price').textContent);
+      const priceB = parseRupiah(b.querySelector('.current-price').textContent);
+      return priceA - priceB;
+    } else if (sortType === 'price-high') {
+      const priceA = parseRupiah(a.querySelector('.current-price').textContent);
+      const priceB = parseRupiah(b.querySelector('.current-price').textContent);
+      return priceB - priceA;
+    } else if (sortType === 'bids') {
+      const bidsA = parseInt(a.querySelector('.auction-stats-row .stat:first-child span').textContent);
+      const bidsB = parseInt(b.querySelector('.auction-stats-row .stat:first-child span').textContent);
+      return bidsB - bidsA;
+    } else if (sortType === 'ending') {
+      const timeA = parseFloat(a.querySelector('.auction-timer').getAttribute('data-end-time'));
+      const timeB = parseFloat(b.querySelector('.auction-timer').getAttribute('data-end-time'));
+      return timeA - timeB;
+    }
+  });
+  
+  // Re-append items in sorted order
+  items.forEach(item => container.appendChild(item));
+}
+
+// ===== CSS ANIMATIONS =====
+
 const style = document.createElement('style');
 style.textContent = `
   @keyframes slideInRight {
@@ -575,72 +735,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// ===== FILTER & SORT FUNCTIONALITY =====
-document.addEventListener('DOMContentLoaded', function() {
-  const categoryFilter = document.getElementById('category-filter');
-  const sortFilter = document.getElementById('sort-filter');
-  
-  if (categoryFilter) {
-    categoryFilter.addEventListener('change', function() {
-      filterAuctions(this.value);
-    });
-  }
-  
-  if (sortFilter) {
-    sortFilter.addEventListener('change', function() {
-      sortAuctions(this.value);
-    });
-  }
-});
-
-function filterAuctions(category) {
-  const auctionItems = document.querySelectorAll('.auction-item');
-  let visibleCount = 0;
-  
-  auctionItems.forEach(item => {
-    const itemCategory = item.getAttribute('data-category');
-    
-    if (category === 'all' || itemCategory === category) {
-      item.style.display = 'block';
-      visibleCount++;
-    } else {
-      item.style.display = 'none';
-    }
-  });
-  
-  // Update active count
-  const activeCount = document.getElementById('active-count');
-  if (activeCount) {
-    activeCount.textContent = visibleCount;
-  }
-}
-
-function sortAuctions(sortType) {
-  const container = document.querySelector('.lelang-container');
-  const items = Array.from(document.querySelectorAll('.auction-item'));
-  
-  items.sort((a, b) => {
-    if (sortType === 'price-low') {
-      const priceA = parseRupiah(a.querySelector('.current-price').textContent);
-      const priceB = parseRupiah(b.querySelector('.current-price').textContent);
-      return priceA - priceB;
-    } else if (sortType === 'price-high') {
-      const priceA = parseRupiah(a.querySelector('.current-price').textContent);
-      const priceB = parseRupiah(b.querySelector('.current-price').textContent);
-      return priceB - priceA;
-    } else if (sortType === 'bids') {
-      const bidsA = parseInt(a.querySelector('.auction-stats-row .stat:first-child span').textContent);
-      const bidsB = parseInt(b.querySelector('.auction-stats-row .stat:first-child span').textContent);
-      return bidsB - bidsA;
-    } else if (sortType === 'ending') {
-      const timeA = parseFloat(a.querySelector('.auction-timer').getAttribute('data-end-time'));
-      const timeB = parseFloat(b.querySelector('.auction-timer').getAttribute('data-end-time'));
-      return timeA - timeB;
-    }
-  });
-  
-  // Re-append items in sorted order
-  items.forEach(item => container.appendChild(item));
-}
-
-console.log('✅ Lelang system with deposit loaded successfully!');
+console.log('✅ Auction-Deposit integration loaded successfully!');
+console.log('📊 Deposit requirement: 50% of bid amount');
+console.log('🔒 Deposit akan ditahan saat bid berhasil');

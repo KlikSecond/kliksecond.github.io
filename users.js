@@ -9,7 +9,7 @@ const defaultUsersData = {
     {
       id: "user-001",
       username: "Hasbi",
-      password: "kelvin12345",
+      password: "kelvin12345",  
       email: "admin@kliksecond.com",
       fullName: "Hasbi",
       phone: "08123456789",

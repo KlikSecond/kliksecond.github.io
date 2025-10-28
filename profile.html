@@ -72,7 +72,15 @@
           <a href="profile.html?tab=settings" class="dropdown-item">
             <i class="bi bi-gear"></i>
             <span>Pengaturan</span>
-          </a>
+            </a>
+              <a href="#" class="menu-item" data-tab="bank">
+              <i class="bi bi-bank"></i>
+              <span>Rekening Bank</span>
+            </a>
+            <a href="#" class="menu-item" data-tab="wallet">
+              <i class="bi bi-wallet2"></i>
+              <span>Deposit Saya</span>
+            </a>
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item" id="logout-btn">
             <i class="bi bi-box-arrow-right"></i>
@@ -373,7 +381,125 @@
             </div>
           </div>
         </div>
+        <!-- TAMBAHKAN SEBELUM CLOSING </main> di profile.html -->
 
+<!-- BANK ACCOUNT TAB -->
+<div class="tab-content" id="bank-tab">
+  <div class="content-header">
+    <h2><i class="bi bi-bank"></i> Rekening Bank</h2>
+    <p>Kelola rekening bank Anda untuk penarikan deposit</p>
+  </div>
+
+  <div class="bank-account-container">
+    
+    <!-- BANK ACCOUNT CARD -->
+    <div class="info-section">
+      <h3>Informasi Rekening</h3>
+      
+      <!-- JIKA BELUM ADA REKENING -->
+      <div class="no-bank-account" id="no-bank-account" style="text-align: center; padding: 40px;">
+        <i class="bi bi-bank" style="font-size: 60px; color: rgba(255, 255, 255, 0.2); margin-bottom: 20px;"></i>
+        <h4 style="color: #fff; margin-bottom: 10px;">Belum Ada Rekening Bank</h4>
+        <p style="color: #aaa; margin-bottom: 25px;">Tambahkan rekening bank untuk menerima pembayaran dan penarikan deposit</p>
+        <button class="btn-edit-profile" id="btn-add-bank">
+          <i class="bi bi-plus-circle"></i> Tambah Rekening
+        </button>
+      </div>
+      
+      <!-- JIKA SUDAH ADA REKENING -->
+      <div class="bank-account-display" id="bank-account-display" style="display: none;">
+        <div class="info-grid">
+          <div class="info-item">
+            <label><i class="bi bi-bank"></i> Nama Bank</label>
+            <p id="bank-name-display">-</p>
+          </div>
+          <div class="info-item">
+            <label><i class="bi bi-credit-card"></i> Nomor Rekening</label>
+            <p id="bank-account-number-display">-</p>
+          </div>
+          <div class="info-item full-width">
+            <label><i class="bi bi-person"></i> Nama Pemilik Rekening</label>
+            <p id="bank-account-name-display">-</p>
+          </div>
+          <div class="info-item">
+            <label><i class="bi bi-shield-check"></i> Status</label>
+            <p style="color: #2ed573;">
+              <i class="bi bi-check-circle-fill"></i> Terverifikasi
+            </p>
+          </div>
+          <div class="info-item">
+            <label><i class="bi bi-calendar"></i> Ditambahkan Pada</label>
+            <p id="bank-verified-date-display">-</p>
+          </div>
+        </div>
+        
+        <button class="btn-edit-profile" id="btn-edit-bank" style="margin-top: 20px;">
+          <i class="bi bi-pencil-square"></i> Ubah Rekening
+        </button>
+      </div>
+    </div>
+
+    <!-- INFO CARD -->
+    <div class="info-section" style="background: rgba(0, 191, 255, 0.05); border-color: rgba(0, 191, 255, 0.2);">
+      <h3 style="color: #00bfff;"><i class="bi bi-info-circle"></i> Informasi Penting</h3>
+      <ul style="color: #aaa; font-size: 14px; line-height: 2; padding-left: 25px;">
+        <li>Rekening bank digunakan untuk menerima pembayaran penjualan produk</li>
+        <li>Penarikan deposit akan ditransfer ke rekening ini</li>
+        <li>Pastikan nama pemilik rekening sesuai dengan KTP</li>
+        <li>Proses verifikasi rekening memakan waktu 1-2 hari kerja</li>
+        <li>Anda dapat mengubah rekening kapan saja</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- WALLET/DEPOSIT TAB -->
+<div class="tab-content" id="wallet-tab">
+  <div class="content-header">
+    <h2><i class="bi bi-wallet2"></i> Deposit Saya</h2>
+    <p>Kelola deposit untuk jaminan lelang</p>
+  </div>
+
+  <div class="wallet-container">
+    
+    <!-- BALANCE CARD -->
+    <div class="wallet-balance-card">
+      <div class="balance-header">
+        <h3><i class="bi bi-wallet2"></i> Saldo Deposit</h3>
+        <div class="balance-display">
+          <span class="balance-amount" id="wallet-balance">Rp 0</span>
+        </div>
+      </div>
+      
+      <div class="wallet-actions">
+        <button class="btn-wallet-action btn-topup" onclick="openWalletTopUpModal()">
+          <i class="bi bi-plus-circle"></i>
+          Top-Up
+        </button>
+        <button class="btn-wallet-action btn-withdraw" onclick="openWithdrawModal()">
+          <i class="bi bi-cash-coin"></i>
+          Tarik Saldo
+        </button>
+      </div>
+    </div>
+    <!-- HELD DEPOSITS -->
+    <div class="info-section">
+      <h3>Deposit yang Ditahan</h3>
+      <div id="held-deposits-list">
+        <!-- Will be loaded by JS -->
+      </div>
+    </div>
+
+    <!-- DEPOSIT HISTORY -->
+    <div class="info-section">
+      <h3>Riwayat Transaksi Deposit</h3>
+      <div id="deposit-history-list">
+        <!-- Will be loaded by JS -->
+      </div>
+    </div>
+  </div>
+</div>
       </main>
     </div>
   </section>

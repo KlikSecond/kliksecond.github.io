@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tentang Kami - Klik Second</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="search-bar-component.css">
+  <link rel="stylesheet" href="auth-modal.css">
+  <link rel="stylesheet" href="notification.css">
+  <style>
+    /* ===== ABOUT US SPECIFIC STYLES ===== */
+    .about-section {
+      padding-top: 100px;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    .about-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ===== HERO SECTION ===== */
+    .about-hero {
+      text-align: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+      border-radius: 25px;
+      margin-bottom: 60px;
+      border: 2px solid rgba(0, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(0,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    .about-hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-hero h1 {
+      font-size: 48px;
+      color: #fff;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #00ffff, #00ccff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .about-hero p {
+      font-size: 18px;
+      color: #bbb;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* ===== STATS SECTION ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-bottom: 60px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      padding: 35px 25px;
+      border-radius: 20px;
+      text-align: center;
+      border: 2px solid rgba(0, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .stat-card:hover::before {
+      left: 100%;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0, 255, 255, 0.3);
+    }
+
+    .stat-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #00ffff, #00ccff);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 32px;
+      color: #000;
+    }
+
+    .stat-number {
+      font-size: 42px;
+      font-weight: bold;
+      color: #00ffff;
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      font-size: 16px;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ===== CONTENT SECTIONS ===== */
+    .content-section {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      border-radius: 25px;
+      padding: 50px 40px;
+      margin-bottom: 40px;
+      border: 2px solid rgba(0, 255, 255, 0.3);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #00ffff, #00ccff);
+      color: #000;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 15px;
+    }
+
+    .section-title {
+      font-size: 36px;
+      color: #fff;
+      margin-bottom: 15px;
+    }
+
+    .section-description {
+      font-size: 16px;
+      color: #bbb;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* ===== BACKGROUND SECTION ===== */
+    .background-content {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 35px;
+      border-radius: 15px;
+      border-left: 4px solid #00ffff;
+    }
+
+    .background-content p {
+      font-size: 16px;
+      color: #ddd;
+      line-height: 1.9;
+      margin-bottom: 20px;
+    }
+
+    .background-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ===== VISION MISSION GRID ===== */
+    .vm-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 30px;
+    }
+
+    .vm-card {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      border-radius: 20px;
+      border: 2px solid rgba(0, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .vm-card:hover {
+      border-color: rgba(0, 255, 255, 0.5);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+    }
+
+    .vm-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .vm-icon {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #00ffff, #00ccff);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: #000;
+    }
+
+    .vm-title {
+      font-size: 28px;
+      color: #00ffff;
+      font-weight: bold;
+    }
+
+    .vm-content {
+      color: #ddd;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .vm-quote {
+      background: rgba(0, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 12px;
+      border-left: 4px solid #00ffff;
+      font-style: italic;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    /* ===== MISSION LIST ===== */
+    .mission-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .mission-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      margin-bottom: 20px;
+      padding: 20px;
+      background: rgba(0, 255, 255, 0.05);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .mission-item:hover {
+      background: rgba(0, 255, 255, 0.1);
+      transform: translateX(10px);
+    }
+
+    .mission-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #00ffff, #00ccff);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
+      color: #000;
+    }
+
+    .mission-text {
+      flex: 1;
+      color: #ddd;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* ===== VALUES SECTION ===== */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .value-card {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      border: 2px solid rgba(0, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .value-card:hover {
+      border-color: rgba(0, 255, 255, 0.5);
+      transform: translateY(-8px);
+      box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+    }
+
+    .value-icon {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, #00ffff, #00ccff);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 32px;
+      color: #000;
+    }
+
+    .value-title {
+      font-size: 20px;
+      color: #00ffff;
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+
+    .value-description {
+      font-size: 14px;
+      color: #bbb;
+      line-height: 1.7;
+    }
+
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      text-align: center;
+      padding: 60px 40px;
+      background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 204, 255, 0.1) 100%);
+      border-radius: 25px;
+      border: 2px solid rgba(0, 255, 255, 0.3);
+      margin-top: 60px;
+    }
+
+    .cta-title {
+      font-size: 36px;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+
+    .cta-description {
+      font-size: 16px;
+      color: #bbb;
+      margin-bottom: 35px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-cta {
+      padding: 15px 35px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 16px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-cta-primary {
+      background: linear-gradient(135deg, #00ffff, #00ccff);
+      color: #000;
+      box-shadow: 0 5px 20px rgba(0, 255, 255, 0.4);
+    }
+
+    .btn-cta-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0, 255, 255, 0.6);
+    }
+
+    .btn-cta-secondary {
+      background: transparent;
+      color: #00ffff;
+      border: 2px solid #00ffff;
+    }
+
+    .btn-cta-secondary:hover {
+      background: rgba(0, 255, 255, 0.1);
+      transform: translateY(-3px);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 968px) {
+      .vm-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-hero h1 {
+        font-size: 36px;
+      }
+
+      .section-title {
+        font-size: 28px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .about-section {
+        padding-top: 80px;
+      }
+
+      .about-hero {
+        padding: 40px 20px;
+      }
+
+      .about-hero h1 {
+        font-size: 28px;
+      }
+
+      .about-hero p {
+        font-size: 15px;
+      }
+
+      .content-section {
+        padding: 35px 25px;
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .values-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .vm-card {
+        padding: 30px 20px;
+      }
+
+      .cta-section {
+        padding: 40px 25px;
+      }
+
+      .cta-title {
+        font-size: 26px;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+      }
+
+      .btn-cta {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .about-hero h1 {
+        font-size: 24px;
+      }
+
+      .stat-number {
+        font-size: 32px;
+      }
+
+      .section-title {
+        font-size: 22px;
+      }
+
+      .vm-title {
+        font-size: 22px;
+      }
+
+      .background-content {
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <nav class="navbar">
+      <img src="LogoKlikSecondTransparent.png" class="logo" alt="Klik Second" onclick="window.location.href='index.html'" style="cursor: pointer;">
+
+      <!-- SEARCH BOX -->
+      <div class="search-wrapper">
+        <div class="search-box" id="navbar-search-box">
+          <i class="bi bi-search search-icon"></i>
+          <input 
+            type="text" 
+            class="search-input" 
+            id="navbar-search-input"
+            placeholder="Cari Gadget"
+            autocomplete="off"
+          >
+          <button class="search-clear-btn" id="navbar-clear-btn" style="display: none;">
+            <i class="bi bi-x"></i>
+          </button>
+          <div class="search-autocomplete" id="navbar-autocomplete"></div>
+        </div>
+      </div>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="search.html">Cari Produk</a></li>
+        <li><a href="lelang.html">Lelang</a></li>
+        <li><a href="pegadaian.html">Pegadaian</a></li>
+        <li><a href="about.html" class="active">About Us</a></li>
+      </ul>
+
+      <!-- Auth Buttons -->
+      <div class="auth-buttons">
+        <button class="btn-login">Login</button>
+        <button class="btn-register">Daftar</button>
+      </div>
+
+      <!-- User Profile Section -->
+      <div class="user-profile-section">
+        <button class="notification-btn">
+          <i class="bi bi-bell-fill"></i>
+          <span class="notification-badge">0</span>
+        </button>
+
+        <div class="user-profile-trigger">
+          <img src="https://ui-avatars.com/api/?name=User&background=00ffff&color=000" alt="User" class="user-avatar">
+          <div class="user-info">
+            <span class="user-name">User Name</span>
+            <span class="user-role">Seller</span>
+          </div>
+          <i class="bi bi-chevron-down dropdown-arrow"></i>
+        </div>
+
+        <div class="user-dropdown">
+          <a href="profile.html?tab=profile" class="dropdown-item">
+            <i class="bi bi-person-circle"></i>
+            <span>Profile Saya</span>
+          </a>
+          <a href="profile.html?tab=products" class="dropdown-item">
+            <i class="bi bi-box-seam"></i>
+            <span>Produk Saya</span>
+          </a>
+          <a href="profile.html?tab=settings" class="dropdown-item">
+            <i class="bi bi-gear"></i>
+            <span>Pengaturan</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item" id="logout-btn">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Keluar</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- NOTIFICATION PANEL -->
+  <div id="notification-panel" class="notification-panel">
+    <div class="notification-header">
+      <h3><i class="bi bi-bell-fill"></i> Notifikasi</h3>
+      <div class="notification-actions">
+        <button class="mark-all-read">Tandai Semua</button>
+        <button class="close-notification">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+    </div>
+    <div class="notification-list" id="notification-list"></div>
+  </div>
+
+  <!-- ABOUT US SECTION -->
+  <section class="about-section">
+    <div class="about-container">
+      
+      <!-- HERO -->
+      <div class="about-hero">
+        <div class="about-hero-content">
+          <h1><i class="bi bi-info-circle-fill"></i> Tentang KlikSecond</h1>
+          <p>
+            Platform terpercaya untuk jual beli gadget second berkualitas. Kami hadir untuk memudahkan Anda menemukan gadget impian dengan harga terbaik dan kualitas terjamin.
+          </p>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="bi bi-people-fill"></i>
+          </div>
+          <div class="stat-number">50K+</div>
+          <div class="stat-label">Pengguna Aktif</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="bi bi-phone-fill"></i>
+          </div>
+          <div class="stat-number">100K+</div>
+          <div class="stat-label">Gadget Terjual</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="bi bi-star-fill"></i>
+          </div>
+          <div class="stat-number">4.8</div>
+          <div class="stat-label">Rating Pengguna</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="bi bi-shield-check"></i>
+          </div>
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Produk Terverifikasi</div>
+        </div>
+      </div>
+
+      <!-- BACKGROUND -->
+      <div class="content-section">
+        <div class="section-header">
+          <span class="section-badge">Latar Belakang</span>
+          <h2 class="section-title">Mengapa KlikSecond Hadir?</h2>
+        </div>
+        <div class="background-content">
+          <p>
+            Di era digital saat ini, kebutuhan masyarakat terhadap gadget seperti smartphone semakin meningkat. Namun tidak semua orang memiliki budget yang sama untuk membeli gadget baru dengan harga yang tinggi. Di sisi lain, masih banyak pengguna yang memiliki gadget lama yang masih layak pakai, namun akhirnya hanya tersimpan tanpa nilai ekonomi.
+          </p>
+          <p>
+            Melihat keluang tersebut, <strong>KlikSecond</strong> hadir sebagai solusi cerdas bagi masyarakat modern untuk jual, beli, lelang, dan gadai smartphone second secara aman, cepat, dan terpercaya. Platform ini mengusung model e-commerce tipe <strong>B2C (Business to Consumer)</strong> dengan fitur <strong>C2C (Consumer to Consumer)</strong>, menghadirkan konsep hybrid marketplace yang menggabungkan sistem direct selling dan layanan digital baru bagi banyak orang.
+          </p>
+          <p>
+            Melalui pendekatan ini, pengguna tidak hanya bisa membeli dari toko resmi, tetapi juga dapat bertransaksi langsung dengan pengguna lain dalam ekosistem yang terverifikasi.
+          </p>
+          <p>
+            Promosi website KlikSecond untuk memperkenalkan platform ini sebagai marketplace khusus gadget second yang bernilai dan transparan. Melalui kampanye video promosi yang menon jolkan fitur unggulan seperti lelang interaktif dan gadai dengan pencairan dana langsung ke rekening, KlikSecond ingin menunjukkan bahwa barang "second" bukan berarti tidak berharga, justru bisa menjadi keuangan dan kesempatan baru bagi banyak orang.
+          </p>
+          <p>
+            Dengan pendekatan promosi yang segar, komunikatif, dan dekat dengan gaya hidup anak muda, KlikSecond berharap membangun citra sebagai platform terpercaya yang memudahkan pengguna mengelola dan memonetisasi gadget lama mereka melalui sistem e-commerce yang fleksibel, aman, dan inovatif.
+          </p>
+        </div>
+      </div>
+
+      <!-- VISION & MISSION -->
+      <div class="content-section">
+        <div class="section-header">
+          <span class="section-badge">Visi & Misi</span>
+          <h2 class="section-title">Komitmen Kami</h2>
+        </div>
+        
+        <div class="vm-grid">
+          <!-- VISION -->
+          <div class="vm-card">
+            <div class="vm-header">
+              <div class="vm-icon">
+                <i class="bi bi-eye-fill"></i>
+              </div>
+              <h3 class="vm-title">Visi</h3>
+            </div>
+            <div class="vm-content">
+              <div class="vm-quote">
+                "Menjadi platform terpercaya yang memudahkan semua orang untuk jual, beli, lelang, dan gadai hp second dengan aman, mudah, dan inovatif dalam satu aplikasi."
+              </div>
+              <p>
+                Kami berkomitmen untuk menjadi pilihan utama masyarakat Indonesia dalam transaksi gadget second, menciptakan ekosistem digital yang aman, transparan, dan menguntungkan bagi semua pihak.
+              </p>
+            </div>
+          </div>
+
+          <!-- MISSION -->
+          <div class="vm-card">
+            <div class="vm-header">
+              <div class="vm-icon">
+                <i class="bi bi-bullseye"></i>
+              </div>
+              <h3 class="vm-title">Misi</h3>
+            </div>
+            <div class="vm-content">
+              <ul class="mission-list">
+                <li class="mission-item">
+                  <div class="mission-icon">
+                    <i class="bi bi-credit-card-2-front"></i>
+                  </div>
+                  <div class="mission-text">
+                    Membangun sistem pembayaran berbasis escrow untuk memastikan transaksi bebas penipuan.
+                  </div>
+                </li>
+                <li class="mission-item">
+                  <div class="mission-icon">
+                    <i class="bi bi-shield-check"></i>
+                  </div>
+                  <div class="mission-text">
+                    Menyediakan verifikasi IMEI dan sertifikasi kondisi produk untuk melindungi konsumen.
+                  </div>
+                </li>
+                <li class="mission-item">
+                  <div class="mission-icon">
+                    <i class="bi bi-star-fill"></i>
+                  </div>
+                  <div class="mission-text">
+                    Menetapkan standar grading produk yang jelas, transparan, dan mudah dipahami.
+                  </div>
+                </li>
+                <li class="mission-item">
+                  <div class="mission-icon">
+                    <i class="bi bi-phone"></i>
+                  </div>
+                  <div class="mission-text">
+                    Mengembangkan platform digital yang user-friendly dengan alur transaksi yang sederhana.
+                  </div>
+                </li>
+                <li class="mission-item">
+                  <div class="mission-icon">
+                    <i class="bi bi-headset"></i>
+                  </div>
+                  <div class="mission-text">
+                    Menawarkan layanan pelanggan yang responsif dan solutif untuk mendukung pengalaman pengguna.
+                  </div>
+                </li>
+                <li class="mission-item">
+                  <div class="mission-icon">
+                    <i class="bi bi-lock-fill"></i>
+                  </div>
+                  <div class="mission-text">
+                    Memberikan perlindungan menyeluruh bagi setiap pengguna melalui verifikasi akun yang ketat, sistem transaksi aman, serta database terenkripsi yang menjaga kerahasiaan data.
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VALUES -->
+      <div class="content-section">
+        <div class="section-header">
+          <span class="section-badge">Nilai Kami</span>
+          <h2 class="section-title">Prinsip Yang Kami Pegang</h2>
+          <p class="section-description">
+            Nilai-nilai ini menjadi fondasi dalam setiap keputusan dan layanan yang kami berikan kepada pengguna.
+          </p>
+        </div>
+
+        <div class="values-grid">
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-shield-check"></i>
+            </div>
+            <h4 class="value-title">Kepercayaan</h4>
+            <p class="value-description">
+              Membangun kepercayaan melalui transparansi, verifikasi produk, dan sistem pembayaran yang aman.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-lightbulb-fill"></i>
+            </div>
+            <h4 class="value-title">Inovasi</h4>
+            <p class="value-description">
+              Terus berinovasi untuk memberikan pengalaman terbaik dengan teknologi terkini.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-heart-fill"></i>
+            </div>
+            <h4 class="value-title">Kepuasan Pengguna</h4>
+            <p class="value-description">
+              Mengutamakan kepuasan pengguna dengan layanan responsif dan solusi yang efektif.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-people-fill"></i>
+            </div>
+            <h4 class="value-title">Komunitas</h4>
+            <p class="value-description">
+              Membangun komunitas yang saling mendukung dan berbagi pengalaman positif.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <h4 class="value-title">Kualitas</h4>
+            <p class="value-description">
+              Menjamin setiap produk telah melewati quality control dan standar grading yang ketat.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-speedometer2"></i>
+            </div>
+            <h4 class="value-title">Efisiensi</h4>
+            <p class="value-description">
+              Memberikan proses transaksi yang cepat, mudah, dan tanpa hambatan.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- WHY CHOOSE US -->
+      <div class="content-section">
+        <div class="section-header">
+          <span class="section-badge">Keunggulan</span>
+          <h2 class="section-title">Mengapa Memilih KlikSecond?</h2>
+        </div>
+
+        <div class="values-grid">
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-upc-scan"></i>
+            </div>
+            <h4 class="value-title">Verifikasi IMEI</h4>
+            <p class="value-description">
+              Setiap produk diverifikasi dengan sistem IMEI untuk memastikan keaslian dan legalitas gadget.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-award-fill"></i>
+            </div>
+            <h4 class="value-title">Grading Transparan</h4>
+            <p class="value-description">
+              Sistem grading A, B+, B yang jelas dan mudah dipahami untuk mengetahui kondisi produk.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-cash-coin"></i>
+            </div>
+            <h4 class="value-title">Escrow Payment</h4>
+            <p class="value-description">
+              Dana Anda aman dengan sistem escrow - pembayaran diteruskan setelah produk diterima.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-hammer"></i>
+            </div>
+            <h4 class="value-title">Fitur Lelang</h4>
+            <p class="value-description">
+              Dapatkan gadget impian dengan harga terbaik melalui sistem lelang yang fair dan menarik.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-gem"></i>
+            </div>
+            <h4 class="value-title">Gadai Gadget</h4>
+            <p class="value-description">
+              Butuh dana cepat? Gadaikan gadget Anda dengan pencairan dana langsung ke rekening.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-truck"></i>
+            </div>
+            <h4 class="value-title">Pengiriman Aman</h4>
+            <p class="value-description">
+              Packaging rapi dan asuransi pengiriman untuk memastikan produk sampai dengan selamat.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-headset"></i>
+            </div>
+            <h4 class="value-title">Customer Support 24/7</h4>
+            <p class="value-description">
+              Tim support kami siap membantu Anda kapan saja melalui chat, email, atau telepon.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="bi bi-arrow-repeat"></i>
+            </div>
+            <h4 class="value-title">Garansi 1-3 Minggu</h4>
+            <p class="value-description">
+              Tidak sesuai? Kami berikan garansi pengembalian 1-3 Minggu untuk kepuasan Anda.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOW IT WORKS -->
+      <div class="content-section">
+        <div class="section-header">
+          <span class="section-badge">Cara Kerja</span>
+          <h2 class="section-title">Cara Bertransaksi di KlikSecond</h2>
+          <p class="section-description">
+            Proses yang mudah, aman, dan transparan untuk semua jenis transaksi.
+          </p>
+        </div>
+
+        <div class="vm-grid">
+          <!-- FOR BUYERS -->
+          <div class="vm-card">
+            <div class="vm-header">
+              <div class="vm-icon">
+                <i class="bi bi-cart-check-fill"></i>
+              </div>
+              <h3 class="vm-title">Untuk Pembeli</h3>
+            </div>
+            <div class="vm-content">
+              <ul class="mission-list">
+                <li class="mission-item">
+                  <div class="mission-icon">1</div>
+                  <div class="mission-text">
+                    <strong>Cari Produk</strong> - Gunakan fitur pencarian untuk menemukan gadget yang Anda inginkan dengan filter kategori, harga, kondisi, dan lokasi.
+                  </div>
+                </li>
+                <li class="mission-item">
+                  <div class="mission-icon">2</div>
+                  <div class="mission-text">
+                    <strong>Cek Detail</strong> - Lihat foto detail, spesifikasi lengkap, grading kondisi, dan verifikasi IMEI produk.
+                  </div>
+                </li>
+                <li class="mission-item">
+                  <div class="mission-icon">3</div>
+                  <div class="mission-text">
+                    <strong>Lakukan Pembelian</strong> - Pilih metode pembayaran (transfer, e-wallet, atau cicilan) melalui sistem escrow yang aman.
+                  </div>
+                </li>
+                <li class="mission-item">
+                  <div class="mission-icon">4</div>
+                  <div class="mission-text">
+                    <strong>Tunggu Pengiriman</strong> - Penjual akan mengirim produk dengan packaging aman dan tracking number.
+                  </div>
+                </li>
+                <li class="mission-item">
+                  <div class="mission-icon">5</div>
+                  <div class="mission-text">
+                    <strong>Terima & Konfirmasi</strong> - Cek kondisi produk, jika sesuai konfirmasi penerimaan dan dana akan diteruskan ke penjual.
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- FOR SELLERS -->
+          <div class="vm-card">
+            <div class="vm-header">
+              <div class="vm-icon">
+                <i class="bi bi-shop"></i>
+              </div>
+              <h3 class="vm-title">Untuk Penjual</h3>
+            </div>
+            <div class="vm-content">
+              <ul class="mission-list">
+                <li class="mission-item">
+                  <div class="mission-icon">1</div>
+                  <div class="mission-text">
+                    <strong>Daftar & Verifikasi</strong> - Buat akun dan lengkapi verifikasi identitas untuk mulai berjualan.
+                  </div>
+                </li>
+                <li class="mission-item">
+                  <div class="mission-icon">2</div>
+                  <div class="mission-text">
+                    <strong>Upload Produk</strong> - Foto produk dari berbagai angle, isi detail spesifikasi, dan upload foto IMEI/barcode.
+                  </div>
+                </li>
+                <li class="mission-item">
+                  <div class="mission-icon">3</div>
+                  <div class="mission-text">
+                    <strong>Verifikasi Tim</strong> - Tim kami akan memverifikasi produk Anda dalam 1x24 jam sebelum tayang di katalog.
+                  </div>
+                </li>
+                <li class="mission-item">
+                  <div class="mission-icon">4</div>
+                  <div class="mission-text">
+                    <strong>Terima Pesanan</strong> - Notifikasi langsung saat ada pembeli, lalu siapkan dan kirim produk dengan packaging aman.
+                  </div>
+                </li>
+                <li class="mission-item">
+                  <div class="mission-icon">5</div>
+                  <div class="mission-text">
+                    <strong>Terima Pembayaran</strong> - Setelah pembeli konfirmasi, dana langsung masuk ke saldo Anda dan bisa ditarik kapan saja.
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA SECTION -->
+      <div class="cta-section">
+        <h2 class="cta-title">Siap Bergabung dengan KlikSecond?</h2>
+        <p class="cta-description">
+          Mulai jual, beli, lelang, atau gadai gadget second Anda sekarang dengan aman dan mudah. Bergabunglah dengan ribuan pengguna yang telah mempercayai KlikSecond!
+        </p>
+        <div class="cta-buttons">
+          <a href="search.html" class="btn-cta btn-cta-primary">
+            <i class="bi bi-search"></i>
+            Jelajahi Produk
+          </a>
+          <a href="index.html#home" class="btn-cta btn-cta-secondary">
+            <i class="bi bi-house-fill"></i>
+            Kembali ke Home
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- AUTHENTICATION MODAL -->
+  <div id="auth-modal" class="auth-modal">
+    <div class="auth-modal-content">
+      <span class="auth-modal-close">
+        <i class="bi bi-x"></i>
+      </span>
+      <div class="auth-modal-header">
+        <h2>Selamat Datang!</h2>
+        <p>Login atau daftar untuk melanjutkan</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Login</button>
+        <button class="auth-tab" data-tab="register">Daftar</button>
+      </div>
+      <div id="login-form" class="auth-form active">
+        <div id="login-error" class="error-message"></div>
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label for="login-username">Username atau Email</label>
+            <input type="text" id="login-username" placeholder="Masukkan username atau email" required>
+          </div>
+          <div class="form-group password-toggle">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="Masukkan password" required>
+            <i class="bi bi-eye-slash password-toggle-icon"></i>
+          </div>
+          <div class="form-options">
+            <label class="remember-me">
+              <input type="checkbox" id="remember-me">
+              <span>Ingat Saya</span>
+            </label>
+            <a href="#" class="forgot-password">Lupa Password?</a>
+          </div>
+          <button type="submit" class="auth-submit-btn">
+            <i class="bi bi-box-arrow-in-right"></i>
+            Login
+          </button>
+        </form>
+      </div>
+      <div id="register-form" class="auth-form">
+        <div id="register-error" class="error-message"></div>
+        <div id="register-success" class="success-message"></div>
+        <form onsubmit="return false;">
+          <div class="form-group">
+            <label for="register-fullname">Nama Lengkap</label>
+            <input type="text" id="register-fullname" placeholder="Masukkan nama lengkap" required>
+          </div>
+          <div class="form-group">
+            <label for="register-email">Email</label>
+            <input type="email" id="register-email" placeholder="Masukkan email" required>
+          </div>
+          <div class="form-group">
+            <label for="register-phone">No. Telepon</label>
+            <input type="tel" id="register-phone" placeholder="08XXXXXXXXXX" required>
+          </div>
+          <div class="form-group">
+            <label for="register-username">Username</label>
+            <input type="text" id="register-username" placeholder="Pilih username" required>
+          </div>
+          <div class="form-group password-toggle">
+            <label for="register-password">Password</label>
+            <input type="password" id="register-password" placeholder="Minimal 6 karakter" required>
+            <i class="bi bi-eye-slash password-toggle-icon"></i>
+          </div>
+          <div class="form-group password-toggle">
+            <label for="register-confirm-password">Konfirmasi Password</label>
+            <input type="password" id="register-confirm-password" placeholder="Ulangi password" required>
+            <i class="bi bi-eye-slash password-toggle-icon"></i>
+          </div>
+          <button type="submit" class="auth-submit-btn">
+            <i class="bi bi-person-plus"></i>
+            Daftar Sekarang
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="users.js"></script>
+  <script src="products-loader.js"></script>
+  <script src="session-manager.js"></script>
+  <script src="auth-handler.js"></script>
+  <script src="notification-handler.js"></script>
+  <script src="search-engine.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

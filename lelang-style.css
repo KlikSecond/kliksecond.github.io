@@ -41,6 +41,106 @@
   line-height: 1.6;
 }
 
+/* ===== DEPOSIT INFO SECTION IN BID MODAL ===== */
+.deposit-info-section {
+  margin-bottom: 25px;
+  animation: slideIn 0.3s ease;
+}
+
+.deposit-info-box {
+  background: rgba(255, 215, 0, 0.05);
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.deposit-info-box h4 {
+  font-size: 16px;
+  color: #ffd700;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.deposit-info-box h4 i {
+  font-size: 20px;
+}
+
+.deposit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+}
+
+.deposit-row:last-child {
+  border-bottom: none;
+}
+
+.deposit-row span {
+  color: #aaa;
+}
+
+.deposit-row strong {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.deposit-shortage {
+  background: rgba(255, 107, 107, 0.15);
+  border: 2px solid rgba(255, 107, 107, 0.4);
+  border-radius: 12px;
+  padding: 15px;
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.deposit-shortage i {
+  font-size: 24px;
+  color: #ff6b6b;
+  flex-shrink: 0;
+}
+
+.shortage-text {
+  flex: 1;
+}
+
+.shortage-text h4 {
+  font-size: 14px;
+  color: #ff6b6b;
+  margin: 0 0 5px 0;
+  font-weight: 600;
+}
+
+.shortage-text p {
+  font-size: 12px;
+  color: #ffaaaa;
+  margin: 0;
+}
+
+.deposit-shortage .shortage-amount {
+  font-size: 18px;
+  color: #ff6b6b;
+  font-weight: bold;
+}
+
+.btn-topup-deposit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}
+
 /* ===== HERO COUNTDOWN ===== */
 .hero-countdown {
   background: rgba(0, 0, 0, 0.4);
