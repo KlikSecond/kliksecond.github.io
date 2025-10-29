@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="auth-modal.css">
   <link rel="stylesheet" href="notification.css">
   <link rel="stylesheet" href="profile.css">
+  <link rel="stylesheet" href="profile-wallet.css">
+  <link rel="stylesheet" href="profile-kyc.css">
 </head>
 <body>
   <div id="particles-js"></div>
@@ -69,10 +71,6 @@
             <i class="bi bi-gem"></i>
             <span>Pegadaian Saya</span>
           </a>
-          <a href="profile.html?tab=settings" class="dropdown-item">
-            <i class="bi bi-gear"></i>
-            <span>Pengaturan</span>
-            </a>
               <a href="#" class="menu-item" data-tab="bank">
               <i class="bi bi-bank"></i>
               <span>Rekening Bank</span>
@@ -80,6 +78,14 @@
             <a href="#" class="menu-item" data-tab="wallet">
               <i class="bi bi-wallet2"></i>
               <span>Deposit Saya</span>
+            </a>
+            <a href="#" class="menu-item" data-tab="kyc">
+              <i class="bi bi-shield-check"></i>
+              <span>Verifikasi KYC</span>
+            </a>
+            <a href="profile.html?tab=settings" class="dropdown-item">
+            <i class="bi bi-gear"></i>
+            <span>Pengaturan</span>
             </a>
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item" id="logout-btn">
@@ -156,6 +162,18 @@
           <a href="#" class="menu-item" data-tab="pawnshop">
             <i class="bi bi-gem"></i>
             <span>Pegadaian Saya</span>
+          </a>
+          <a href="#" class="menu-item" data-tab="bank">
+            <i class="bi bi-bank"></i>
+            <span>Rekening Bank</span>
+          </a>
+          <a href="#" class="menu-item" data-tab="wallet">
+            <i class="bi bi-wallet"></i>
+            <span>Deposit Saya</span>
+          </a>
+          <a href="#" class="menu-item" data-tab="kyc">
+            <i class="bi bi-shield-check"></i>
+            <span>Verifikasi KYC</span>
           </a>
           <a href="#" class="menu-item" data-tab="settings">
             <i class="bi bi-gear"></i>
@@ -382,7 +400,22 @@
           </div>
         </div>
         <!-- TAMBAHKAN SEBELUM CLOSING </main> di profile.html -->
+         <div class="tab-content" id="kyc-tab">
+        <div class="content-header">
+          <h2><i class="bi bi-shield-check"></i> Verifikasi KYC</h2>
+          <p>Verifikasi identitas Anda untuk keamanan dan kepercayaan</p>
+        </div>
 
+        <div id="kyc-tab-content">
+          <!-- Content will be loaded dynamically by profile-kyc-handler.js -->
+          <div style="text-align: center; padding: 60px 20px;">
+            <div class="loading-spinner">
+              <i class="bi bi-arrow-repeat"></i>
+              <span>Loading KYC data...</span>
+            </div>
+          </div>
+        </div>
+      </div>
 <!-- BANK ACCOUNT TAB -->
 <div class="tab-content" id="bank-tab">
   <div class="content-header">
@@ -500,6 +533,7 @@
     </div>
   </div>
 </div>
+
       </main>
     </div>
   </section>
@@ -577,5 +611,11 @@
   <script src="profile-data.js"></script>
   <script src="profile-handler.js"></script>
   <script src="script.js"></script>
+  <script src="profile-bank.js"></script>
+  <script src="deposit-system.js"></script>
+  <script src="profile-bank-handler.js"></script>
+  <script src="profile-wallet-handler.js"></script>
+  <script src="kyc-system.js"></script>
+  <script src="profile-kyc-handler.js"></script>
 </body>
 </html>

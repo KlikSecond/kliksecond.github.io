@@ -1,0 +1,749 @@
+/* ===== KYC VERIFICATION STYLES ===== */
+
+/* ===== KYC Container ===== */
+.kyc-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* ===== KYC Status Card ===== */
+.kyc-status-card {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.4) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.kyc-status-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+/* ===== Status Icons ===== */
+.kyc-status-icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 25px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  position: relative;
+  z-index: 1;
+}
+
+.kyc-status-icon.unverified {
+  background: rgba(170, 170, 170, 0.2);
+  border: 3px solid rgba(170, 170, 170, 0.5);
+  color: #aaa;
+}
+
+.kyc-status-icon.pending {
+  background: rgba(255, 193, 7, 0.2);
+  border: 3px solid rgba(255, 193, 7, 0.5);
+  color: #ffc107;
+  animation: pendingPulse 2s ease-in-out infinite;
+}
+
+.kyc-status-icon.verified {
+  background: rgba(46, 213, 115, 0.2);
+  border: 3px solid rgba(46, 213, 115, 0.5);
+  color: #2ed573;
+  animation: verifiedBounce 0.6s ease;
+}
+
+.kyc-status-icon.rejected {
+  background: rgba(255, 107, 107, 0.2);
+  border: 3px solid rgba(255, 107, 107, 0.5);
+  color: #ff6b6b;
+}
+
+@keyframes pendingPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 20px rgba(255, 193, 7, 0);
+  }
+}
+
+@keyframes verifiedBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ===== Status Titles ===== */
+.kyc-status-title {
+  font-size: 28px;
+  margin-bottom: 15px;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+
+.kyc-status-title.unverified {
+  color: #aaa;
+}
+
+.kyc-status-title.pending {
+  color: #ffc107;
+}
+
+.kyc-status-title.verified {
+  color: #2ed573;
+}
+
+.kyc-status-title.rejected {
+  color: #ff6b6b;
+}
+
+.kyc-status-description {
+  color: #aaa;
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto 25px;
+  position: relative;
+  z-index: 1;
+}
+
+.kyc-status-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  padding: 8px 20px;
+  border-radius: 25px;
+  color: #00ffff;
+  font-size: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Submit Button ===== */
+.btn-submit-kyc,
+.btn-resubmit-kyc,
+.btn-submit-kyc-form {
+  padding: 15px 40px;
+  background: linear-gradient(135deg, #00ffff, #00ccff);
+  border: none;
+  border-radius: 30px;
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.btn-submit-kyc::before,
+.btn-resubmit-kyc::before,
+.btn-submit-kyc-form::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn-submit-kyc:hover::before,
+.btn-resubmit-kyc:hover::before,
+.btn-submit-kyc-form:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-submit-kyc:hover,
+.btn-resubmit-kyc:hover,
+.btn-submit-kyc-form:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 255, 255, 0.5);
+}
+
+.btn-submit-kyc i,
+.btn-resubmit-kyc i,
+.btn-submit-kyc-form i {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-submit-kyc span,
+.btn-resubmit-kyc span,
+.btn-submit-kyc-form span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== KYC Info Banner ===== */
+.kyc-info-banner {
+  background: rgba(0, 191, 255, 0.1);
+  border: 2px solid rgba(0, 191, 255, 0.3);
+  border-radius: 15px;
+  padding: 20px 25px;
+}
+
+.kyc-info-banner h4 {
+  color: #00bfff;
+  font-size: 16px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kyc-info-banner ul {
+  color: #aaa;
+  font-size: 14px;
+  line-height: 2;
+  margin: 0;
+  padding-left: 25px;
+}
+
+.kyc-info-banner ul li {
+  margin-bottom: 8px;
+}
+
+/* ===== KYC Form Section ===== */
+.kyc-form-section {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+}
+
+.kyc-form-section h3 {
+  font-size: 20px;
+  color: #00ffff;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kyc-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.kyc-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kyc-form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.kyc-form-group label {
+  font-size: 14px;
+  color: #00ffff;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kyc-form-group input,
+.kyc-form-group textarea,
+.kyc-form-group select {
+  width: 100%;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.kyc-form-group input:focus,
+.kyc-form-group textarea:focus,
+.kyc-form-group select:focus {
+  outline: none;
+  border-color: #00ffff;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+}
+
+.kyc-form-group textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.kyc-form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 20px;
+  padding-right: 40px;
+}
+
+.kyc-form-group select option {
+  background: #1a1a2e;
+  color: #fff;
+  padding: 10px;
+}
+
+/* ===== Upload Section ===== */
+.kyc-upload-section {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+}
+
+.kyc-upload-section h3 {
+  font-size: 20px;
+  color: #00ffff;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kyc-upload-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.kyc-upload-item {
+  position: relative;
+  background: rgba(0, 255, 255, 0.05);
+  border: 2px dashed rgba(0, 255, 255, 0.3);
+  border-radius: 15px;
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.kyc-upload-item:hover {
+  background: rgba(0, 255, 255, 0.08);
+  border-color: #00ffff;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 255, 255, 0.2);
+}
+
+.kyc-upload-icon {
+  font-size: 50px;
+  color: #00ffff;
+  margin-bottom: 15px;
+  display: block;
+  transition: all 0.3s ease;
+}
+
+.kyc-upload-item:hover .kyc-upload-icon {
+  transform: scale(1.1);
+}
+
+.kyc-upload-title {
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.kyc-upload-description {
+  font-size: 13px;
+  color: #aaa;
+  line-height: 1.5;
+}
+
+.kyc-upload-input {
+  display: none;
+}
+
+.kyc-upload-preview {
+  display: none;
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.kyc-upload-filename {
+  display: none;
+  font-size: 12px;
+  color: #00ffff;
+  margin-top: 10px;
+  word-break: break-all;
+}
+
+.kyc-upload-item.has-image {
+  border-style: solid;
+  border-color: rgba(46, 213, 115, 0.5);
+  background: rgba(46, 213, 115, 0.05);
+}
+
+.kyc-upload-item.has-image .kyc-upload-icon,
+.kyc-upload-item.has-image .kyc-upload-title,
+.kyc-upload-item.has-image .kyc-upload-description {
+  display: none;
+}
+
+.kyc-upload-item.has-image .kyc-upload-preview,
+.kyc-upload-item.has-image .kyc-upload-filename {
+  display: block;
+}
+
+.kyc-remove-image {
+  display: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 107, 107, 0.9);
+  border: 2px solid #fff;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.kyc-upload-item.has-image .kyc-remove-image {
+  display: flex;
+}
+
+.kyc-remove-image:hover {
+  background: #ff6b6b;
+  transform: scale(1.1) rotate(90deg);
+}
+
+/* ===== Submit Container ===== */
+.kyc-submit-container {
+  text-align: center;
+  padding: 20px;
+}
+
+/* ===== Details Display ===== */
+.kyc-details-display {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+}
+
+.kyc-details-display h3 {
+  font-size: 20px;
+  color: #00ffff;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kyc-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.kyc-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.kyc-detail-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.kyc-detail-item label {
+  font-size: 13px;
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kyc-detail-item label i {
+  color: #00ffff;
+}
+
+.kyc-detail-item p {
+  font-size: 15px;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* ===== Documents Display ===== */
+.kyc-documents-display {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+}
+
+.kyc-documents-display h3 {
+  font-size: 20px;
+  color: #00ffff;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kyc-documents-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.kyc-document-card {
+  background: rgba(0, 255, 255, 0.05);
+  border: 2px solid rgba(0, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 15px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.kyc-document-card:hover {
+  border-color: #00ffff;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 255, 255, 0.3);
+}
+
+.kyc-document-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.kyc-document-card:hover .kyc-document-image {
+  transform: scale(1.02);
+}
+
+.kyc-document-title {
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.kyc-document-date {
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* ===== Rejection Reason ===== */
+.rejection-reason {
+  background: rgba(255, 107, 107, 0.1);
+  border: 2px solid rgba(255, 107, 107, 0.3);
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.rejection-reason h4 {
+  color: #ff6b6b;
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rejection-reason p {
+  color: #aaa;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ===== Lightbox ===== */
+.kyc-lightbox {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.kyc-lightbox.active {
+  display: flex;
+}
+
+.kyc-lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90vh;
+  animation: zoomIn 0.3s ease;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.kyc-lightbox-image {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 10px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.kyc-lightbox-close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.kyc-lightbox-close:hover {
+  background: rgba(255, 107, 107, 0.9);
+  border-color: #ff6b6b;
+  transform: rotate(90deg);
+}
+
+/* ===== Responsive Styles ===== */
+@media (max-width: 768px) {
+  .kyc-form-grid,
+  .kyc-upload-grid,
+  .kyc-details-grid,
+  .kyc-documents-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kyc-status-card {
+    padding: 30px 20px;
+  }
+
+  .kyc-status-icon {
+    width: 80px;
+    height: 80px;
+    font-size: 40px;
+  }
+
+  .kyc-status-title {
+    font-size: 22px;
+  }
+
+  .kyc-form-section,
+  .kyc-upload-section,
+  .kyc-details-display,
+  .kyc-documents-display {
+    padding: 20px 15px;
+  }
+
+  .kyc-upload-item {
+    padding: 30px 15px;
+  }
+
+  .kyc-upload-icon {
+    font-size: 40px;
+  }
+
+  .btn-submit-kyc,
+  .btn-resubmit-kyc,
+  .btn-submit-kyc-form {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .kyc-status-card {
+    padding: 25px 15px;
+  }
+
+  .kyc-status-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 35px;
+  }
+
+  .kyc-status-title {
+    font-size: 20px;
+  }
+
+  .kyc-status-description {
+    font-size: 14px;
+  }
+
+  .kyc-form-section h3,
+  .kyc-upload-section h3,
+  .kyc-details-display h3,
+  .kyc-documents-display h3 {
+    font-size: 18px;
+  }
+
+  .kyc-info-banner ul {
+    font-size: 13px;
+  }
+
+  .btn-submit-kyc,
+  .btn-resubmit-kyc,
+  .btn-submit-kyc-form {
+    padding: 12px 30px;
+    font-size: 14px;
+  }
+}
