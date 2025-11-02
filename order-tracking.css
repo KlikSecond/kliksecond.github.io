@@ -1,505 +1,274 @@
-/* ===== ORDER TRACKING STYLES ===== */
+/* ===== ORDER TRACKING PAGE STYLES ===== */
 
-/* ===== Tracking Modal ===== */
-.tracking-modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(10px);
-  z-index: 10000;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  animation: fadeIn 0.3s ease;
+/* ===== Tracking Section ===== */
+.tracking-section {
+  padding-top: 100px;
+  min-height: 100vh;
+  padding-bottom: 60px;
 }
 
-.tracking-modal-overlay.active {
-  display: flex;
-}
-
-.tracking-modal-content {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-  border-radius: 25px;
+.tracking-container {
   max-width: 1200px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===== Back Button ===== */
+.tracking-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: rgba(0, 0, 0, 0.3);
   border: 2px solid rgba(0, 255, 255, 0.3);
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8);
-  animation: slideUp 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  position: relative;
+  border-radius: 25px;
+  color: #00ffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 30px;
+  text-decoration: none;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.tracking-back-btn:hover {
+  background: rgba(0, 255, 255, 0.1);
+  border-color: #00ffff;
+  transform: translateX(-5px);
 }
 
-@keyframes slideUp {
-  from {
-    transform: translateY(100px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.tracking-back-btn i {
+  font-size: 18px;
 }
 
 /* ===== Tracking Header ===== */
 .tracking-header {
-  background: linear-gradient(135deg, #00ffff, #00ccff);
-  padding: 25px 35px;
-  border-radius: 25px 25px 0 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
-.tracking-header h2 {
-  font-size: 24px;
-  color: #000;
-  margin: 0;
+.tracking-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.tracking-order-info h1 {
+  font-size: 28px;
+  color: #fff;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.tracking-order-info h1 i {
+  color: #00ffff;
+}
+
+.tracking-order-id {
+  color: #00ffff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.tracking-order-date {
+  color: #aaa;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.tracking-status-badge {
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 14px;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: statusPulse 2s ease-in-out infinite;
 }
 
-.tracking-header h2 i {
-  font-size: 28px;
+.tracking-status-badge.processing {
+  background: rgba(0, 191, 255, 0.2);
+  color: #00bfff;
+  border: 2px solid rgba(0, 191, 255, 0.5);
+  box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
 }
 
-.tracking-close-btn {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.2);
-  border: 2px solid rgba(0, 0, 0, 0.3);
-  color: #000;
-  font-size: 28px;
-  cursor: pointer;
+.tracking-status-badge.shipped {
+  background: rgba(138, 43, 226, 0.2);
+  color: #8a2be2;
+  border: 2px solid rgba(138, 43, 226, 0.5);
+  box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+}
+
+@keyframes statusPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
+  }
+}
+
+/* ===== Tracking Grid ===== */
+.tracking-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 30px;
+}
+
+/* ===== Main Tracking Content ===== */
+.tracking-main {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
+  flex-direction: column;
+  gap: 25px;
 }
 
-.tracking-close-btn:hover {
-  background: rgba(255, 107, 107, 0.9);
-  border-color: #ff6b6b;
-  color: #fff;
-  transform: rotate(90deg);
-}
-
-/* ===== Tracking Body ===== */
-.tracking-body {
-  padding: 35px;
-}
-
-/* ===== Order Info Card ===== */
-.tracking-order-info {
-  background: rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(0, 255, 255, 0.2);
+/* ===== Live Tracking Card ===== */
+.live-tracking-card {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.5) 100%);
+  border: 2px solid rgba(0, 255, 255, 0.3);
   border-radius: 20px;
-  padding: 25px;
-  margin-bottom: 30px;
+  padding: 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   position: relative;
   overflow: hidden;
 }
 
-.tracking-order-info::before {
+.live-tracking-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
-  animation: shimmer 3s infinite;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.05) 0%, transparent 70%);
+  animation: pulse 4s ease-in-out infinite;
 }
 
-@keyframes shimmer {
-  to {
-    left: 100%;
-  }
-}
-
-.order-info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+.live-tracking-card h2 {
+  font-size: 22px;
+  color: #fff;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   position: relative;
   z-index: 1;
 }
 
-.order-info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.order-info-label {
-  font-size: 13px;
-  color: #aaa;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.order-info-label i {
+.live-tracking-card h2 i {
   color: #00ffff;
-  font-size: 16px;
+  font-size: 24px;
 }
 
-.order-info-value {
-  font-size: 18px;
-  color: #fff;
-  font-weight: 600;
-}
-
-.tracking-number {
-  font-family: 'Courier New', monospace;
-  background: rgba(0, 255, 255, 0.1);
-  padding: 8px 15px;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 255, 255, 0.3);
-  display: inline-block;
-  font-size: 16px;
-}
-
-/* ===== Courier Info Badge ===== */
-.courier-badge {
-  background: linear-gradient(135deg, #00ffff, #00ccff);
-  color: #000;
-  padding: 10px 20px;
-  border-radius: 25px;
-  font-size: 14px;
-  font-weight: 700;
+.live-indicator {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
-}
-
-.courier-badge i {
-  font-size: 18px;
-}
-
-/* ===== Map Container ===== */
-.tracking-map-container {
-  background: rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(0, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 25px;
-  margin-bottom: 30px;
-  position: relative;
-  overflow: hidden;
-}
-
-.tracking-map-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.tracking-map-header h3 {
-  font-size: 20px;
-  color: #00ffff;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.map-refresh-btn {
-  padding: 10px 20px;
-  background: rgba(0, 255, 255, 0.1);
-  border: 2px solid rgba(0, 255, 255, 0.3);
-  border-radius: 20px;
-  color: #00ffff;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
   gap: 8px;
+  padding: 6px 14px;
+  background: rgba(255, 0, 0, 0.2);
+  border: 1px solid rgba(255, 0, 0, 0.5);
+  border-radius: 20px;
+  font-size: 12px;
+  color: #ff4444;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
-.map-refresh-btn:hover {
-  background: rgba(0, 255, 255, 0.2);
-  transform: translateY(-2px);
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff4444;
+  animation: blink 1.5s ease-in-out infinite;
 }
 
-.map-refresh-btn i {
-  font-size: 16px;
-  animation: rotate 0s linear;
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
-.map-refresh-btn.refreshing i {
-  animation: rotate 1s linear infinite;
-}
-
-@keyframes rotate {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* ===== Map Display ===== */
-.map-display {
-  width: 100%;
-  height: 400px;
-  background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
-  border-radius: 15px;
+/* ===== Progress Bar ===== */
+.tracking-progress {
   position: relative;
+  z-index: 1;
+  margin-bottom: 40px;
+}
+
+.progress-bar-container {
+  position: relative;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
   overflow: hidden;
-  border: 2px solid rgba(0, 255, 255, 0.1);
+  margin-bottom: 15px;
 }
 
-/* ===== Static Map with SVG ===== */
-.static-map {
-  width: 100%;
+.progress-bar-fill {
   height: 100%;
+  background: linear-gradient(90deg, #00ffff, #00ccff, #0099cc);
+  border-radius: 10px;
   position: relative;
+  transition: width 1s ease;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
 }
 
-.map-background {
+.progress-bar-fill::after {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
-    repeating-linear-gradient(
-      0deg,
-      rgba(0, 255, 255, 0.03) 0px,
-      transparent 1px,
-      transparent 40px,
-      rgba(0, 255, 255, 0.03) 41px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      rgba(0, 255, 255, 0.03) 0px,
-      transparent 1px,
-      transparent 40px,
-      rgba(0, 255, 255, 0.03) 41px
-    );
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
 }
 
-/* ===== Route Line ===== */
-.route-line {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
-.route-path {
-  stroke: #00ffff;
-  stroke-width: 3;
-  fill: none;
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
-  animation: drawPath 3s ease-in-out forwards;
-  filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.6));
-}
-
-@keyframes drawPath {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* ===== Location Markers ===== */
-.location-marker {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.location-marker:hover {
-  transform: translate(-50%, -50%) scale(1.1);
-}
-
-.marker-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  position: relative;
-  animation: markerPulse 2s ease-in-out infinite;
-}
-
-@keyframes markerPulse {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7);
-  }
-  50% {
-    box-shadow: 0 0 0 20px rgba(0, 255, 255, 0);
-  }
-}
-
-.marker-origin {
-  background: linear-gradient(135deg, #00ffff, #00ccff);
-  color: #000;
-  border: 3px solid #fff;
-  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.5);
-}
-
-.marker-current {
-  background: linear-gradient(135deg, #ffc107, #ffed4e);
-  color: #000;
-  border: 3px solid #fff;
-  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.5);
-  animation: markerPulse 1.5s ease-in-out infinite, moveCurrent 5s ease-in-out infinite;
-}
-
-@keyframes moveCurrent {
-  0%, 100% {
-    transform: translate(-50%, -50%) translateY(0);
-  }
-  50% {
-    transform: translate(-50%, -50%) translateY(-5px);
-  }
-}
-
-.marker-destination {
-  background: linear-gradient(135deg, #2ed573, #26de81);
-  color: #000;
-  border: 3px solid #fff;
-  box-shadow: 0 4px 15px rgba(46, 213, 115, 0.5);
-}
-
-.marker-label {
-  position: absolute;
-  top: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.9);
-  color: #fff;
-  padding: 8px 15px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-  border: 1px solid rgba(0, 255, 255, 0.3);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-}
-
-/* ===== Distance Info ===== */
-.distance-info {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(0, 255, 255, 0.3);
-  border-radius: 25px;
-  padding: 15px 30px;
-  display: flex;
-  gap: 30px;
-  align-items: center;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
-}
-
-.distance-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-}
-
-.distance-label {
-  font-size: 11px;
-  color: #aaa;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.distance-value {
-  font-size: 20px;
-  font-weight: 700;
+.progress-percentage {
+  text-align: right;
   color: #00ffff;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.distance-value i {
-  font-size: 18px;
-}
-
-/* ===== Tracking Timeline ===== */
-.tracking-timeline-container {
-  background: rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(0, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 25px;
-}
-
-.tracking-timeline-header {
-  margin-bottom: 25px;
-}
-
-.tracking-timeline-header h3 {
-  font-size: 20px;
-  color: #00ffff;
-  margin: 0 0 10px 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.tracking-timeline-header p {
   font-size: 14px;
-  color: #aaa;
-  margin: 0;
+  font-weight: 700;
 }
 
 /* ===== Timeline ===== */
 .tracking-timeline {
   position: relative;
-  padding: 20px 0;
+  z-index: 1;
 }
 
 .tracking-timeline::before {
   content: '';
   position: absolute;
-  left: 30px;
+  left: 20px;
   top: 0;
   height: 100%;
   width: 3px;
-  background: linear-gradient(180deg, #00ffff, rgba(0, 255, 255, 0.2));
+  background: linear-gradient(180deg, #00ffff, rgba(0, 255, 255, 0.3), transparent);
 }
 
 .timeline-item {
   position: relative;
-  padding-left: 80px;
+  padding-left: 60px;
   padding-bottom: 40px;
-  animation: fadeInUp 0.5s ease backwards;
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
 }
 
 .timeline-item:nth-child(1) { animation-delay: 0.1s; }
@@ -527,268 +296,504 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 60px;
-  height: 60px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 18px;
   z-index: 2;
-  border: 4px solid #1a1a2e;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
 }
 
-.timeline-icon.active {
+.timeline-item.completed .timeline-icon {
+  background: linear-gradient(135deg, #2ed573, #26de81);
+  color: #000;
+  box-shadow: 0 4px 15px rgba(46, 213, 115, 0.4);
+  border: 3px solid rgba(46, 213, 115, 0.3);
+}
+
+.timeline-item.active .timeline-icon {
   background: linear-gradient(135deg, #00ffff, #00ccff);
   color: #000;
+  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.6);
+  border: 3px solid rgba(0, 255, 255, 0.5);
   animation: iconPulse 2s ease-in-out infinite;
+}
+
+.timeline-item.pending .timeline-icon {
+  background: rgba(255, 255, 255, 0.1);
+  color: #666;
+  border: 3px solid rgba(255, 255, 255, 0.1);
 }
 
 @keyframes iconPulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7), 0 4px 15px rgba(0, 0, 0, 0.5);
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(0, 255, 255, 0.6);
   }
   50% {
-    box-shadow: 0 0 0 15px rgba(0, 255, 255, 0), 0 4px 15px rgba(0, 0, 0, 0.5);
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(0, 255, 255, 0.8);
   }
-}
-
-.timeline-icon.completed {
-  background: linear-gradient(135deg, #2ed573, #26de81);
-  color: #000;
-}
-
-.timeline-icon.pending {
-  background: rgba(170, 170, 170, 0.2);
-  color: #aaa;
-  border-color: rgba(170, 170, 170, 0.3);
 }
 
 .timeline-content {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 15px;
   padding: 20px;
   transition: all 0.3s ease;
 }
 
-.timeline-item:hover .timeline-content {
-  background: rgba(0, 0, 0, 0.5);
+.timeline-item.active .timeline-content {
   border-color: rgba(0, 255, 255, 0.3);
-  transform: translateX(5px);
+  background: rgba(0, 255, 255, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 255, 255, 0.1);
 }
 
-.timeline-date {
-  font-size: 12px;
-  color: #00ffff;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.timeline-content:hover {
+  transform: translateX(5px);
+  border-color: rgba(0, 255, 255, 0.3);
 }
 
 .timeline-title {
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 700;
   color: #fff;
   margin-bottom: 8px;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timeline-item.completed .timeline-title {
+  color: #2ed573;
+}
+
+.timeline-item.active .timeline-title {
+  color: #00ffff;
 }
 
 .timeline-description {
   font-size: 14px;
   color: #aaa;
   line-height: 1.6;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
-.timeline-location {
+.timeline-date {
   font-size: 13px;
   color: #00ffff;
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(0, 255, 255, 0.1);
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 255, 255, 0.2);
-  width: fit-content;
+  font-weight: 600;
 }
 
-/* ===== Status Badge ===== */
-.status-badge {
-  display: inline-block;
-  padding: 6px 15px;
-  border-radius: 20px;
+.timeline-location {
   font-size: 12px;
-  font-weight: 700;
+  color: #666;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ===== Sidebar ===== */
+.tracking-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* ===== Shipping Info Card ===== */
+.shipping-info-card {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.5) 100%);
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.shipping-info-card h3 {
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.shipping-info-card h3 i {
+  color: #00ffff;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
+}
+
+.info-item label {
+  font-size: 12px;
+  color: #aaa;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  font-weight: 600;
 }
 
-.status-badge.in-transit {
-  background: rgba(255, 193, 7, 0.2);
-  color: #ffc107;
-  border: 1px solid rgba(255, 193, 7, 0.5);
+.info-item p {
+  font-size: 15px;
+  color: #fff;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
-.status-badge.delivered {
-  background: rgba(46, 213, 115, 0.2);
-  color: #2ed573;
-  border: 1px solid rgba(46, 213, 115, 0.5);
+.tracking-number {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 12px 15px;
+  margin-top: 5px;
 }
 
-.status-badge.processing {
+.tracking-number span {
+  font-size: 14px;
+  color: #00ffff;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+.copy-btn {
+  padding: 6px 12px;
+  background: rgba(0, 255, 255, 0.2);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 8px;
+  color: #00ffff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copy-btn:hover {
+  background: rgba(0, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ===== Product Info Card ===== */
+.product-info-card {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.5) 100%);
+  border: 2px solid rgba(0, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.product-info-card h3 {
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-info-card h3 i {
+  color: #00ffff;
+}
+
+.product-item {
+  display: flex;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.product-item:hover {
+  border-color: rgba(0, 255, 255, 0.3);
+  transform: translateY(-3px);
+}
+
+.product-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 2px solid rgba(0, 255, 255, 0.2);
+}
+
+.product-details {
+  flex: 1;
+}
+
+.product-name {
+  font-size: 15px;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.product-specs {
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+
+.product-price {
+  font-size: 16px;
+  color: #00ffff;
+  font-weight: 700;
+}
+
+/* ===== Contact Card ===== */
+.contact-card {
+  background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(0, 191, 255, 0.05) 100%);
+  border: 2px solid rgba(0, 191, 255, 0.3);
+  border-radius: 20px;
+  padding: 25px;
+  text-align: center;
+}
+
+.contact-card h3 {
+  font-size: 18px;
+  color: #00bfff;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.contact-card p {
+  font-size: 14px;
+  color: #aaa;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.contact-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.contact-btn {
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.contact-btn.whatsapp {
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: #fff;
+}
+
+.contact-btn.whatsapp:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
+.contact-btn.email {
   background: rgba(0, 191, 255, 0.2);
   color: #00bfff;
-  border: 1px solid rgba(0, 191, 255, 0.5);
+  border: 2px solid rgba(0, 191, 255, 0.3);
+}
+
+.contact-btn.email:hover {
+  background: rgba(0, 191, 255, 0.3);
+  border-color: #00bfff;
 }
 
 /* ===== Responsive Design ===== */
-@media (max-width: 768px) {
-  .tracking-modal-content {
-    max-height: 95vh;
-  }
-
-  .tracking-header {
-    padding: 20px 20px;
-  }
-
-  .tracking-header h2 {
-    font-size: 20px;
-  }
-
-  .tracking-body {
-    padding: 20px;
-  }
-
-  .order-info-grid {
+@media (max-width: 1024px) {
+  .tracking-grid {
     grid-template-columns: 1fr;
   }
 
-  .map-display {
-    height: 300px;
-  }
-
-  .distance-info {
-    flex-direction: column;
-    gap: 15px;
-    padding: 12px 20px;
-  }
-
-  .timeline-item {
-    padding-left: 70px;
-  }
-
-  .timeline-icon {
-    width: 50px;
-    height: 50px;
-    font-size: 20px;
-  }
-
-  .tracking-timeline::before {
-    left: 25px;
+  .tracking-sidebar {
+    order: -1;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
+  .tracking-section {
+    padding-top: 80px;
+  }
+
   .tracking-header {
-    padding: 15px;
+    padding: 20px;
   }
 
-  .tracking-header h2 {
-    font-size: 18px;
+  .tracking-header-top {
+    flex-direction: column;
+    gap: 15px;
   }
 
-  .tracking-close-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 24px;
+  .tracking-order-info h1 {
+    font-size: 22px;
   }
 
-  .tracking-body {
-    padding: 15px;
-  }
-
-  .tracking-order-info,
-  .tracking-map-container,
-  .tracking-timeline-container {
-    padding: 20px 15px;
-  }
-
-  .map-display {
-    height: 250px;
-  }
-
-  .marker-label {
-    font-size: 10px;
-    padding: 6px 10px;
-  }
-
-  .distance-value {
-    font-size: 16px;
+  .live-tracking-card {
+    padding: 20px;
   }
 
   .timeline-item {
-    padding-left: 60px;
-    padding-bottom: 30px;
+    padding-left: 50px;
   }
 
   .timeline-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-  }
-
-  .tracking-timeline::before {
-    left: 20px;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
   }
 
   .timeline-content {
     padding: 15px;
   }
 
+  .shipping-info-card,
+  .product-info-card,
+  .contact-card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tracking-back-btn {
+    font-size: 13px;
+    padding: 10px 18px;
+  }
+
+  .tracking-order-info h1 {
+    font-size: 20px;
+  }
+
+  .tracking-status-badge {
+    padding: 10px 18px;
+    font-size: 12px;
+  }
+
+  .timeline-item {
+    padding-left: 45px;
+    padding-bottom: 30px;
+  }
+
+  .timeline-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
   .timeline-title {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   .timeline-description {
     font-size: 13px;
   }
+
+  .product-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .product-image {
+    width: 100%;
+    height: 150px;
+  }
 }
 
-/* ===== Scrollbar Styling ===== */
-.tracking-modal-content::-webkit-scrollbar {
-  width: 8px;
+/* ===== Loading Animation ===== */
+.tracking-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+  gap: 20px;
 }
 
-.tracking-modal-content::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
+.tracking-loading i {
+  font-size: 60px;
+  color: #00ffff;
+  animation: spin 1.5s linear infinite;
 }
 
-.tracking-modal-content::-webkit-scrollbar-thumb {
+.tracking-loading p {
+  font-size: 16px;
+  color: #aaa;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== Error State ===== */
+.tracking-error {
+  text-align: center;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%);
+  border: 2px solid rgba(255, 107, 107, 0.3);
+  border-radius: 20px;
+}
+
+.tracking-error i {
+  font-size: 80px;
+  color: #ff6b6b;
+  margin-bottom: 20px;
+}
+
+.tracking-error h3 {
+  font-size: 24px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.tracking-error p {
+  font-size: 15px;
+  color: #aaa;
+  margin-bottom: 30px;
+}
+
+.btn-retry {
+  padding: 12px 30px;
   background: linear-gradient(135deg, #00ffff, #00ccff);
-  border-radius: 10px;
+  border: none;
+  border-radius: 25px;
+  color: #000;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.tracking-modal-content::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #00ccff, #00aacc);
-}
-
-/* ===== Print Styles ===== */
-@media print {
-  .tracking-close-btn,
-  .map-refresh-btn {
-    display: none !important;
-  }
-
-  .tracking-modal-content {
-    box-shadow: none;
-    border: 1px solid #ddd;
-  }
-
-  .map-display {
-    border: 1px solid #ddd;
-  }
+.btn-retry:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 255, 255, 0.5);
 }

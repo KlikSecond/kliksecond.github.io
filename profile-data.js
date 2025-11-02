@@ -1,6 +1,5 @@
-// ===== PROFILE DATA GENERATOR =====
-// File untuk generate sample data di halaman profile
-// Ini adalah contoh implementasi yang bisa diganti dengan API backend nantinya
+// ===== PROFILE DATA GENERATOR (FIXED VERSION) =====
+// File untuk generate sample data di halaman profile dengan tracking terintegrasi
 
 console.log('📊 Profile data generator loading...');
 
@@ -246,6 +245,54 @@ function getStatusLabel(status) {
   return labels[status] || status;
 }
 
+// ===== TRACKING HELPER FUNCTION =====
+function trackOrder(orderId) {
+  console.log('📦 Tracking order:', orderId);
+  
+  // Show simple alert for immediate feedback
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 2px solid rgba(0, 191, 255, 0.5);
+    border-radius: 12px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 10000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.3s ease;
+  `;
+  
+  notification.innerHTML = `
+    <i class="bi bi-arrow-repeat" style="font-size: 24px; color: #00bfff; animation: spin 1s linear infinite;"></i>
+    <span style="color: #fff; font-size: 14px;">Memuat data pelacakan...</span>
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Add spin animation
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  `;
+  document.head.appendChild(style);
+  
+  // Redirect after short delay
+  setTimeout(() => {
+    window.location.href = `order-tracking.html?order=${orderId}`;
+  }, 800);
+}
+
 // ===== RENDER FUNCTIONS =====
 function renderProducts(products = sampleUserProducts) {
   if (products.length === 0) {
@@ -303,6 +350,7 @@ function renderProducts(products = sampleUserProducts) {
   `).join('');
 }
 
+// ===== RENDER ORDERS WITH TRACKING (INTEGRATED) =====
 function renderOrders(orders = sampleUserOrders, filterStatus = 'all') {
   let filteredOrders = orders;
   
@@ -347,9 +395,12 @@ function renderOrders(orders = sampleUserOrders, filterStatus = 'all') {
           <span class="order-total-price">Rp ${formatPrice(order.total)}</span>
         </div>
         <div class="order-actions">
-          ${order.status === 'shipped' ? `
-            <button class="btn-product-action btn-view">
-              <i class="bi bi-geo-alt"></i> Lacak
+          ${(order.status === 'shipped' || order.status === 'processing') ? `
+            <button class="btn-product-action btn-view btn-track-order" 
+                    data-order-id="${order.id}"
+                    style="background: linear-gradient(135deg, #00ffff, #00ccff); color: #000; border: none; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);">
+              <i class="bi bi-geo-alt-fill" style="font-size: 16px;"></i> 
+              <span>Lacak Paket</span>
             </button>
           ` : ''}
           ${order.status === 'completed' ? `
@@ -496,7 +547,6 @@ function loadProductsWithSample() {
   const productsList = document.getElementById('products-list');
   if (!productsList) return;
 
-  // Check if user wants to see sample data
   const showSample = localStorage.getItem('showSampleData') !== 'false';
 
   if (showSample) {
@@ -515,6 +565,44 @@ function loadOrdersWithSample(filterStatus = 'all') {
 
   if (showSample) {
     ordersList.innerHTML = renderOrders(sampleUserOrders, filterStatus);
+    
+    // CRITICAL FIX: Attach click events to tracking buttons
+    setTimeout(() => {
+      const trackButtons = document.querySelectorAll('.btn-track-order');
+      console.log('🔧 Attaching events to', trackButtons.length, 'tracking buttons');
+      
+      trackButtons.forEach(btn => {
+        // Remove any existing listeners
+        btn.replaceWith(btn.cloneNode(true));
+      });
+      
+      // Re-query after replacement
+      document.querySelectorAll('.btn-track-order').forEach(btn => {
+        const orderId = btn.getAttribute('data-order-id');
+        
+        // Add click event
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('🖱️ Track button clicked for order:', orderId);
+          trackOrder(orderId);
+        });
+        
+        // Add hover effect
+        btn.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-2px)';
+          this.style.boxShadow = '0 6px 25px rgba(0, 255, 255, 0.5)';
+        });
+        
+        btn.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
+          this.style.boxShadow = '0 4px 15px rgba(0, 255, 255, 0.3)';
+        });
+        
+        console.log('✅ Event attached to button:', orderId);
+      });
+    }, 200);
+    
   } else {
     ordersList.innerHTML = renderOrders([], filterStatus);
   }
@@ -566,93 +654,23 @@ function updateStatsWithSample() {
   }
 }
 
-// ===== OVERRIDE ORIGINAL LOAD FUNCTIONS =====
-// Override functions in profile-handler.js to use sample data
-if (typeof window !== 'undefined') {
-  // Wait for profile-handler to load
-  const checkInterval = setInterval(() => {
-    if (window.profileHandler) {
-      clearInterval(checkInterval);
-
-      // Store original functions
-      const originalLoadProducts = window.profileHandler.loadProducts || function() {};
-      const originalLoadOrders = window.profileHandler.loadOrders || function() {};
-      const originalLoadAuctions = window.profileHandler.loadAuctions || function() {};
-      const originalLoadPawnshop = window.profileHandler.loadPawnshop || function() {};
-
-      // Override with sample data versions
-      window.addEventListener('DOMContentLoaded', () => {
-        // Add sample data toggle button
-        addSampleDataToggle();
-      });
-
-      console.log('✅ Profile data generator attached');
+// ===== SETUP ORDER FILTERS =====
+function setupOrderFilters(activeStatus) {
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  filterBtns.forEach(btn => {
+    const status = btn.getAttribute('data-status');
+    
+    if (status === activeStatus) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
     }
-  }, 100);
 
-  // Timeout after 5 seconds
-  setTimeout(() => {
-    clearInterval(checkInterval);
-  }, 5000);
-}
-
-// ===== ADD SAMPLE DATA TOGGLE =====
-function addSampleDataToggle() {
-  const contentHeader = document.querySelector('.content-header');
-  if (!contentHeader) return;
-
-  const showSample = localStorage.getItem('showSampleData') !== 'false';
-
-  const toggleHTML = `
-    <div style="margin-top: 15px; padding: 12px; background: rgba(0, 255, 255, 0.1); border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <i class="bi bi-info-circle" style="color: #00ffff; font-size: 20px;"></i>
-        <div>
-          <div style="color: #fff; font-size: 14px; font-weight: 600;">Mode Demo</div>
-          <div style="color: #aaa; font-size: 12px;">Tampilkan data contoh untuk demo fitur</div>
-        </div>
-      </div>
-      <label class="toggle-switch">
-        <input type="checkbox" id="toggle-sample-data" ${showSample ? 'checked' : ''}>
-        <span class="toggle-slider"></span>
-      </label>
-    </div>
-  `;
-
-  contentHeader.insertAdjacentHTML('afterend', toggleHTML);
-
-  // Add event listener
-  const toggleInput = document.getElementById('toggle-sample-data');
-  if (toggleInput) {
-    toggleInput.addEventListener('change', (e) => {
-      const enabled = e.target.checked;
-      localStorage.setItem('showSampleData', enabled);
-      
-      // Reload current tab
-      const activeTab = document.querySelector('.menu-item.active');
-      if (activeTab) {
-        const tabName = activeTab.getAttribute('data-tab');
-        reloadTabData(tabName);
-      }
-    });
-  }
-}
-
-function reloadTabData(tabName) {
-  switch(tabName) {
-    case 'products':
-      loadProductsWithSample();
-      break;
-    case 'orders':
-      loadOrdersWithSample();
-      break;
-    case 'auctions':
-      loadAuctionsWithSample();
-      break;
-    case 'pawnshop':
-      loadPawnshopWithSample();
-      break;
-  }
+    btn.onclick = () => {
+      console.log('🔍 Filter clicked:', status);
+      loadOrdersWithSample(status);
+    };
+  });
 }
 
 // ===== EXPORT FOR GLOBAL USE =====
@@ -669,7 +687,11 @@ window.profileDataGenerator = {
   loadOrdersWithSample,
   loadAuctionsWithSample,
   loadPawnshopWithSample,
-  updateStatsWithSample
+  updateStatsWithSample,
+  trackOrder // Export trackOrder function
 };
 
-console.log('✅ Profile data generator loaded successfully');
+// Export trackOrder as global function
+window.trackOrder = trackOrder;
+
+console.log('✅ Profile data generator loaded successfully with tracking integration');
