@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="profile-wallet.css">
   <link rel="stylesheet" href="profile-kyc.css">
   <link rel="stylesheet" href="order-tracking.css">
+  <link rel="stylesheet" href="profile-loyalty.css">
 </head>
 <body>
   <div id="particles-js"></div>
@@ -55,6 +56,10 @@
           <a href="profile.html" class="dropdown-item">
             <i class="bi bi-person-circle"></i>
             <span>Profile Saya</span>
+          </a>
+          <a href="#" class="menu-item" data-tab="loyalty">
+            <i class="bi bi-trophy"></i>
+            <span>Member Loyalty</span>
           </a>
           <a href="profile.html?tab=products" class="dropdown-item">
             <i class="bi bi-box-seam"></i>
@@ -147,6 +152,10 @@
           <a href="#" class="menu-item active" data-tab="profile">
             <i class="bi bi-person-circle"></i>
             <span>Profil Saya</span>
+          </a>
+          <a href="#" class="menu-item active" data-tab="loyalty">
+            <i class="bi bi-card-checklist"></i>
+            <span>Loyalty Card</span>
           </a>
           <a href="#" class="menu-item" data-tab="products">
             <i class="bi bi-box-seam"></i>
@@ -535,6 +544,30 @@
   </div>
 </div>
 
+<!-- Di bagian profile-menu (sidebar) -->
+<a href="#" class="menu-item" data-tab="loyalty">
+  <i class="bi bi-trophy"></i>
+  <span>Member Loyalty</span>
+</a>
+
+<!-- Di bagian tab-content (sebelum closing </main>) -->
+<div class="tab-content" id="loyalty-tab">
+  <div class="content-header">
+    <h2><i class="bi bi-trophy"></i> Member Loyalty & Referral</h2>
+    <p>Kelola tier membership dan kode referral Anda</p>
+  </div>
+
+  <div id="loyalty-tab-content">
+    <!-- Content will be loaded dynamically by profile-loyalty-handler.js -->
+    <div style="text-align: center; padding: 60px 20px;">
+      <div class="loading-spinner">
+        <i class="bi bi-arrow-repeat"></i>
+        <span>Loading loyalty data...</span>
+      </div>
+    </div>
+  </div>
+</div>
+
       </main>
     </div>
   </section>
@@ -619,5 +652,7 @@
   <script src="kyc-system.js"></script>
   <script src="profile-kyc-handler.js"></script>
   <script src="order-tracking-system.js"></script>
+  <script src="loyalty-system.js"></script>
+  <script src="profile-loyalty-handler.js"></script>
 </body>
 </html>

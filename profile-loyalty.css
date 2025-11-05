@@ -1,0 +1,575 @@
+/* ===== MEMBER LOYALTY & REFERRAL SYSTEM STYLES ===== */
+
+/* ===== Loyalty Container ===== */
+.loyalty-container {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* ===== Loyalty Status Card ===== */
+.loyalty-status-card {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.4) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.loyalty-status-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  opacity: 0.1;
+  animation: rotateGradient 10s linear infinite;
+}
+
+@keyframes rotateGradient {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== Tier Badge ===== */
+.tier-badge-container {
+  text-align: center;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+.tier-badge {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.tier-badge.silver {
+  background: linear-gradient(135deg, #C0C0C0, #E8E8E8);
+  border: 4px solid #A8A8A8;
+  color: #4A4A4A;
+}
+
+.tier-badge.gold {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  border: 4px solid #FF8C00;
+  color: #8B4513;
+  box-shadow: 0 10px 40px rgba(255, 215, 0, 0.5);
+}
+
+.tier-badge.platinum {
+  background: linear-gradient(135deg, #E5E4E2, #BCC6CC);
+  border: 4px solid #8C92AC;
+  color: #2C3E50;
+  box-shadow: 0 10px 40px rgba(229, 228, 226, 0.5);
+}
+
+.tier-badge.diamond {
+  background: linear-gradient(135deg, #B9F2FF, #00D4FF);
+  border: 4px solid #00A8CC;
+  color: #005577;
+  box-shadow: 0 10px 40px rgba(0, 212, 255, 0.6);
+}
+
+.tier-name {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.tier-name.silver { color: #C0C0C0; }
+.tier-name.gold { color: #FFD700; }
+.tier-name.platinum { color: #E5E4E2; }
+.tier-name.diamond { color: #00D4FF; }
+
+.tier-description {
+  color: #aaa;
+  font-size: 14px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* ===== Progress Bar ===== */
+.loyalty-progress-section {
+  margin-top: 30px;
+  position: relative;
+  z-index: 1;
+}
+
+.loyalty-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.loyalty-progress-label {
+  color: #00ffff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.loyalty-progress-value {
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.loyalty-progress-bar {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loyalty-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00ffff, #00ccff);
+  border-radius: 10px;
+  transition: width 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.loyalty-progress-fill.gold {
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+}
+
+.loyalty-progress-fill.platinum {
+  background: linear-gradient(90deg, #E5E4E2, #BCC6CC);
+}
+
+.loyalty-progress-fill.diamond {
+  background: linear-gradient(90deg, #B9F2FF, #00D4FF);
+}
+
+.loyalty-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+.loyalty-next-tier {
+  text-align: center;
+  margin-top: 10px;
+  color: #aaa;
+  font-size: 13px;
+}
+
+/* ===== Benefits Section ===== */
+.loyalty-benefits {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+}
+
+.loyalty-benefits h3 {
+  font-size: 20px;
+  color: #00ffff;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.benefit-item {
+  background: rgba(0, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.benefit-item:hover {
+  background: rgba(0, 255, 255, 0.1);
+  border-color: #00ffff;
+  transform: translateY(-2px);
+}
+
+.benefit-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00ffff, #00ccff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.benefit-text {
+  flex: 1;
+}
+
+.benefit-title {
+  font-size: 14px;
+  color: #fff;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.benefit-description {
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* ===== Referral Section ===== */
+.referral-section {
+  background: linear-gradient(135deg, rgba(46, 213, 115, 0.1) 0%, rgba(38, 222, 129, 0.1) 100%);
+  border: 2px solid rgba(46, 213, 115, 0.3);
+  border-radius: 20px;
+  padding: 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+.referral-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(46, 213, 115, 0.1) 0%, transparent 70%);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.referral-header {
+  text-align: center;
+  margin-bottom: 25px;
+  position: relative;
+  z-index: 1;
+}
+
+.referral-header h3 {
+  font-size: 24px;
+  color: #2ed573;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.referral-header p {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.referral-code-container {
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px dashed rgba(46, 213, 115, 0.5);
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 25px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.referral-code-label {
+  color: #aaa;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.referral-code-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.referral-code {
+  font-size: 32px;
+  font-weight: bold;
+  color: #2ed573;
+  letter-spacing: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+.btn-copy-code {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #2ed573, #26de81);
+  border: none;
+  border-radius: 25px;
+  color: #000;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-copy-code:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 213, 115, 0.5);
+}
+
+.referral-link-container {
+  margin-bottom: 20px;
+}
+
+.referral-link-input {
+  width: 100%;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(46, 213, 115, 0.3);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+}
+
+.referral-link-input:focus {
+  outline: none;
+  border-color: #2ed573;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ===== Referral Stats ===== */
+.referral-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  position: relative;
+  z-index: 1;
+}
+
+.referral-stat-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(46, 213, 115, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.referral-stat-card:hover {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: #2ed573;
+  transform: translateY(-3px);
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2ed573;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Referral Rewards ===== */
+.referral-rewards {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(46, 213, 115, 0.2);
+  border-radius: 15px;
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.referral-rewards h4 {
+  font-size: 16px;
+  color: #2ed573;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rewards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reward-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(46, 213, 115, 0.05);
+  border: 1px solid rgba(46, 213, 115, 0.2);
+  border-radius: 10px;
+  padding: 12px;
+  transition: all 0.3s ease;
+}
+
+.reward-item:hover {
+  background: rgba(46, 213, 115, 0.1);
+  border-color: #2ed573;
+}
+
+.reward-icon {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2ed573, #26de81);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 16px;
+}
+
+.reward-text {
+  flex: 1;
+  color: #fff;
+  font-size: 13px;
+}
+
+/* ===== Tier Comparison Table ===== */
+.tier-comparison {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+  overflow-x: auto;
+}
+
+.tier-comparison h3 {
+  font-size: 20px;
+  color: #00ffff;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.comparison-table thead {
+  background: rgba(0, 255, 255, 0.1);
+}
+
+.comparison-table th,
+.comparison-table td {
+  padding: 15px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.comparison-table th {
+  color: #00ffff;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.comparison-table td {
+  color: #fff;
+  font-size: 13px;
+}
+
+.comparison-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tier-icon {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .tier-badge {
+    width: 100px;
+    height: 100px;
+    font-size: 40px;
+  }
+
+  .tier-name {
+    font-size: 24px;
+  }
+
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .referral-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .referral-code {
+    font-size: 24px;
+  }
+
+  .referral-code-display {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .loyalty-status-card,
+  .referral-section {
+    padding: 25px 20px;
+  }
+
+  .tier-badge {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+  }
+
+  .tier-name {
+    font-size: 20px;
+  }
+
+  .referral-code {
+    font-size: 20px;
+    letter-spacing: 2px;
+  }
+}
