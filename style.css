@@ -383,6 +383,213 @@ body {
   margin-bottom: 20px;
 }
 
+/* ===== BANNER BUY BUTTON ENHANCEMENTS ===== */
+/* Add this to your style.css or create separate banner-styles.css */
+
+/* Banner Buy Button Styling */
+.banner-buy-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.banner-buy-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.banner-buy-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Active/Pressed State */
+.banner-buy-btn:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 0 2px 8px rgba(0, 255, 255, 0.4);
+}
+
+/* Loading State */
+.banner-buy-btn.loading {
+  pointer-events: none;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.banner-buy-btn.loading i {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Hover Effect Enhancement */
+.banner-buy-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 255, 255, 0.6);
+}
+
+/* Pulse Animation for Attention */
+.banner-buy-btn {
+  animation: subtlePulse 3s ease-in-out infinite;
+}
+
+@keyframes subtlePulse {
+  0%, 100% {
+    box-shadow: 0 4px 10px rgba(0, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 6px 15px rgba(0, 255, 255, 0.5);
+  }
+}
+
+/* Remove pulse on hover */
+.banner-buy-btn:hover {
+  animation: none;
+}
+
+/* Focus State for Accessibility */
+.banner-buy-btn:focus {
+  outline: 3px solid rgba(0, 255, 255, 0.5);
+  outline-offset: 3px;
+}
+
+/* Mobile Touch Feedback */
+@media (max-width: 768px) {
+  .banner-buy-btn:active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+  }
+}
+
+/* ===== BANNER NOTIFICATION ANIMATIONS ===== */
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+}
+
+/* ===== SLIDER IMPROVEMENTS ===== */
+/* Prevent layout shift during transitions */
+.slider {
+  will-change: transform;
+}
+
+.slide {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* Smooth cover image transitions */
+.cover-wrapper {
+  will-change: transform;
+}
+
+/* ===== ACCESSIBILITY IMPROVEMENTS ===== */
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #00ffff;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 5px 0;
+  z-index: 100;
+  transition: top 0.3s;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .banner-buy-btn {
+    border: 3px solid #fff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .banner-buy-btn,
+  .slide,
+  .cover-wrapper {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ===== LOADING SPINNER ===== */
+.banner-loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spinner 0.8s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== RESPONSIVE BANNER BUTTON ===== */
+@media (max-width: 480px) {
+  .banner-buy-btn {
+    padding: 10px 22px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  
+  .banner-buy-btn i {
+    font-size: 14px;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  .banner-buy-btn,
+  .prev,
+  .next {
+    display: none;
+  }
+}
+
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);

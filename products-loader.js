@@ -1,5 +1,73 @@
 // ===== LOAD PRODUCTS FROM JSON =====
 const productsData = {
+  // ===== BANNER PRODUCTS (Featured) - CRITICAL FOR BANNER BUTTONS =====
+  "banner": [
+    {
+      "id": "banner-iphone-15-pro-max",  // ⭐ ID ini harus match dengan data-product-id
+      "name": "iPhone 15 Pro Max",
+      "price": 17200000,
+      "city": "Jakarta",
+      "category": "iPhone",
+      "grade": "A",
+      "battery": "90%",
+      "storage": "8GB + 256GB",
+      "condition": "Fullset no minus",
+      "usage": "3-4 bulan pemakaian",
+      "images": [
+        "https://images.tokopedia.net/img/cache/700/VqbcmM/2023/10/27/e692ce96-2164-4c9c-9f58-b8dda1ef3037.jpg",
+        "https://asset.kompas.com/crops/d9bQyjdtuHm9-sMgpDtT8rUsnu4=/46x0:910x576/1200x800/data/photo/2023/09/13/6500fef74d9db.jpg",
+        "https://images.tokopedia.net/img/cache/700/VqbcmM/2023/10/27/e692ce96-2164-4c9c-9f58-b8dda1ef3037.jpg"
+      ],
+      "seller": "Apple Premium Store Jakarta",
+      "rating": 4.9,
+      "reviews": 2150,
+      "shipping": "Gratis Ongkir"
+    },
+    {
+      "id": "banner-infinix-hot-40-pro",  // ⭐ ID ini harus match dengan data-product-id
+      "name": "Infinix Hot 40 Pro",
+      "price": 1900000,
+      "city": "Surabaya",
+      "category": "Android",
+      "grade": "A",
+      "battery": "94%",
+      "storage": "8GB + 256GB",
+      "condition": "Fullset no minus",
+      "usage": "Kurang dari 2 bulan",
+      "images": [
+        "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800",
+        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800",
+        "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&q=80"
+      ],
+      "seller": "Infinix Official Store Surabaya",
+      "rating": 4.8,
+      "reviews": 1450,
+      "shipping": "Gratis Ongkir"
+    },
+    {
+      "id": "banner-iphone-13-pro-max",  // ⭐ ID ini harus match dengan data-product-id
+      "name": "iPhone 13 Pro Max",
+      "price": 19200000,
+      "city": "Bandung",
+      "category": "iPhone",
+      "grade": "A",
+      "battery": "88%",
+      "storage": "8GB + 512GB",
+      "condition": "Fullset no minus",
+      "usage": "5 bulan pemakaian",
+      "images": [
+        "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=800",
+        "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=800",
+        "https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=800&q=80"
+      ],
+      "seller": "iStore Bandung Premium",
+      "rating": 4.9,
+      "reviews": 1890,
+      "shipping": "Gratis Ongkir"
+    }
+  ],
+  
+  // ===== TABLET PRODUCTS =====
   "tablets": [
     {
       "id": "tablet-001",
@@ -65,6 +133,8 @@ const productsData = {
       "shipping": "Gratis Ongkir"
     }
   ],
+  
+  // ===== ANDROID PRODUCTS =====
   "android": [
     {
       "id": "android-001",
@@ -130,6 +200,8 @@ const productsData = {
       "shipping": "Gratis Ongkir"
     }
   ],
+  
+  // ===== IPHONE PRODUCTS =====
   "iphone": [
     {
       "id": "iphone-001",
@@ -197,12 +269,12 @@ const productsData = {
   ]
 };
 
-// Function to format price
+// ===== HELPER FUNCTION: FORMAT PRICE =====
 function formatPrice(price) {
   return new Intl.NumberFormat('id-ID').format(price);
 }
 
-// Function to create product card
+// ===== HELPER FUNCTION: CREATE PRODUCT CARD =====
 function createProductCard(product) {
   return `
     <div class="produk-card">
@@ -216,7 +288,7 @@ function createProductCard(product) {
   `;
 }
 
-// Function to load products
+// ===== FUNCTION: LOAD PRODUCTS INTO GRID =====
 function loadProducts() {
   // Load Tablets
   const tabletGrid = document.getElementById('tablet-grid');
@@ -243,12 +315,26 @@ function loadProducts() {
   }
 }
 
-// Store products data globally for access from other pages
+// ===== STORE PRODUCTS DATA GLOBALLY =====
 if (typeof window !== 'undefined') {
   window.productsData = productsData;
+  console.log('✅ Products data loaded globally');
+  console.log('📦 Total banner products:', productsData.banner.length);
+  console.log('📦 Total tablet products:', productsData.tablets.length);
+  console.log('📦 Total android products:', productsData.android.length);
+  console.log('📦 Total iPhone products:', productsData.iphone.length);
+  
+  // ⭐ CRITICAL: Log all banner IDs for debugging
+  console.log('🎯 Banner Product IDs:');
+  productsData.banner.forEach(product => {
+    console.log(`  - ${product.id}: ${product.name}`);
+  });
 }
 
-// Load products when DOM is ready
-document.addEventListener('DOMContentLoaded', loadProducts);
+// ===== LOAD PRODUCTS WHEN DOM IS READY =====
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('📱 DOM Ready - Loading products...');
+  loadProducts();
+});
 
-console.log(window.productsData);
+console.log('✅ products-loader.js loaded successfully');

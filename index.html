@@ -394,7 +394,8 @@
       <i class="bi bi-arrow-right-circle-fill next"></i>
 
       <div class="slider">
-        <div class="slide active">
+        <!-- SLIDE 1: iPhone 15 Pro Max -->
+        <div class="slide active" data-product-id="banner-iphone-15-pro-max">
           <img src="https://asset.kompas.com/crops/d9bQyjdtuHm9-sMgpDtT8rUsnu4=/46x0:910x576/1200x800/data/photo/2023/09/13/6500fef74d9db.jpg" alt="iPhone Background" class="bg-img">
           <div class="overlay"></div>
           <div class="caption">
@@ -407,14 +408,17 @@
               <span>Rp 17.200.000</span>
               <span>Grade A</span>
             </div>
-            <a href="#" class="read-now">Beli Sekarang</a>
+            <a href="#" class="read-now banner-buy-btn" data-product-id="banner-iphone-15-pro-max">
+              Beli Sekarang
+            </a>
           </div>
           <div class="cover-wrapper">
             <img src="https://images.tokopedia.net/img/cache/700/VqbcmM/2023/10/27/e692ce96-2164-4c9c-9f58-b8dda1ef3037.jpg" alt="iPhone 15 Pro Max" class="cover-img">
           </div>
         </div>
 
-        <div class="slide">
+        <!-- SLIDE 2: Infinix Hot 40 Pro -->
+        <div class="slide" data-product-id="banner-infinix-hot-40-pro">
           <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800" alt="Android Background" class="bg-img">
           <div class="overlay"></div>
           <div class="caption">
@@ -427,14 +431,17 @@
               <span>Rp 1.900.000</span>
               <span>Grade A</span>
             </div>
-            <a href="#" class="read-now">Beli Sekarang</a>
+            <a href="#" class="read-now banner-buy-btn" data-product-id="banner-infinix-hot-40-pro">
+              Beli Sekarang
+            </a>
           </div>
           <div class="cover-wrapper">
             <img src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400" alt="Infinix Hot 40 Pro" class="cover-img">
           </div>
         </div>
 
-        <div class="slide">
+        <!-- SLIDE 3: iPhone 13 Pro Max -->
+        <div class="slide" data-product-id="banner-iphone-13-pro-max">
           <img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=800" alt="iPhone Background" class="bg-img">
           <div class="overlay"></div>
           <div class="caption">
@@ -447,7 +454,9 @@
               <span>Rp 19.200.000</span>
               <span>Grade A</span>
             </div>
-            <a href="#" class="read-now">Beli Sekarang</a>
+            <a href="#" class="read-now banner-buy-btn" data-product-id="banner-iphone-13-pro-max">
+              Beli Sekarang
+            </a>
           </div>
           <div class="cover-wrapper">
             <img src="https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=400" alt="iPhone 13 Pro Max" class="cover-img">
@@ -569,14 +578,13 @@
 
   <!-- ===== CRITICAL: SCRIPT LOADING ORDER ===== -->
   <!-- 1. Load users data FIRST -->
-  <script src="users.js"></script>
+   <script src="users.js"></script>
   
-  <!-- 2. Load products data -->
+  <!-- 2. Load products data with banner products -->
   <script src="products-loader.js"></script>
   
   <!-- 3. Load session manager -->
   <script src="session-manager.js"></script>
-  
   
   <!-- 4. Load auth handler -->
   <script src="auth-handler.js"></script>
@@ -584,17 +592,24 @@
   <!-- 5. Load notification handler -->
   <script src="notification-handler.js"></script>
 
+  <!-- 6. Load search engine -->
   <script src="search-engine.js"></script>
   
-  <!-- 6. Load other handlers -->
+  <!-- 7. Load banner handler (NEW - handles slider and product navigation) -->
+  <script src="banner-handler.js"></script>
+  
+  <!-- 8. Load other handlers -->
   <script src="upload-product.js"></script>
   <script src="auction-timer.js"></script>
   <script src="chatbot.js"></script>
   
-  <!-- 7. Load particles and main script -->
+  <!-- 9. Load particles -->
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   
+  <!-- 10. Load main script (cleaned version without slider code) -->
   <script src="script.js"></script>
+  
+  <!-- 11. Load navbar cart -->
   <script src="navbar-cart.js"></script>
 </body>
 </html>

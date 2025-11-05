@@ -1,3 +1,9 @@
+// ===== MAIN SCRIPT FILE =====
+// File: script.js
+// Purpose: Main initialization and particles configuration
+
+console.log('🎯 Main script.js loaded');
+
 // ===== PARTICLES.JS CONFIGURATION =====
 particlesJS("particles-js", {
   particles: {
@@ -27,31 +33,64 @@ particlesJS("particles-js", {
   retina_detect: true
 });
 
-// ===== GET PRODUCT DATA =====
+console.log('✅ Particles.js initialized');
+
+// ===== HELPER FUNCTIONS =====
+
+/**
+ * Get all products from all categories (INCLUDING BANNER)
+ * @returns {Array} Array of all products
+ */
 function getAllProducts() {
-  // Get products from products-loader.js
   if (window.productsData) {
+    // ⭐ CRITICAL FIX: Include banner products
     return [
-      ...window.productsData.tablets,
-      ...window.productsData.android,
-      ...window.productsData.iphone
+      ...(window.productsData.banner || []),
+      ...(window.productsData.tablets || []),
+      ...(window.productsData.android || []),
+      ...(window.productsData.iphone || [])
     ];
   }
   return [];
 }
 
-// ===== GET PRODUCT BY ID =====
+/**
+ * Get product by ID (searches in ALL categories including banner)
+ * @param {string} productId - The product ID to search for
+ * @returns {Object|null} Product object or null if not found
+ */
 function getProductById(productId) {
+  console.log('🔍 Searching for product:', productId);
   const allProducts = getAllProducts();
-  return allProducts.find(product => product.id === productId);
+  
+  console.log('📦 Total products to search:', allProducts.length);
+  
+  const product = allProducts.find(product => product.id === productId);
+  
+  if (product) {
+    console.log('✅ Product found:', product.name);
+  } else {
+    console.error('❌ Product not found with ID:', productId);
+    console.log('Available product IDs:', allProducts.map(p => p.id).join(', '));
+  }
+  
+  return product;
 }
 
-// ===== FORMAT PRICE =====
+/**
+ * Format price to Indonesian Rupiah format
+ * @param {number} price - Price to format
+ * @returns {string} Formatted price string
+ */
 function formatPrice(price) {
   return new Intl.NumberFormat('id-ID').format(price);
 }
 
-// ===== RENDER STARS =====
+/**
+ * Render star rating
+ * @param {number} rating - Rating value (0-5)
+ * @returns {string} HTML string with star icons
+ */
 function renderStars(rating) {
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 >= 0.5;
@@ -77,245 +116,165 @@ function renderStars(rating) {
   return starsHtml;
 }
 
-// ===== UPDATE MAIN IMAGE =====
-function updateMainImage(imageSrc) {
-  const mainImage = document.getElementById('product-image');
-  if (mainImage) {
-    mainImage.src = imageSrc;
-    
-    // Update active thumbnail
-    const thumbnails = document.querySelectorAll('.image-thumbnails img');
-    thumbnails.forEach(thumb => {
-      if (thumb.src === imageSrc) {
-        thumb.classList.add('active');
-      } else {
-        thumb.classList.remove('active');
+// ===== SMOOTH SCROLL =====
+function initializeSmoothScroll() {
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const href = this.getAttribute('href');
+      
+      // Skip if it's just "#"
+      if (href === '#') return;
+      
+      e.preventDefault();
+      
+      const target = document.querySelector(href);
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
       }
     });
-  }
-}
-
-// ===== LOAD PRODUCT DETAILS =====
-function loadProductDetails() {
-  // Get product ID from URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const productId = urlParams.get('id');
-  
-  if (!productId) {
-
-  }
-  
-  // Get product data
-  const product = getProductById(productId);
-  
-  if (!product) {
-
-  }
-  
-  // Update page title
-  document.title = `${product.name} - Klik Second`;
-  
-  // Update breadcrumb
-  document.getElementById('product-category').textContent = product.category;
-  document.getElementById('product-name-breadcrumb').textContent = product.name;
-  
-  // Update product name
-  document.getElementById('product-name').textContent = product.name;
-  
-  // Update rating
-  document.getElementById('product-rating').innerHTML = renderStars(product.rating);
-  document.getElementById('rating-value').textContent = product.rating;
-  document.getElementById('reviews-count').textContent = product.reviews;
-  
-  // Update price
-  document.querySelector('#product-price span').textContent = formatPrice(product.price);
-  
-  // Update specs
-  document.getElementById('product-condition').textContent = product.condition;
-  document.getElementById('product-battery').textContent = product.battery;
-  document.getElementById('product-storage').textContent = product.storage;
-  document.getElementById('product-usage').textContent = product.usage;
-  document.getElementById('product-grade').textContent = `Grade ${product.grade}`;
-  
-  // Update seller info
-  document.getElementById('seller-name').textContent = product.seller;
-  document.getElementById('seller-rating').textContent = product.rating;
-  
-  // Update shipping info
-  document.getElementById('product-shipping').textContent = product.shipping;
-  document.getElementById('product-location').textContent = product.city;
-  
-  // Update description
-  const descriptionContent = `
-    <p><strong>${product.name}</strong> adalah gadget berkualitas tinggi yang tersedia di Klik Second dengan kondisi ${product.condition.toLowerCase()}.</p>
-    
-    <p><strong>Detail Produk:</strong></p>
-    <ul>
-      <li>Kategori: ${product.category}</li>
-      <li>Kondisi: ${product.condition}</li>
-      <li>Grade: ${product.grade}</li>
-      <li>Kapasitas Penyimpanan: ${product.storage}</li>
-      <li>Health Battery: ${product.battery}</li>
-      <li>Lama Pemakaian: ${product.usage}</li>
-    </ul>
-    
-    <p><strong>Keunggulan Produk:</strong></p>
-    <ul>
-      <li>✅ Produk Original & Bergaransi</li>
-      <li>✅ Sudah Dicek Quality Control</li>
-      <li>✅ Free Ongkir untuk wilayah tertentu</li>
-      <li>✅ Kemasan Aman & Rapi</li>
-      <li>✅ Bisa COD & Cicilan 0%</li>
-    </ul>
-    
-    <p><strong>Yang Didapatkan:</strong></p>
-    <ul>
-      <li>📦 Unit ${product.name}</li>
-      <li>📦 Charger Original</li>
-      <li>📦 Kabel Data</li>
-      <li>📦 Box Original</li>
-      <li>📦 Manual Book & Kartu Garansi</li>
-    </ul>
-    
-    <p><em>Catatan: Pastikan untuk memeriksa produk saat diterima. Jika ada kendala, segera hubungi kami untuk pengembalian atau penggantian.</em></p>
-  `;
-  document.getElementById('product-description').innerHTML = descriptionContent;
-  
-  // Load images
-  const mainImage = document.getElementById('product-image');
-  const thumbnailsContainer = document.getElementById('thumbnails-container');
-  
-  if (product.images && product.images.length > 0) {
-    // Set main image
-    mainImage.src = product.images[0];
-    mainImage.alt = product.name;
-    
-    // Clear and add thumbnails
-    thumbnailsContainer.innerHTML = '';
-    product.images.forEach((image, index) => {
-      const thumbnail = document.createElement('img');
-      thumbnail.src = image;
-      thumbnail.alt = `${product.name} - Image ${index + 1}`;
-      thumbnail.onclick = () => updateMainImage(image);
-      
-      // Mark first thumbnail as active
-      if (index === 0) {
-        thumbnail.classList.add('active');
-      }
-      
-      thumbnailsContainer.appendChild(thumbnail);
-    });
-  }
-  
-  // Store product data for cart functionality
-  window.currentProduct = product;
-}
-
-// ===== CART FUNCTIONALITY =====
-let cart = [];
-
-function addToCart() {
-  if (!window.currentProduct) {
-    alert('Produk tidak ditemukan!');
-    return;
-  }
-  
-  cart.push(window.currentProduct);
-  alert(`${window.currentProduct.name} berhasil ditambahkan ke keranjang!`);
-  console.log('Cart:', cart);
-  
-  // In a real application, you would save to localStorage or send to backend
-  // localStorage.setItem('cart', JSON.stringify(cart));
-}
-
-function buyNow() {
-  if (!window.currentProduct) {
-    alert('Produk tidak ditemukan!');
-    return;
-  }
-  
-  alert(`Proses pembelian ${window.currentProduct.name}. Anda akan diarahkan ke halaman checkout.`);
-  console.log('Buying:', window.currentProduct);
-  
-  // In a real application, you would redirect to checkout page
-  // window.location.href = `checkout.html?id=${window.currentProduct.id}`;
-}
-
-// ===== INITIALIZE =====
-document.addEventListener('DOMContentLoaded', () => {
-  // Wait a bit for products-loader.js to load
-  setTimeout(() => {
-    loadProductDetails();
-  }, 100);
-});
-
-const slides = document.querySelectorAll('.slider .slide');
-const nextBtn = document.querySelector('.next');
-const prevBtn = document.querySelector('.prev');
-let currentSlide = 0;
-let autoSlideInterval;
-
-// Fungsi untuk menampilkan slide
-function showSlide(index, direction = null) {
-  const outgoingSlide = slides[currentSlide];
-  const incomingSlide = slides[index];
-
-  slides.forEach((slide) => {
-    slide.classList.remove('active', 'exit-left', 'exit-right', 'enter-from-left', 'enter-from-right');
   });
+  
+  console.log('✅ Smooth scroll initialized');
+}
 
-  if (direction === 'next') {
-    // Posisi awal masuk dari kanan
-    incomingSlide.classList.add('enter-from-right');
-    setTimeout(() => {
-      incomingSlide.classList.remove('enter-from-right');
-      incomingSlide.classList.add('active');
-      outgoingSlide.classList.add('exit-left');
-    }, 20);
-  } else if (direction === 'prev') {
-    // Posisi awal masuk dari kiri
-    incomingSlide.classList.add('enter-from-left');
-    setTimeout(() => {
-      incomingSlide.classList.remove('enter-from-left');
-      incomingSlide.classList.add('active');
-      outgoingSlide.classList.add('exit-right');
-    }, 20);
-  } else {
-    // Load awal
-    incomingSlide.classList.add('active');
+// ===== SCROLL TO TOP BUTTON =====
+function initializeScrollToTop() {
+  let scrollToTopBtn = document.querySelector('.scroll-to-top');
+  
+  // Create button if it doesn't exist
+  if (!scrollToTopBtn) {
+    scrollToTopBtn = document.createElement('button');
+    scrollToTopBtn.className = 'scroll-to-top';
+    scrollToTopBtn.innerHTML = '<i class="bi bi-arrow-up-circle-fill"></i>';
+    scrollToTopBtn.style.cssText = `
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00ffff, #00cccc);
+      color: #000;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 999;
+      box-shadow: 0 4px 15px rgba(0, 255, 255, 0.4);
+    `;
+    document.body.appendChild(scrollToTopBtn);
   }
-
-  currentSlide = index;
+  
+  // Show/hide button on scroll
+  window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+      scrollToTopBtn.style.opacity = '1';
+      scrollToTopBtn.style.visibility = 'visible';
+    } else {
+      scrollToTopBtn.style.opacity = '0';
+      scrollToTopBtn.style.visibility = 'hidden';
+    }
+  });
+  
+  // Scroll to top on click
+  scrollToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+  
+  console.log('✅ Scroll to top button initialized');
 }
 
-// Fungsi tombol Next
-nextBtn.addEventListener('click', () => {
-  let nextIndex = (currentSlide + 1) % slides.length;
-  showSlide(nextIndex, 'next');
-  resetAutoSlide();
+// ===== LAZY LOAD IMAGES =====
+function initializeLazyLoading() {
+  const images = document.querySelectorAll('img[data-src]');
+  
+  const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+        observer.unobserve(img);
+      }
+    });
+  });
+  
+  images.forEach(img => imageObserver.observe(img));
+  
+  console.log(`✅ Lazy loading initialized for ${images.length} images`);
+}
+
+// ===== GLOBAL ERROR HANDLER =====
+window.addEventListener('error', (e) => {
+  console.error('❌ Global error:', e.message);
 });
 
-// Fungsi tombol Previous
-prevBtn.addEventListener('click', () => {
-  let prevIndex = (currentSlide - 1 + slides.length) % slides.length;
-  showSlide(prevIndex, 'prev');
-  resetAutoSlide();
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('❌ Unhandled promise rejection:', e.reason);
 });
 
-// Fungsi autoplay
-function startAutoSlide() {
-  autoSlideInterval = setInterval(() => {
-    let nextIndex = (currentSlide + 1) % slides.length;
-    showSlide(nextIndex, 'next');
-  }, 10000); // 10 detik
+// ===== DEBUG: VERIFY PRODUCTS DATA =====
+function verifyProductsData() {
+  console.log('🔍 Verifying products data...');
+  
+  if (window.productsData) {
+    console.log('✅ Products data available');
+    console.log('📊 Data structure:', {
+      banner: window.productsData.banner?.length || 0,
+      tablets: window.productsData.tablets?.length || 0,
+      android: window.productsData.android?.length || 0,
+      iphone: window.productsData.iphone?.length || 0
+    });
+    
+    // List all product IDs
+    const allProducts = getAllProducts();
+    console.log('📦 Total products:', allProducts.length);
+    console.log('🆔 All product IDs:', allProducts.map(p => p.id).join(', '));
+  } else {
+    console.warn('⚠️ Products data not yet loaded');
+  }
 }
 
-// Fungsi untuk reset saat user klik manual
-function resetAutoSlide() {
-  clearInterval(autoSlideInterval);
-  startAutoSlide();
+// ===== MAIN INITIALIZATION =====
+function initializeMainScript() {
+  console.log('🚀 Initializing main script...');
+  
+  // Initialize smooth scroll
+  initializeSmoothScroll();
+  
+  // Initialize scroll to top button
+  initializeScrollToTop();
+  
+  // Initialize lazy loading
+  initializeLazyLoading();
+  
+  // Verify products data after a delay
+  setTimeout(() => {
+    verifyProductsData();
+  }, 1000);
+  
+  console.log('✅ Main script initialized successfully');
 }
 
-// Inisialisasi pertama
-showSlide(currentSlide);
-startAutoSlide();
+// ===== START INITIALIZATION =====
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeMainScript);
+} else {
+  initializeMainScript();
+}
+
+// ===== EXPOSE HELPER FUNCTIONS GLOBALLY =====
+window.getAllProducts = getAllProducts;
+window.getProductById = getProductById;
+window.formatPrice = formatPrice;
+window.renderStars = renderStars;
+
+console.log('✅ script.js fully loaded');

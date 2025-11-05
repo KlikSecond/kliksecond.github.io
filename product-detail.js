@@ -33,15 +33,16 @@ particlesJS("particles-js", {
 // ===== GLOBAL VARIABLES =====
 let currentProduct = null;
 
-// ===== GET ALL PRODUCTS =====
+// ===== GET ALL PRODUCTS (TERMASUK BANNER) =====
 function getAllProducts() {
-  // Get products from products-loader.js
+  // CRITICAL FIX: Tambahkan banner products ke pencarian
   if (window.productsData) {
     console.log('✅ Products data found');
     return [
-      ...window.productsData.tablets,
-      ...window.productsData.android,
-      ...window.productsData.iphone
+      ...(window.productsData.banner || []),      // ⭐ TAMBAHKAN INI
+      ...(window.productsData.tablets || []),
+      ...(window.productsData.android || []),
+      ...(window.productsData.iphone || [])
     ];
   }
   console.warn('⚠️ Products data not found');
@@ -52,12 +53,17 @@ function getAllProducts() {
 function getProductById(productId) {
   console.log('🔍 Looking for product:', productId);
   const allProducts = getAllProducts();
+  
+  console.log('📦 Total products available:', allProducts.length);
+  console.log('📋 Product IDs:', allProducts.map(p => p.id));
+  
   const product = allProducts.find(product => product.id === productId);
   
   if (product) {
     console.log('✅ Product found:', product.name);
   } else {
     console.error('❌ Product not found with ID:', productId);
+    console.log('Available IDs:', allProducts.map(p => p.id).join(', '));
   }
   
   return product;
@@ -124,8 +130,7 @@ function loadProductDetails() {
   
   if (!productId) {
     console.error('❌ No product ID in URL');
-    alert('Produk tidak ditemukan! ID produk tidak ada di URL.');
-    window.location.href = 'index.html';
+    showErrorMessage('Produk tidak ditemukan! ID produk tidak ada di URL.');
     return;
   }
   
@@ -134,8 +139,7 @@ function loadProductDetails() {
   
   if (!product) {
     console.error('❌ Product not found in database');
-    alert('Data produk tidak ditemukan di database!');
-    window.location.href = 'index.html';
+    showErrorMessage(`Data produk tidak ditemukan di database!<br><small>Product ID: ${productId}</small>`);
     return;
   }
   
@@ -241,6 +245,28 @@ function loadProductDetails() {
   loadProductImages(product);
   
   console.log('✅ All product details loaded');
+}
+
+// ===== SHOW ERROR MESSAGE =====
+function showErrorMessage(message) {
+  const container = document.querySelector('.product-detail');
+  if (container) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 100px 20px; color: #fff;">
+        <i class="bi bi-exclamation-circle" style="font-size: 64px; color: #ff6b6b; margin-bottom: 20px;"></i>
+        <h2 style="color: #fff; margin-bottom: 15px;">Produk Tidak Ditemukan</h2>
+        <p style="color: #aaa; margin-bottom: 30px;">${message}</p>
+        <a href="index.html" style="display: inline-block; padding: 12px 30px; background: #00ffff; color: #000; text-decoration: none; border-radius: 25px; font-weight: bold;">
+          <i class="bi bi-house-door"></i> Kembali ke Beranda
+        </a>
+      </div>
+    `;
+  }
+  
+  // Wait 3 seconds then redirect
+  setTimeout(() => {
+    window.location.href = 'index.html';
+  }, 3000);
 }
 
 // ===== LOAD PRODUCT IMAGES =====
@@ -486,6 +512,12 @@ function waitForProductsData() {
       if (window.productsData) {
         clearInterval(checkInterval);
         console.log('✅ Products data ready');
+        console.log('📊 Data structure:', {
+          banner: window.productsData.banner?.length || 0,
+          tablets: window.productsData.tablets?.length || 0,
+          android: window.productsData.android?.length || 0,
+          iphone: window.productsData.iphone?.length || 0
+        });
         resolve(true);
       } else if (attempts >= maxAttempts) {
         clearInterval(checkInterval);
@@ -507,7 +539,7 @@ async function initialize() {
   const dataReady = await waitForProductsData();
   
   if (!dataReady) {
-    alert('Error: Data produk tidak dapat dimuat. Silakan refresh halaman.');
+    showErrorMessage('Error: Data produk tidak dapat dimuat. Silakan refresh halaman.');
     return;
   }
   
