@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keranjang Belanja - Klik Second</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="auth-modal.css">
+  <link rel="stylesheet" href="notification.css">
+  <link rel="stylesheet" href="navbar-cart.css">
+  <style>
+    /* ===== CART PAGE STYLES ===== */
+    body {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+    }
+
+    .cart-page-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 20px 60px;
+    }
+
+    .cart-page-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .cart-page-header h1 {
+      font-size: 42px;
+      color: #fff;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .cart-page-header h1 i {
+      color: #00ffff;
+    }
+
+    .cart-page-header p {
+      color: #aaa;
+      font-size: 16px;
+    }
+
+    .cart-content {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 30px;
+      align-items: start;
+    }
+
+    /* ===== CART ITEMS ===== */
+    .cart-items-section {
+      background: rgba(42, 42, 42, 0.6);
+      border-radius: 20px;
+      padding: 30px;
+      border: 2px solid rgba(0, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 15px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .cart-item:hover {
+      border-color: rgba(0, 255, 255, 0.3);
+      transform: translateX(5px);
+    }
+
+    .cart-item-image {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 10px;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cart-item-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cart-item-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin: 0;
+    }
+
+    .cart-item-specs {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: #aaa;
+    }
+
+    .cart-item-specs span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .cart-item-specs i {
+      color: #00ffff;
+    }
+
+    .cart-item-price {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00ffff;
+      margin: 10px 0;
+    }
+
+    .cart-item-actions {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-top: auto;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(0, 255, 255, 0.1);
+      padding: 8px 15px;
+      border-radius: 25px;
+      border: 1px solid rgba(0, 255, 255, 0.3);
+    }
+
+    .qty-btn {
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      border: 1px solid rgba(0, 255, 255, 0.5);
+      border-radius: 8px;
+      color: #00ffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: 0.3s;
+    }
+
+    .qty-btn:hover {
+      background: rgba(0, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .qty-value {
+      font-size: 16px;
+      color: #fff;
+      font-weight: 600;
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .btn-remove {
+      background: transparent;
+      border: 2px solid rgba(255, 71, 87, 0.3);
+      color: #ff4757;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .btn-remove:hover {
+      background: rgba(255, 71, 87, 0.2);
+      border-color: #ff4757;
+      transform: scale(1.05);
+    }
+
+    .btn-checkout-item {
+      background: linear-gradient(135deg, #00ffff, #00cccc);
+      border: none;
+      color: #000;
+      padding: 12px 24px;
+      border-radius: 25px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+      transition: 0.3s;
+      margin-left: auto;
+    }
+
+    .btn-checkout-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+    }
+
+    /* ===== EMPTY CART ===== */
+    .empty-cart {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .empty-cart i {
+      font-size: 100px;
+      color: rgba(255, 255, 255, 0.1);
+      margin-bottom: 30px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .empty-cart h2 {
+      font-size: 28px;
+      color: #fff;
+      margin-bottom: 15px;
+    }
+
+    .empty-cart p {
+      color: #aaa;
+      font-size: 16px;
+      margin-bottom: 30px;
+    }
+
+    .btn-shop {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 35px;
+      background: linear-gradient(135deg, #00ffff, #00cccc);
+      color: #000;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .btn-shop:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 255, 255, 0.5);
+    }
+
+    /* ===== CART SUMMARY ===== */
+    .cart-summary {
+      background: rgba(42, 42, 42, 0.6);
+      border-radius: 20px;
+      padding: 30px;
+      border: 2px solid rgba(0, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 100px;
+    }
+
+    .cart-summary h3 {
+      font-size: 22px;
+      color: #fff;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid rgba(0, 255, 255, 0.2);
+    }
+
+    .cart-summary h3 i {
+      color: #00ffff;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      font-size: 15px;
+      color: #ddd;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .summary-row.total {
+      margin-top: 15px;
+      padding-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+      border-top: 2px solid rgba(0, 255, 255, 0.2);
+      border-bottom: none;
+    }
+
+    .summary-row.total span:last-child {
+      color: #00ffff;
+      font-size: 28px;
+    }
+
+    .btn-checkout-all {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #00ffff, #00cccc);
+      border: none;
+      border-radius: 15px;
+      color: #000;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 25px;
+      transition: 0.3s;
+    }
+
+    .btn-checkout-all:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0, 255, 255, 0.6);
+    }
+
+    .btn-checkout-all:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-clear-cart {
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      border: 2px solid rgba(255, 71, 87, 0.3);
+      border-radius: 15px;
+      color: #ff4757;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 15px;
+      transition: 0.3s;
+    }
+
+    .btn-clear-cart:hover {
+      background: rgba(255, 71, 87, 0.1);
+      border-color: #ff4757;
+    }
+
+    .security-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px;
+      background: rgba(0, 255, 127, 0.1);
+      border: 2px solid rgba(0, 255, 127, 0.3);
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .security-info i {
+      font-size: 28px;
+      color: #00ff7f;
+    }
+
+    .security-info div {
+      flex: 1;
+    }
+
+    .security-info strong {
+      display: block;
+      color: #00ff7f;
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
+
+    .security-info p {
+      color: #aaa;
+      font-size: 11px;
+      margin: 0;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .cart-content {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-summary {
+        position: static;
+        order: -1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .cart-page-container {
+        padding: 100px 15px 40px;
+      }
+
+      .cart-page-header h1 {
+        font-size: 32px;
+      }
+
+      .cart-item {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .cart-item-image {
+        width: 100%;
+        height: 200px;
+        margin: 0 auto;
+      }
+
+      .cart-item-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .btn-checkout-item {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cart-page-header h1 {
+        font-size: 26px;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .cart-item-name {
+        font-size: 18px;
+      }
+
+      .cart-item-price {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <nav class="navbar">
+      <a href="index.html">
+        <img src="LogoKlikSecondTransparent.png" class="logo" alt="Klik Second">
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="search.html">Cari Produk</a></li>
+        <li><a href="lelang.html">Lelang</a></li>
+        <li><a href="pegadaian.html">Pegadaian</a></li>
+        <li><a href="about.html">About Us</a></li>
+      </ul>
+
+      <!-- Auth Buttons -->
+      <div class="auth-buttons">
+        <button class="btn-login">Login</button>
+        <button class="btn-register">Daftar</button>
+      </div>
+
+      <!-- User Profile Section -->
+      <div class="user-profile-section">
+        <button class="navbar-cart-btn" id="navbar-cart-btn">
+          <i class="bi bi-cart-fill"></i>
+          <span class="navbar-cart-badge">0</span>
+        </button>
+
+        <button class="notification-btn">
+          <i class="bi bi-bell-fill"></i>
+          <span class="notification-badge">0</span>
+        </button>
+
+        <div class="user-profile-trigger">
+          <img src="https://ui-avatars.com/api/?name=User&background=00ffff&color=000" alt="User" class="user-avatar">
+          <div class="user-info">
+            <span class="user-name">User Name</span>
+            <span class="user-role">Seller</span>
+          </div>
+          <i class="bi bi-chevron-down dropdown-arrow"></i>
+        </div>
+
+        <div class="user-dropdown">
+          <a href="profile.html?tab=profile" class="dropdown-item">
+            <i class="bi bi-person-circle"></i>
+            <span>Profile Saya</span>
+          </a>
+          <a href="profile.html?tab=products" class="dropdown-item">
+            <i class="bi bi-box-seam"></i>
+            <span>Produk Saya</span>
+          </a>
+          <a href="#" class="dropdown-item" id="logout-btn">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Keluar</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- CART PAGE -->
+  <div class="cart-page-container">
+    <div class="cart-page-header">
+      <h1>
+        <i class="bi bi-cart-fill"></i>
+        Keranjang Belanja
+      </h1>
+      <p>Review produk sebelum melakukan pembayaran</p>
+    </div>
+
+    <div class="cart-content">
+      <!-- CART ITEMS -->
+      <div class="cart-items-section" id="cart-items-container">
+        <!-- Cart items will be loaded here -->
+      </div>
+
+      <!-- CART SUMMARY -->
+      <div class="cart-summary">
+        <h3>
+          <i class="bi bi-receipt"></i>
+          Ringkasan Belanja
+        </h3>
+
+        <div class="summary-row">
+          <span>Total Item</span>
+          <span id="total-items">0 Produk</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotal">Rp 0</span>
+        </div>
+
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="grand-total">Rp 0</span>
+        </div>
+
+        <button class="btn-checkout-all" id="checkout-all-btn" disabled>
+          <i class="bi bi-lightning-charge-fill"></i>
+          Checkout Semua
+        </button>
+
+        <button class="btn-clear-cart" id="clear-cart-btn">
+          <i class="bi bi-trash"></i>
+          Kosongkan Keranjang
+        </button>
+
+        <div class="security-info">
+          <i class="bi bi-shield-check"></i>
+          <div>
+            <strong>Pembayaran Aman</strong>
+            <p>Transaksi dilindungi enkripsi SSL</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="users.js"></script>
+  <script src="products-loader.js"></script>
+  <script src="session-manager.js"></script>
+  <script src="auth-handler.js"></script>
+  <script src="notification-handler.js"></script>
+  <script src="navbar-cart.js"></script>
+  
+  <script>
+    // ===== PARTICLES.JS =====
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 80 },
+        color: { value: "#00ffff" },
+        shape: { type: "circle" },
+        opacity: { value: 0.5 },
+        size: { value: 3 },
+        line_linked: {
+          enable: true,
+          distance: 150,
+          color: "#00ffff",
+          opacity: 0.4,
+          width: 1
+        },
+        move: { enable: true, speed: 2 }
+      }
+    });
+
+    // ===== CART PAGE MANAGER =====
+    let cartItems = [];
+
+    function loadCart() {
+      try {
+        const cartData = localStorage.getItem('cart');
+        if (cartData) {
+          cartItems = JSON.parse(cartData);
+        }
+        console.log('📦 Cart loaded:', cartItems.length, 'items');
+        renderCart();
+      } catch (e) {
+        console.error('❌ Error loading cart:', e);
+        cartItems = [];
+        renderCart();
+      }
+    }
+
+    function renderCart() {
+      const container = document.getElementById('cart-items-container');
+      
+      if (cartItems.length === 0) {
+        container.innerHTML = `
+          <div class="empty-cart">
+            <i class="bi bi-cart-x"></i>
+            <h2>Keranjang Belanja Kosong</h2>
+            <p>Yuk, mulai belanja dan temukan gadget impianmu!</p>
+            <a href="index.html" class="btn-shop">
+              <i class="bi bi-shop"></i>
+              Mulai Belanja
+            </a>
+          </div>
+        `;
+        updateSummary();
+        return;
+      }
+
+      container.innerHTML = cartItems.map((item, index) => `
+        <div class="cart-item" data-index="${index}">
+          <img src="${item.image || item.images[0]}" alt="${item.name}" class="cart-item-image">
+          
+          <div class="cart-item-details">
+            <h3 class="cart-item-name">${item.name}</h3>
+            
+            <div class="cart-item-specs">
+              <span><i class="bi bi-award"></i> Grade ${item.grade}</span>
+              <span><i class="bi bi-battery-charging"></i> ${item.battery}</span>
+              <span><i class="bi bi-hdd"></i> ${item.storage}</span>
+              <span><i class="bi bi-geo-alt"></i> ${item.city}</span>
+            </div>
+            
+            <div class="cart-item-price">Rp ${formatPrice(item.price)}</div>
+            
+            <div class="cart-item-actions">
+              <div class="quantity-controls">
+                <button class="qty-btn" onclick="updateQuantity(${index}, -1)">
+                  <i class="bi bi-dash"></i>
+                </button>
+                <span class="qty-value">${item.quantity}</span>
+                <button class="qty-btn" onclick="updateQuantity(${index}, 1)">
+                  <i class="bi bi-plus"></i>
+                </button>
+              </div>
+              
+              <button class="btn-remove" onclick="removeItem(${index})">
+                <i class="bi bi-trash"></i>
+                Hapus
+              </button>
+              
+              <button class="btn-checkout-item" onclick="checkoutItem('${item.id}')">
+                <i class="bi bi-cart-check"></i>
+                Checkout
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      updateSummary();
+    }
+
+    function updateQuantity(index, change) {
+      if (index < 0 || index >= cartItems.length) return;
+      
+      cartItems[index].quantity += change;
+      
+      if (cartItems[index].quantity <= 0) {
+        removeItem(index);
+        return;
+      }
+      
+      saveCart();
+      renderCart();
+    }
+
+    function removeItem(index) {
+      if (confirm('Hapus produk dari keranjang?')) {
+        cartItems.splice(index, 1);
+        saveCart();
+        renderCart();
+        showToast('Produk dihapus dari keranjang', 'info');
+      }
+    }
+
+    function checkoutItem(productId) {
+      console.log('🛒 Checkout item:', productId);
+      window.location.href = `checkout.html?id=${productId}`;
+    }
+
+    function checkoutAll() {
+      if (cartItems.length === 0) {
+        showToast('Keranjang masih kosong!', 'warning');
+        return;
+      }
+      
+      // For multi-item checkout, we'll use the first item for now
+      // In production, you'd implement a multi-item checkout flow
+      const firstItemId = cartItems[0].id;
+      window.location.href = `checkout.html?id=${firstItemId}`;
+    }
+
+    function clearCart() {
+      if (confirm('Kosongkan semua produk di keranjang?')) {
+        cartItems = [];
+        saveCart();
+        renderCart();
+        showToast('Keranjang dikosongkan', 'info');
+      }
+    }
+
+    function saveCart() {
+      try {
+        localStorage.setItem('cart', JSON.stringify(cartItems));
+        
+        // Update navbar cart badge
+        if (window.navbarCartManager) {
+          window.navbarCartManager.loadCartFromStorage();
+          window.navbarCartManager.updateNavbarCart();
+        }
+      } catch (e) {
+        console.error('❌ Error saving cart:', e);
+      }
+    }
+
+    function updateSummary() {
+      const totalItems = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      const subtotal = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+      
+      document.getElementById('total-items').textContent = `${totalItems} Produk`;
+      document.getElementById('subtotal').textContent = `Rp ${formatPrice(subtotal)}`;
+      document.getElementById('grand-total').textContent = `Rp ${formatPrice(subtotal)}`;
+      
+      const checkoutBtn = document.getElementById('checkout-all-btn');
+      if (cartItems.length > 0) {
+        checkoutBtn.disabled = false;
+      } else {
+        checkoutBtn.disabled = true;
+      }
+    }
+
+    function formatPrice(price) {
+      return new Intl.NumberFormat('id-ID').format(price);
+    }
+
+    function showToast(message, type = 'success') {
+      const existing = document.querySelector('.cart-toast');
+      if (existing) existing.remove();
+
+      const icons = {
+        'success': 'bi-check-circle-fill',
+        'warning': 'bi-exclamation-circle-fill',
+        'info': 'bi-info-circle-fill'
+      };
+
+      const colors = {
+        'success': 'linear-gradient(135deg, #00ff7f, #00cc66)',
+        'warning': 'linear-gradient(135deg, #ffaa00, #ff8800)',
+        'info': 'linear-gradient(135deg, #00bfff, #0099cc)'
+      };
+
+      const toast = document.createElement('div');
+      toast.className = 'cart-toast';
+      toast.innerHTML = `
+        <i class="bi ${icons[type]}"></i>
+        <span>${message}</span>
+      `;
+
+      toast.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 30px;
+        background: ${colors[type]};
+        color: #000;
+        padding: 15px 25px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: bold;
+        z-index: 10000;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        animation: slideInRight 0.3s ease;
+      `;
+
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.animation = 'slideOutRight 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // ===== EVENT LISTENERS =====
+    document.getElementById('checkout-all-btn').addEventListener('click', checkoutAll);
+    document.getElementById('clear-cart-btn').addEventListener('click', clearCart);
+
+    // ===== INITIALIZE =====
+    document.addEventListener('DOMContentLoaded', loadCart);
+
+    // ===== EXPOSE FUNCTIONS =====
+    window.updateQuantity = updateQuantity;
+    window.removeItem = removeItem;
+    window.checkoutItem = checkoutItem;
+
+    console.log('✅ Cart page initialized');
+  </script>
+</body>
+</html>
